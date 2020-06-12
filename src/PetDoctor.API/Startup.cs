@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace PetDoctor.API
 {
@@ -17,7 +19,32 @@ namespace PetDoctor.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.RegisterMiddleware = true;
+            }).AddVersionedApiExplorer(options => { options.SubstituteApiVersionInUrl = true; });
+
+            services.AddOpenApiDocument(document =>
+            {
+                document.DocumentName = "v1";
+                document.ApiGroupNames = new[] {"1"};
+                document.Title = "Pet Doctor API";
+                document.Description = "This API enables managing veterinary appointments for your canine companions";
+                document.Version = "v1";
+                document.SerializerSettings = new JsonSerializerSettings {ContractResolver = new DefaultContractResolver()};
+            });
+
+            services.AddOpenApiDocument(document =>
+            {
+                document.DocumentName = "allVersions";
+                document.Version = "allVersions";
+                document.Title = "Pet Doctor API";
+                document.Description = "This API enables managing veterinary appointments for your canine companions";
+                document.SerializerSettings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() };
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -31,12 +58,13 @@ namespace PetDoctor.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
         }
     }
 }

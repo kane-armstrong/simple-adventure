@@ -4,7 +4,7 @@
     "PetDoctor.API": {
       "commandName": "Project",
       "launchBrowser": false,
-      "launchUrl": "",
+      "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5640;https://localhost:5641",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
