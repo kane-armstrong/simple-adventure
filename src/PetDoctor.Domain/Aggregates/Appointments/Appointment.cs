@@ -29,8 +29,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             Owner owner,
             string reasonForVisit,
             DateTimeOffset scheduledOn,
-            DateTimeOffset completedOn,
-            AppointmentState state)
+            DateTimeOffset completedOn)
         {
             Id = Guid.NewGuid();
             Pet = pet;
@@ -38,7 +37,9 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             ReasonForVisit = reasonForVisit;
             ScheduledOn = scheduledOn;
             CompletedOn = completedOn;
-            State = state;
+            State = AppointmentState.Requested;
+
+            AppendEvent(new AppointmentCreated(Id, CreateMemento()));
         }
 
         public Appointment(
@@ -47,8 +48,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             Guid? attendingVeterinarianId,
             string reasonForVisit,
             DateTimeOffset scheduledOn,
-            DateTimeOffset completedOn,
-            AppointmentState state)
+            DateTimeOffset completedOn)
         {
             Id = Guid.NewGuid();
             Pet = pet;
@@ -57,7 +57,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             ReasonForVisit = reasonForVisit;
             ScheduledOn = scheduledOn;
             CompletedOn = completedOn;
-            State = state;
+            State = AppointmentState.Requested;
 
             AppendEvent(new AppointmentCreated(Id, CreateMemento()));
         }
