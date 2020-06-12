@@ -13,6 +13,17 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public DateTimeOffset CompletedOn { get; private set; }
         public AppointmentState State { get; private set; }
 
+        public Appointment(AppointmentCreated @event)
+        {
+            Pet = @event.Data.Pet;
+            Owner = @event.Data.Owner;
+            AttendingVeterinarianId = @event.Data.AttendingVeterinarianId;
+            ReasonForVisit = @event.Data.ReasonForVisit;
+            ScheduledOn = @event.Data.ScheduledOn;
+            CompletedOn = @event.Data.CompletedOn;
+            State = @event.Data.State;
+        }
+
         public Appointment(
             Pet pet,
             Owner owner,
@@ -86,6 +97,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             State = AppointmentState.Completed;
             AppendEvent(new AppointmentCompleted(Id, CreateMemento()));
         }
+
 
         public AppointmentMemento CreateMemento()
         {
