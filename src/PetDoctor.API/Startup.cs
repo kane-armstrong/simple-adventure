@@ -45,6 +45,8 @@ namespace PetDoctor.API
                 document.Description = "This API enables managing veterinary appointments for your canine companions";
                 document.SerializerSettings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() };
             });
+
+            services.AddHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,6 +61,7 @@ namespace PetDoctor.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("");
             });
 
             app.UseOpenApi();
