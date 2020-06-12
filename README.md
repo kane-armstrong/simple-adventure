@@ -21,3 +21,15 @@ Additional work that isn't in scope but may be done anyway:
 
 It has been a while since I got to use all of the muscles required by this project, and this is an opportunity to 
 work them.
+
+## Local Development
+
+Install the latest .NET Core 3.1 SDK
+
+### Using Docker
+
+Build using `docker build -t petdoctor-api .`
+
+Run using `docker run -d -p 5640:80 petdoctor-api`
+
+Omit `-d` if you don't want the container to run past the scope of your terminal session
