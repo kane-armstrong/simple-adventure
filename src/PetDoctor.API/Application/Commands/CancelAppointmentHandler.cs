@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using PetDoctor.Domain.Aggregates.Appointments;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +16,15 @@ namespace PetDoctor.API.Application.Commands
 
         public async Task<CommandResult> Handle(CancelAppointment request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var appointment = await _appointments.Find(request.Id);
+            if (appointment == null)
+                return new CommandResult(false, null);
+
+            appointment.Cancel(request.Reason);
+
+            await _appointments.Save(appointment);
+
+            return new CommandResult(true, appointment.Id);
         }
     }
 }
