@@ -122,6 +122,11 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             State = AppointmentState.Canceled;
         }
 
+        public void Apply(AppointmentMembersCheckedIn @event)
+        {
+            State = AppointmentState.CheckedIn;
+        }
+
         public AppointmentMemento CreateMemento()
         {
             return new AppointmentMemento
