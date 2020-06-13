@@ -5,12 +5,12 @@ namespace PetDoctor.Domain.Aggregates.Appointments.Events
     public class AppointmentRejected : DomainEvent
     {
         public Guid AppointmentId { get; }
-        public AppointmentMemento Data { get; }
+        public string RejectionReason { get; }
 
-        public AppointmentRejected(Guid appointmentId, AppointmentMemento data)
+        public AppointmentRejected(Guid appointmentId, string rejectionReason)
         {
             AppointmentId = appointmentId;
-            Data = data;
+            RejectionReason = rejectionReason;
         }
     }
 }
