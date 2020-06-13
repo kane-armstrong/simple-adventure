@@ -58,5 +58,22 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Confi
             var sut = await _testFixture.FindAppointment(id);
             sut.State.Should().Be(AppointmentState.Confirmed);
         }
+
+        [Fact]
+        [ResetDatabase]
+        public async Task captures_the_attending_veterinarian_id()
+        {
+            var client = _testFixture.Client;
+            var seeder = new AppointmentSeeder();
+            var id = await seeder.CreateAppointment(client);
+            var request = _fixture.Create<ConfirmAppointment>();
+            var uri = $"{EndpointRoute}/{id}/confirm";
+
+            var response = await client.PutAsJsonAsync(uri, request);
+            await response.ThrowWithBodyIfUnsuccessfulStatusCode();
+
+            var sut = await _testFixture.FindAppointment(id);
+            sut.AttendingVeterinarianId.Should().Be(request.AttendingVeterinarianId);
+        }
     }
 }
