@@ -1,9 +1,8 @@
 ﻿using System;
-using MediatR;
 
 namespace PetDoctor.API.Application.Commands
 {
-    public class CancelAppointment : IRequest
+    public class CancelAppointment : Command
     {
         internal Guid Id { get; set; }
     }

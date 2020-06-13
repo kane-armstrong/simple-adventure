@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Commands
 {
-    public class RescheduleAppointmentHandler : IRequestHandler<RescheduleAppointment, Unit>
+    public class RescheduleAppointmentHandler : IRequestHandler<RescheduleAppointment, CommandContext>
     {
-        public Task<Unit> Handle(RescheduleAppointment request, CancellationToken cancellationToken)
+        public Task<CommandContext> Handle(RescheduleAppointment request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -1,9 +1,8 @@
 ﻿using System;
-using MediatR;
 
 namespace PetDoctor.API.Application.Commands
 {
-    public class CheckinToAppointment : IRequest
+    public class CheckinToAppointment : Command
     {
         internal Guid Id { get; set; }
     }
