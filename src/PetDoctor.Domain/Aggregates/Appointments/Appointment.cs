@@ -10,7 +10,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public Guid? AttendingVeterinarianId { get; private set; }
         public string ReasonForVisit { get;  }
         public DateTimeOffset ScheduledOn { get; private set; }
-        public DateTimeOffset CompletedOn { get; private set; }
+        public DateTimeOffset? CompletedOn { get; private set; }
         public AppointmentState State { get; private set; }
 
         public Appointment(AppointmentCreated @event)
@@ -20,7 +20,6 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             AttendingVeterinarianId = @event.Data.AttendingVeterinarianId;
             ReasonForVisit = @event.Data.ReasonForVisit;
             ScheduledOn = @event.Data.ScheduledOn;
-            CompletedOn = @event.Data.CompletedOn;
             State = @event.Data.State;
         }
 
@@ -28,15 +27,13 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             Pet pet,
             Owner owner,
             string reasonForVisit,
-            DateTimeOffset scheduledOn,
-            DateTimeOffset completedOn)
+            DateTimeOffset scheduledOn)
         {
             Id = Guid.NewGuid();
             Pet = pet;
             Owner = owner;
             ReasonForVisit = reasonForVisit;
             ScheduledOn = scheduledOn;
-            CompletedOn = completedOn;
             State = AppointmentState.Requested;
 
             AppendEvent(new AppointmentCreated(Id, CreateMemento()));
@@ -47,8 +44,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             Owner owner,
             Guid? attendingVeterinarianId,
             string reasonForVisit,
-            DateTimeOffset scheduledOn,
-            DateTimeOffset completedOn)
+            DateTimeOffset scheduledOn)
         {
             Id = Guid.NewGuid();
             Pet = pet;
@@ -56,7 +52,6 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             AttendingVeterinarianId = attendingVeterinarianId;
             ReasonForVisit = reasonForVisit;
             ScheduledOn = scheduledOn;
-            CompletedOn = completedOn;
             State = AppointmentState.Requested;
 
             AppendEvent(new AppointmentCreated(Id, CreateMemento()));
@@ -105,7 +100,6 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             {
                 State = State,
                 AttendingVeterinarianId = AttendingVeterinarianId,
-                CompletedOn = CompletedOn,
                 Owner = Owner,
                 Pet = Pet,
                 ReasonForVisit = ReasonForVisit,

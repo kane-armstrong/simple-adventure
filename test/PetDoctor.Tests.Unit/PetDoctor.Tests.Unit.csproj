@@ -17,6 +17,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="autofixture" Version="4.11.0" />
+    <PackageReference Include="fluentassertions" Version="5.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PetDoctor.Domain\PetDoctor.Domain.csproj" />
   </ItemGroup>
 
 </Project>

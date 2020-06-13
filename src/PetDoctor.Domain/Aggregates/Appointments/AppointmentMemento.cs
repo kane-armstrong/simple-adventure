@@ -9,7 +9,6 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public Guid? AttendingVeterinarianId { get; set; }
         public string ReasonForVisit { get; set; }
         public DateTimeOffset ScheduledOn { get; set; }
-        public DateTimeOffset CompletedOn { get; set; }
         public AppointmentState State { get; set; }
     }
 }
