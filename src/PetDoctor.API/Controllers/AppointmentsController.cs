@@ -11,8 +11,9 @@ using PetDoctor.API.Application;
 
 namespace PetDoctor.API.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("api/appointments")]
     [ApiController]
+    [ApiVersion("2")]
+    [Route("api/v{version:apiVersion}/appointments")]
     public class AppointmentsController : ControllerBase
     {
         private readonly IMediator _mediator;
