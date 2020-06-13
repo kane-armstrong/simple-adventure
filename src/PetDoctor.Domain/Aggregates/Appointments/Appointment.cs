@@ -1,5 +1,6 @@
 ﻿using PetDoctor.Domain.Aggregates.Appointments.Events;
 using System;
+using System.Collections.Generic;
 
 namespace PetDoctor.Domain.Aggregates.Appointments
 {
@@ -130,6 +131,39 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public void Apply(AppointmentCompleted @event)
         {
             State = AppointmentState.Completed;
+        }
+
+        public void ReplayEvents(IReadOnlyCollection<DomainEvent> events)
+        {
+            foreach (var domainEvent in events)
+            {
+                switch (domainEvent)
+                {
+                    case AppointmentConfirmed ac:
+                        Apply(ac);
+                        break;
+                    case AppointmentRejected ar:
+                        Apply(ar);
+                        break;
+                    case AppointmentRescheduled ars:
+                        Apply(ars);
+                        break;
+                    case AppointmentCanceled acl:
+                        Apply(acl);
+                        break;
+                    case AppointmentMembersCheckedIn amc:
+                        Apply(amc);
+                        break;
+                    case AppointmentCompleted acm:
+                        Apply(acm);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(domainEvent),
+                            domainEvent.GetType().Name,
+                            "This event is not replayable");
+                }
+            }
         }
 
         public AppointmentMemento CreateMemento()
