@@ -2,11 +2,13 @@ using System.Reflection;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using PetDoctor.Infrastructure;
 
 namespace PetDoctor.API
 {
@@ -51,6 +53,14 @@ namespace PetDoctor.API
             services.AddHealthChecks();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
+
+            services.AddDbContext<PetDoctorContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("PetDoctorContext"), sql =>
+                {
+                    sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
