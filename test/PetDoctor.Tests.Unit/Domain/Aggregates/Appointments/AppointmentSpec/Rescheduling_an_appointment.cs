@@ -4,12 +4,12 @@ using PetDoctor.Domain.Aggregates.Appointments;
 using System;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
+namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 {
-    public class RescheduleAppointmentTests
+    public class Rescheduling_an_appointment
     {
         [Fact]
-        public void Rescheduling_an_appointment_should_update_state_to_requested()
+        public void should_update_state_to_requested()
         {
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
@@ -20,7 +20,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Rescheduling_an_appointment_should_set_scheduled_on_correctly()
+        public void should_set_scheduled_on_correctly()
         {
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();

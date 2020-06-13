@@ -4,12 +4,12 @@ using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
+namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 {
-    public class AppointmentConstructionFromEventTests
+    public class Creating_appointment_from_appointmentcreated_event
     {
         [Fact]
-        public void Rehydrating_an_appointment_should_set_pet_correctly()
+        public void should_set_pet_correctly()
         {
             var fixture = new Fixture();
 
@@ -21,7 +21,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Rehydrating_an_appointment_should_set_owner_correctly()
+        public void should_set_owner_correctly()
         {
             var fixture = new Fixture();
 
@@ -33,7 +33,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Rehydrating_an_appointment_should_set_reason_correctly()
+        public void should_set_reason_correctly()
         {
             var fixture = new Fixture();
 
@@ -45,7 +45,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Rehydrating_an_appointment_should_set_scheduled_on_correctly()
+        public void should_set_scheduled_on_correctly()
         {
             var fixture = new Fixture();
 
@@ -57,7 +57,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Rehydrating_an_appointment_should_set_vet_id_correctly()
+        public void should_set_vet_id_correctly()
         {
             var fixture = new Fixture();
 
@@ -69,7 +69,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Rehydrating_an_appointment_should_set_state_to_requested()
+        public void should_set_state_to_requested()
         {
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();

@@ -2,12 +2,12 @@
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
+namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.OwnerSpec
 {
-    public class OwnerConstructionTests
+    public class Creating_an_owner
     {
         [Fact]
-        public void Creating_an_owner_should_set_first_name_correctly()
+        public void should_set_first_name_correctly()
         {
             const string firstName = "Kane";
 
@@ -17,7 +17,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Creating_an_owner_should_set_last_name_correctly()
+        public void should_set_last_name_correctly()
         {
             const string lastName = "Armstrong";
 
@@ -27,7 +27,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Creating_an_owner_should_set_phone_correctly()
+        public void should_set_phone_correctly()
         {
             const string phone = "212-000-0000";
 
@@ -37,7 +37,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Creating_an_owner_should_set_email_correctly()
+        public void should_set_email_correctly()
         {
             const string email = "kane@somewhere.com";
 

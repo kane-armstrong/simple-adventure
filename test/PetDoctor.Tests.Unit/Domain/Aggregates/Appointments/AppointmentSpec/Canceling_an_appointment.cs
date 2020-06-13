@@ -3,12 +3,12 @@ using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
+namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 {
-    public class CancelAppointmentTests
+    public class Canceling_an_appointment
     {
         [Fact]
-        public void Canceling_an_appointment_should_update_state_to_canceled()
+        public void should_update_state_to_canceled()
         {
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
@@ -19,7 +19,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Canceling_an_appointment_should_set_cancellation_reason_correctly()
+        public void should_set_cancellation_reason_correctly()
         {
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();

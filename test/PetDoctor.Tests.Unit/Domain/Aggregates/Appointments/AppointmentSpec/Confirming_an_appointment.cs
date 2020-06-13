@@ -4,12 +4,12 @@ using PetDoctor.Domain.Aggregates.Appointments;
 using System;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
+namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 {
-    public class ConfirmAppointmentTests
+    public class Confirming_an_appointment
     {
         [Fact]
-        public void Confirming_an_appointment_should_update_state_to_confirmed()
+        public void should_update_state_to_confirmed()
         {
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
@@ -20,7 +20,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Confirming_an_appointment_should_set_vet_id_correctly()
+        public void should_set_vet_id_correctly()
         {
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
