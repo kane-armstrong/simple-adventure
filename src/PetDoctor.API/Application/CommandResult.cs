@@ -6,13 +6,11 @@ namespace PetDoctor.API.Application
     {
         public bool ResourceFound { get; }
         public Guid? ResourceId { get; }
-        public bool? CommandSuccessful { get; }
 
-        public CommandResult(bool resourceFound, bool commandSuccessful, Guid? resourceId)
+        public CommandResult(bool resourceFound, Guid? resourceId)
         {
             ResourceFound = resourceFound;
             ResourceId = resourceId;
-            CommandSuccessful = commandSuccessful;
         }
     }
 }

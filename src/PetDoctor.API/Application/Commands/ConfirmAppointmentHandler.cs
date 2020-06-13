@@ -18,13 +18,13 @@ namespace PetDoctor.API.Application.Commands
         {
             var appointment = await _appointments.Find(request.Id);
             if (appointment == null)
-                return new CommandResult(false, false, null);
+                return new CommandResult(false, null);
 
             appointment.Confirm(request.AttendingVeterinarianId);
 
             await _appointments.Save(appointment);
 
-            return new CommandResult(true, true, appointment.Id);
+            return new CommandResult(true, appointment.Id);
         }
     }
 }
