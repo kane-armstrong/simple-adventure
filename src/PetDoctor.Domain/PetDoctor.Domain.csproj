@@ -5,4 +5,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="mediatr" Version="8.0.1" />
+  </ItemGroup>
+
 </Project>
