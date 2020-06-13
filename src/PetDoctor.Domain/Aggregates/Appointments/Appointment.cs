@@ -98,6 +98,12 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             AppendEvent(new AppointmentCompleted(Id));
         }
 
+        public void Apply(AppointmentConfirmed @event)
+        {
+            AttendingVeterinarianId = @event.AttendingVeterinarianId;
+            State = AppointmentState.Confirmed;
+        }
+
         public AppointmentMemento CreateMemento()
         {
             return new AppointmentMemento
