@@ -90,7 +90,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public void CheckIn()
         {
             State = AppointmentState.CheckedIn;
-            AppendEvent(new AppointmentMembersCheckedIn(Id, CreateMemento()));
+            AppendEvent(new AppointmentMembersCheckedIn(Id));
         }
 
         public void Complete()
