@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,11 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Queries\" />
-    <Folder Include="Application\Commands\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\PetDoctor.Domain\PetDoctor.Domain.csproj" />
     <ProjectReference Include="..\PetDoctor.Infrastructure\PetDoctor.Infrastructure.csproj" />
   </ItemGroup>
 
