@@ -10,6 +10,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public Guid? AttendingVeterinarianId { get; private set; }
         public string ReasonForVisit { get;  }
         public string? RejectionReason { get; set; }
+        public string? CancellationReason { get; set; }
         public DateTimeOffset ScheduledOn { get; private set; }
         public DateTimeOffset? CompletedOn { get; private set; }
         public AppointmentState State { get; private set; }
@@ -79,10 +80,11 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             AppendEvent(new AppointmentRescheduled(Id, date));
         }
 
-        public void Cancel()
+        public void Cancel(string reason)
         {
             State = AppointmentState.Canceled;
-            AppendEvent(new AppointmentCanceled(Id, CreateMemento()));
+            CancellationReason = reason;
+            AppendEvent(new AppointmentCanceled(Id, reason));
         }
 
         public void CheckIn()
