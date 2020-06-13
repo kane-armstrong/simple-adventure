@@ -26,7 +26,9 @@ namespace PetDoctor.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers().AddNewtonsoftJson()
+                // Fixes 404s in TestServer
+                .AddApplicationPart(typeof(Startup).Assembly);
 
             services.AddApiVersioning(options =>
             {
