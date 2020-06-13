@@ -1,4 +1,3 @@
-using System.Reflection;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,7 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using PetDoctor.API.Infrastructure;
 using PetDoctor.Infrastructure;
+using SqlStreamStore;
+using System.Reflection;
 
 namespace PetDoctor.API
 {
@@ -34,11 +36,11 @@ namespace PetDoctor.API
             services.AddOpenApiDocument(document =>
             {
                 document.DocumentName = "v1";
-                document.ApiGroupNames = new[] {"1"};
+                document.ApiGroupNames = new[] { "1" };
                 document.Title = "Pet Doctor API";
                 document.Description = "This API enables managing veterinary appointments for your canine companions";
                 document.Version = "v1";
-                document.SerializerSettings = new JsonSerializerSettings {ContractResolver = new DefaultContractResolver()};
+                document.SerializerSettings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() };
             });
 
             services.AddOpenApiDocument(document =>
@@ -54,13 +56,19 @@ namespace PetDoctor.API
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
+            var cs = Configuration.GetConnectionString("PetDoctorContext");
+
             services.AddDbContext<PetDoctorContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("PetDoctorContext"), sql =>
+                options.UseSqlServer(cs, sql =>
                 {
                     sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                 });
             });
+
+            services.AddSingleton(new MsSqlStreamStoreSettings(cs));
+            services.AddSingleton<IStreamStore, MsSqlStreamStore>();
+            services.AddSingleton<MsSqlStreamStore>(); // for migrations
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

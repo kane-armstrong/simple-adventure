@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PetDoctor.Infrastructure;
+using SqlStreamStore;
 
 namespace PetDoctor.API
 {
@@ -30,6 +31,11 @@ namespace PetDoctor.API
             var appDbContext = scope.ServiceProvider.GetRequiredService<PetDoctorContext>();
             // Ideally this would be done in a separate console app in prod (with version assertions here)
             appDbContext.Database.Migrate();
+
+            var streamStore = scope.ServiceProvider.GetRequiredService<MsSqlStreamStore>();
+            var schemaCheck = streamStore.CheckSchema().GetAwaiter().GetResult();
+            if (!schemaCheck.IsMatch())
+                streamStore.CreateSchema().GetAwaiter().GetResult();
         }
     }
 }
