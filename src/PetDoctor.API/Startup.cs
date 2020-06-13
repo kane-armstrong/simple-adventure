@@ -7,12 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PetDoctor.API.Infrastructure;
+using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Infrastructure;
+using PetDoctor.Infrastructure.Repositories;
 using SqlStreamStore;
 using System.Reflection;
-using PetDoctor.Domain.Aggregates.Appointments;
-using PetDoctor.Infrastructure.Repositories;
 
 namespace PetDoctor.API
 {
@@ -58,6 +57,13 @@ namespace PetDoctor.API
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
+            ConfigureDatabaseServices(services);
+        }
+
+        protected virtual void ConfigureDatabaseServices(IServiceCollection services)
+        {
             var cs = Configuration.GetConnectionString("PetDoctorContext");
 
             services.AddDbContext<PetDoctorContext>(options =>
@@ -71,8 +77,6 @@ namespace PetDoctor.API
             services.AddSingleton(new MsSqlStreamStoreSettings(cs));
             services.AddSingleton<IStreamStore, MsSqlStreamStore>();
             services.AddSingleton<MsSqlStreamStore>(); // for migrations
-
-            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
