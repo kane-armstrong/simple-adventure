@@ -57,10 +57,11 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             AppendEvent(new AppointmentCreated(Id, CreateMemento()));
         }
 
-        public void Confirm()
+        public void Confirm(Guid attendingVeterinarianId)
         {
             State = AppointmentState.Confirmed;
-            AppendEvent(new AppointmentConfirmed(Id, CreateMemento()));
+            AttendingVeterinarianId = attendingVeterinarianId;
+            AppendEvent(new AppointmentConfirmed(Id, attendingVeterinarianId));
         }
 
         public void Reject()
@@ -92,7 +93,6 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             State = AppointmentState.Completed;
             AppendEvent(new AppointmentCompleted(Id, CreateMemento()));
         }
-
 
         public AppointmentMemento CreateMemento()
         {
