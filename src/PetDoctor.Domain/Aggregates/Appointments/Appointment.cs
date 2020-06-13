@@ -104,6 +104,12 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             State = AppointmentState.Confirmed;
         }
 
+        public void Apply(AppointmentRejected @event)
+        {
+            RejectionReason = @event.RejectionReason;
+            State = AppointmentState.Rejected;
+        }
+
         public AppointmentMemento CreateMemento()
         {
             return new AppointmentMemento
