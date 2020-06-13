@@ -50,8 +50,8 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Creat
             var response = await client.PostAsJsonAsync(EndpointRoute, request);
             await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
-            var expectedLocationPattern = $"{client.BaseAddress}{EndpointRoute}/\\d";
-            response.Headers.Location.AbsoluteUri.Should().MatchRegex(expectedLocationPattern);
+            const string guidPattern = "[({]?[a-fA-F0-9]{8}[-]?([a-fA-F0-9]{4}[-]?){3}[a-fA-F0-9]{12}[})]?";
+            response.Headers.Location.AbsoluteUri.Should().MatchRegex($"{client.BaseAddress}{EndpointRoute}/{guidPattern}");
         }
 
         [Fact]
