@@ -9,7 +9,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
     public class AppointmentConstructionFromEventTests
     {
         [Fact]
-        public void Creating_an_appointment_should_set_pet_correctly()
+        public void Rehydrating_an_appointment_should_set_pet_correctly()
         {
             var fixture = new Fixture();
 
@@ -21,7 +21,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Creating_an_appointment_should_set_owner_correctly()
+        public void Rehydrating_an_appointment_should_set_owner_correctly()
         {
             var fixture = new Fixture();
 
@@ -33,7 +33,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Creating_an_appointment_should_set_reason_correctly()
+        public void Rehydrating_an_appointment_should_set_reason_correctly()
         {
             var fixture = new Fixture();
 
@@ -45,7 +45,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Creating_an_appointment_should_set_scheduled_on_correctly()
+        public void Rehydrating_an_appointment_should_set_scheduled_on_correctly()
         {
             var fixture = new Fixture();
 
@@ -57,7 +57,7 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
         }
 
         [Fact]
-        public void Creating_an_appointment_should_set_vet_id_correctly()
+        public void Rehydrating_an_appointment_should_set_vet_id_correctly()
         {
             var fixture = new Fixture();
 
@@ -66,6 +66,15 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
             var sut = new Appointment(@event);
 
             sut.AttendingVeterinarianId.Should().Be(@event.Data.AttendingVeterinarianId);
+        }
+
+        [Fact]
+        public void Rehydrating_an_appointment_should_set_state_to_requested()
+        {
+            var fixture = new Fixture();
+            var sut = fixture.Create<Appointment>();
+
+            sut.State.Should().Be(AppointmentState.Requested);
         }
     }
 }

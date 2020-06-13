@@ -73,5 +73,14 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments
 
             sut.AttendingVeterinarianId.Should().Be(vetId);
         }
+
+        [Fact]
+        public void Creating_an_appointment_should_set_state_to_requested()
+        {
+            var fixture = new Fixture();
+            var sut = fixture.Create<Appointment>();
+
+            sut.State.Should().Be(AppointmentState.Requested);
+        }
     }
 }
