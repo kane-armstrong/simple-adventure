@@ -4,7 +4,7 @@ using System;
 
 namespace PetDoctor.Infrastructure
 {
-    internal static class SerializationExtensions
+    public static class SerializationExtensions
     {
         public static string ToJson(this object @this)
         {

@@ -1,13 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PetDoctor.API.Application;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Extensions;
 using PetDoctor.API.Application.Models;
 using PetDoctor.API.Application.Queries;
 using System;
 using System.Threading.Tasks;
-using PetDoctor.API.Application;
 
 namespace PetDoctor.API.Controllers
 {
@@ -37,10 +37,7 @@ namespace PetDoctor.API.Controllers
         {
             var result = await _mediator.Send(new GetAppointmentById { Id = id });
             if (result == null)
-            {
                 return NotFound();
-            }
-
             return Ok(result);
         }
 
