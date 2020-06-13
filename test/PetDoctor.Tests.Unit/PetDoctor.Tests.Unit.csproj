@@ -18,7 +18,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="autofixture" Version="4.11.0" />
-    <PackageReference Include="fluentassertions" Version="5.7.0" />
+    <PackageReference Include="fluentassertions" Version="5.10.3" />
   </ItemGroup>
 
   <ItemGroup>
