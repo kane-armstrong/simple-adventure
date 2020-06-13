@@ -12,7 +12,7 @@ using PetDoctor.API.Application;
 namespace PetDoctor.API.Controllers
 {
     [ApiController]
-    [ApiVersion("2")]
+    [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/appointments")]
     public class AppointmentsController : ControllerBase
     {
