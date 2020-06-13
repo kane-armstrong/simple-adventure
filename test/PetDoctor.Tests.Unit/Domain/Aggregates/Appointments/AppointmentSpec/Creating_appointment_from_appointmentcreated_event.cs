@@ -9,6 +9,18 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
     public class Creating_appointment_from_appointmentcreated_event
     {
         [Fact]
+        public void should_set_id_correctly()
+        {
+            var fixture = new Fixture();
+
+            var @event = fixture.Create<AppointmentCreated>();
+
+            var sut = new Appointment(@event);
+
+            sut.Id.Should().Be(@event.AppointmentId);
+        }
+
+        [Fact]
         public void should_set_pet_correctly()
         {
             var fixture = new Fixture();

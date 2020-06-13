@@ -17,6 +17,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
 
         public Appointment(AppointmentCreated @event)
         {
+            Id = @event.AppointmentId;
             Pet = @event.Data.Pet;
             Owner = @event.Data.Owner;
             AttendingVeterinarianId = @event.Data.AttendingVeterinarianId;
