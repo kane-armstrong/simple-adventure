@@ -127,6 +127,11 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             State = AppointmentState.CheckedIn;
         }
 
+        public void Apply(AppointmentCompleted @event)
+        {
+            State = AppointmentState.Completed;
+        }
+
         public AppointmentMemento CreateMemento()
         {
             return new AppointmentMemento
