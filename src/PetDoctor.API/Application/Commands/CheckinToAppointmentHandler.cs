@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Commands
 {
-    public class CheckinToAppointmentHandler : IRequestHandler<CheckinToAppointment, CommandContext>
+    public class CheckinToAppointmentHandler : IRequestHandler<CheckinToAppointment, CommandResult>
     {
-        public Task<CommandContext> Handle(CheckinToAppointment request, CancellationToken cancellationToken)
+        public Task<CommandResult> Handle(CheckinToAppointment request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

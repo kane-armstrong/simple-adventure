@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Commands
 {
-    public class CancelAppointmentHandler : IRequestHandler<CancelAppointment, CommandContext>
+    public class CancelAppointmentHandler : IRequestHandler<CancelAppointment, CommandResult>
     {
         private readonly IAppointmentRepository _appointments;
 
@@ -15,7 +15,7 @@ namespace PetDoctor.API.Application.Commands
             _appointments = appointments;
         }
 
-        public async Task<CommandContext> Handle(CancelAppointment request, CancellationToken cancellationToken)
+        public async Task<CommandResult> Handle(CancelAppointment request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

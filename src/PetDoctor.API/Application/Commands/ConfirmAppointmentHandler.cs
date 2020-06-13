@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Commands
 {
-    public class ConfirmAppointmentHandler : IRequestHandler<ConfirmAppointment, CommandContext>
+    public class ConfirmAppointmentHandler : IRequestHandler<ConfirmAppointment, CommandResult>
     {
-        public Task<CommandContext> Handle(ConfirmAppointment request, CancellationToken cancellationToken)
+        public Task<CommandResult> Handle(ConfirmAppointment request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
