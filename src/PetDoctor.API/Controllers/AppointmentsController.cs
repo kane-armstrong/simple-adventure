@@ -51,7 +51,7 @@ namespace PetDoctor.API.Controllers
             ConfigureCommandContext(request);
             var result = await _mediator.Send(request);
             const string route = nameof(GetAppointmentById);
-            return CreatedAtRoute(route, new { id = result.ResourceId }, null);
+            return CreatedAtRoute(route, new { id = result.ResourceId, version = "1" }, null);
         }
 
         [HttpPut("{id}/confirm")]
