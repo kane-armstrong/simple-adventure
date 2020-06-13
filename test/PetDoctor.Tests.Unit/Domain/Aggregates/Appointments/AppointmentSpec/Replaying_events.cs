@@ -25,31 +25,47 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             sut.Should().BeEquivalentTo(other);
         }
 
-        [Fact]
-        public void produces_the_correct_results_given_a_non_empty_set()
+        [Theory]
+        [MemberData(nameof(TestEvents))]
+        public void produces_the_correct_results_given_a_non_empty_set(
+            AppointmentCreated createdEvent, 
+            List<DomainEvent> events, 
+            Appointment expectedState)
+        {
+            var sut = new Appointment(createdEvent);
+            sut.ReplayEvents(events);
+            sut.Should().BeEquivalentTo(expectedState, c => c.Excluding(p => p.PendingEvents));
+        }
+
+        public static IEnumerable<object[]> TestEvents()
         {
             var fixture = new Fixture();
             var createdEvent = fixture.Create<AppointmentCreated>();
 
-            var sut = new Appointment(createdEvent);
+            var appointment = new Appointment(createdEvent);
 
             var vetId = Guid.NewGuid();
-            var newDate = sut.ScheduledOn.AddDays(3);
+            var newDate = appointment.ScheduledOn.AddDays(3);
 
             var events = new List<DomainEvent>
             {
-                new AppointmentConfirmed(sut.Id, vetId),
-                new AppointmentRescheduled(sut.Id, newDate),
-                new AppointmentConfirmed(sut.Id, vetId),
-                new AppointmentMembersCheckedIn(sut.Id),
-                new AppointmentCompleted(sut.Id)
+                new AppointmentConfirmed(appointment.Id, Guid.NewGuid()),
+                new AppointmentRescheduled(appointment.Id, newDate),
+                new AppointmentConfirmed(appointment.Id, vetId),
+                new AppointmentMembersCheckedIn(appointment.Id),
+                new AppointmentCompleted(appointment.Id)
             };
 
-            sut.ReplayEvents(events);
+            appointment.Confirm(vetId);
+            appointment.Reschedule(newDate);
+            appointment.Confirm(vetId);
+            appointment.CheckIn();
+            appointment.Complete();
 
-            sut.State.Should().Be(AppointmentState.Completed);
-            sut.ScheduledOn.Should().Be(newDate);
-            sut.AttendingVeterinarianId.Should().Be(vetId);
+            yield return new object[]
+            {
+                createdEvent, events, appointment
+            };
         }
     }
 }
