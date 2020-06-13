@@ -7,6 +7,7 @@ using PetDoctor.API.Application.Models;
 using PetDoctor.API.Application.Queries;
 using System;
 using System.Threading.Tasks;
+using PetDoctor.API.Application;
 
 namespace PetDoctor.API.Controllers
 {
@@ -46,17 +47,21 @@ namespace PetDoctor.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateAppointment([FromBody]CreateAppointment request)
         {
-            var todo = await _mediator.Send(request);
+            ConfigureCommandContext(request);
+            var result = await _mediator.Send(request);
             const string route = nameof(GetAppointmentById);
-            return CreatedAtRoute(route, new { id = todo.Id }, null);
+            return CreatedAtRoute(route, new { id = result.ResourceId }, null);
         }
 
         [HttpPut("{id}/confirm")]
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> ConfirmAppointment([FromRoute]Guid id, [FromBody]ConfirmAppointment request)
         {
+            ConfigureCommandContext(request);
             request.Id = id;
-            await _mediator.Send(request);
+            var result = await _mediator.Send(request);
+            if (!result.ResourceFound)
+                return NotFound();
             return NoContent();
         }
 
@@ -64,8 +69,11 @@ namespace PetDoctor.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RejectAppointment([FromRoute]Guid id, [FromBody]RejectAppointment request)
         {
+            ConfigureCommandContext(request);
             request.Id = id;
-            await _mediator.Send(request);
+            var result = await _mediator.Send(request);
+            if (!result.ResourceFound)
+                return NotFound();
             return NoContent();
         }
 
@@ -73,8 +81,11 @@ namespace PetDoctor.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RescheduleAppointment([FromRoute]Guid id, [FromBody]RescheduleAppointment request)
         {
+            ConfigureCommandContext(request);
             request.Id = id;
-            await _mediator.Send(request);
+            var result = await _mediator.Send(request);
+            if (!result.ResourceFound)
+                return NotFound();
             return NoContent();
         }
 
@@ -82,8 +93,11 @@ namespace PetDoctor.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> CancelAppointment([FromRoute]Guid id, [FromBody]CancelAppointment request)
         {
+            ConfigureCommandContext(request);
             request.Id = id;
-            await _mediator.Send(request);
+            var result = await _mediator.Send(request);
+            if (!result.ResourceFound)
+                return NotFound();
             return NoContent();
         }
 
@@ -91,8 +105,11 @@ namespace PetDoctor.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> CheckinToAppointment([FromRoute]Guid id, [FromBody]CheckinToAppointment request)
         {
+            ConfigureCommandContext(request);
             request.Id = id;
-            await _mediator.Send(request);
+            var result = await _mediator.Send(request);
+            if (!result.ResourceFound)
+                return NotFound();
             return NoContent();
         }
 
@@ -100,9 +117,18 @@ namespace PetDoctor.API.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> CompleteAppointment([FromRoute]Guid id, [FromBody]CompleteAppointment request)
         {
+            ConfigureCommandContext(request);
             request.Id = id;
-            await _mediator.Send(request);
+            var result = await _mediator.Send(request);
+            if (!result.ResourceFound)
+                return NotFound();
             return NoContent();
+        }
+
+        private void ConfigureCommandContext(Command command)
+        {
+            // If I end up adding authentication then I could pass user info in through this (as opposed to relying on claims via IHttpContextAccessor)
+            command.Context = new CommandContext();
         }
     }
 }
