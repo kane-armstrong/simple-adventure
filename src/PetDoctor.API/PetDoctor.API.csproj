@@ -13,9 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\" />
     <Folder Include="Application\Queries\" />
     <Folder Include="Application\Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PetDoctor.Infrastructure\PetDoctor.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -22,7 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\PetDoctor.API\PetDoctor.API.csproj" />
     <ProjectReference Include="..\..\src\PetDoctor.Domain\PetDoctor.Domain.csproj" />
+    <ProjectReference Include="..\..\src\PetDoctor.Infrastructure\PetDoctor.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
   </ItemGroup>
 
 </Project>
