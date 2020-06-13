@@ -1,5 +1,5 @@
-﻿using System;
-using PetDoctor.Domain.Aggregates.Appointments.Events;
+﻿using PetDoctor.Domain.Aggregates.Appointments.Events;
+using System;
 
 namespace PetDoctor.Domain.Aggregates.Appointments
 {
@@ -8,11 +8,10 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public Pet Pet { get; }
         public Owner Owner { get; }
         public Guid? AttendingVeterinarianId { get; private set; }
-        public string ReasonForVisit { get;  }
+        public string ReasonForVisit { get; }
         public string? RejectionReason { get; set; }
         public string? CancellationReason { get; set; }
         public DateTimeOffset ScheduledOn { get; private set; }
-        public DateTimeOffset? CompletedOn { get; private set; }
         public AppointmentState State { get; private set; }
 
         public Appointment(AppointmentCreated @event)
@@ -96,7 +95,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public void Complete()
         {
             State = AppointmentState.Completed;
-            AppendEvent(new AppointmentCompleted(Id, CreateMemento()));
+            AppendEvent(new AppointmentCompleted(Id));
         }
 
         public AppointmentMemento CreateMemento()
