@@ -22,11 +22,5 @@ namespace PetDoctor.API.Tests.Functional.Setup
             var appointments = _webApplicationFactory.Services.GetRequiredService<IAppointmentRepository>();
             return await appointments.Find(id);
         }
-
-        public async Task AddAppointment(Appointment appointment)
-        {
-            var appointments = _webApplicationFactory.Services.GetRequiredService<IAppointmentRepository>();
-            await appointments.Save(appointment);
-        }
     }
 }

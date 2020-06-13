@@ -7,9 +7,9 @@ namespace PetDoctor.API.Tests.Functional.Helpers
 {
     public static class HttpResponseMessageExtensions
     {
-        public static async Task<T> GetPayload<T>(this HttpResponseMessage @this)
+        public static async Task<T> GetPayload<T>(this HttpResponseMessage message)
         {
-            var content = await @this.Content.ReadAsStringAsync();
+            var content = await message.Content.ReadAsStringAsync();
             try
             {
                 return content.FromJson<T>();
@@ -18,6 +18,15 @@ namespace PetDoctor.API.Tests.Functional.Helpers
             {
                 throw new InvalidOperationException("Invalid payload");
             }
+        }
+
+        public static async Task ThrowWithBodyIfUnsuccessfulStatusCode(this HttpResponseMessage message)
+        {
+            if (message.IsSuccessStatusCode)
+                return;
+
+            var content = await message.Content.ReadAsStringAsync();
+            throw new Exception($"Test failed - {message.StatusCode}: {content}");
         }
     }
 }

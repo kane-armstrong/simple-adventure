@@ -13,6 +13,7 @@ namespace PetDoctor.API.Tests.Functional.Helpers
         public async Task<Guid> CreateAppointment(HttpClient client)
         {
             var fixture = new Fixture();
+            fixture.Customize(new CreateAppointmentCustomization());
             var appointment = fixture.Create<CreateAppointment>();
             const string route = "api/v1/appointments";
             var result = await client.PostAsJsonAsync(route, appointment);
