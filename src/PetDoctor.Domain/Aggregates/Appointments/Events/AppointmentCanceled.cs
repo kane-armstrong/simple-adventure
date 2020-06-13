@@ -6,6 +6,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments.Events
     {
         public Guid AppointmentId { get; }
         public string CancellationReason { get; set; }
+        public AppointmentState State = AppointmentState.Canceled;
 
         public AppointmentCanceled(Guid appointmentId, string cancellationReason)
         {

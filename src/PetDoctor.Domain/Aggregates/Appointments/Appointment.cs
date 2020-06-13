@@ -102,35 +102,35 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public void Apply(AppointmentConfirmed @event)
         {
             AttendingVeterinarianId = @event.AttendingVeterinarianId;
-            State = AppointmentState.Confirmed;
+            State = @event.State;
         }
 
         public void Apply(AppointmentRejected @event)
         {
             RejectionReason = @event.RejectionReason;
-            State = AppointmentState.Rejected;
+            State = @event.State;
         }
 
         public void Apply(AppointmentRescheduled @event)
         {
             ScheduledOn = @event.Date;
-            State = AppointmentState.Requested;
+            State = @event.State;
         }
 
         public void Apply(AppointmentCanceled @event)
         {
             CancellationReason = @event.CancellationReason;
-            State = AppointmentState.Canceled;
+            State = @event.State;
         }
 
         public void Apply(AppointmentMembersCheckedIn @event)
         {
-            State = AppointmentState.CheckedIn;
+            State = @event.State;
         }
 
         public void Apply(AppointmentCompleted @event)
         {
-            State = AppointmentState.Completed;
+            State = @event.State;
         }
 
         public void ReplayEvents(IReadOnlyCollection<DomainEvent> events)

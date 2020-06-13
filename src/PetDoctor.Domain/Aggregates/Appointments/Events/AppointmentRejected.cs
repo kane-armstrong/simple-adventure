@@ -6,6 +6,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments.Events
     {
         public Guid AppointmentId { get; }
         public string RejectionReason { get; }
+        public AppointmentState State = AppointmentState.Rejected;
 
         public AppointmentRejected(Guid appointmentId, string rejectionReason)
         {

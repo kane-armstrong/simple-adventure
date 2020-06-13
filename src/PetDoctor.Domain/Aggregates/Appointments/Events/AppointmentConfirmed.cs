@@ -6,6 +6,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments.Events
     {
         public Guid AppointmentId { get; }
         public Guid AttendingVeterinarianId { get; set; }
+        public AppointmentState State = AppointmentState.Confirmed;
 
         public AppointmentConfirmed(Guid appointmentId, Guid attendingVeterinarianId)
         {
