@@ -70,8 +70,36 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.ListA
 
             var page = await result.GetPayload<Page<AppointmentView>>();
             page.Data.Should().NotBeEmpty();
+            page.Data.Count.Should().Be(count);
             page.TotalCount.Should().Be(count);
             page.HasNextPage.Should().BeFalse();
+        }
+
+        [Fact]
+        [ResetDatabase]
+        public async Task returns_a_multiple_pages_when_appointment_count_exceeds_page_size()
+        {
+            var client = _testFixture.Client;
+
+            const int pageCount = 5;
+            const int count = 10;
+
+            var uri = $"{EndpointRoute}?index=1&size={pageCount}";
+
+            var seeder = new AppointmentSeeder();
+            for (var i = 0; i < count; i++)
+            {
+                await seeder.CreateAppointment(client);
+            }
+
+            var result = await client.GetAsync(uri);
+            result.IsSuccessStatusCode.Should().BeTrue();
+
+            var page = await result.GetPayload<Page<AppointmentView>>();
+            page.Data.Should().NotBeEmpty();
+            page.Data.Count.Should().Be(pageCount);
+            page.TotalCount.Should().Be(count);
+            page.HasNextPage.Should().BeTrue();
         }
     }
 }
