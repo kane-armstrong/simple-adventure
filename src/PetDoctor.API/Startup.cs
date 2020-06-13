@@ -59,7 +59,7 @@ namespace PetDoctor.API
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            services.AddTransient<IAppointmentRepository, AppointmentRepository>();
 
             ConfigureDatabaseServices(services);
         }
