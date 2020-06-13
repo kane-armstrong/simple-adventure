@@ -11,6 +11,8 @@ using PetDoctor.API.Infrastructure;
 using PetDoctor.Infrastructure;
 using SqlStreamStore;
 using System.Reflection;
+using PetDoctor.Domain.Aggregates.Appointments;
+using PetDoctor.Infrastructure.Repositories;
 
 namespace PetDoctor.API
 {
@@ -69,6 +71,8 @@ namespace PetDoctor.API
             services.AddSingleton(new MsSqlStreamStoreSettings(cs));
             services.AddSingleton<IStreamStore, MsSqlStreamStore>();
             services.AddSingleton<MsSqlStreamStore>(); // for migrations
+
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
