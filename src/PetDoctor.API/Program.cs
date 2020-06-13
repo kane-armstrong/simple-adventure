@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PetDoctor.Infrastructure;
 
 namespace PetDoctor.API
 {
@@ -7,7 +10,11 @@ namespace PetDoctor.API
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            MigrateDatabases(host);
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -16,5 +23,13 @@ namespace PetDoctor.API
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private static void MigrateDatabases(IHost host)
+        {
+            using var scope = host.Services.CreateScope();
+            var appDbContext = scope.ServiceProvider.GetRequiredService<PetDoctorContext>();
+            // Ideally this would be done in a separate console app in prod (with version assertions here)
+            appDbContext.Database.Migrate();
+        }
     }
 }

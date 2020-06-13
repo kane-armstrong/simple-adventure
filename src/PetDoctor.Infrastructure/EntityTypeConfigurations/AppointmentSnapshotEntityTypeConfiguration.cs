@@ -59,6 +59,14 @@ namespace PetDoctor.Infrastructure.EntityTypeConfigurations
                 .HasMaxLength(1000)
                 .IsRequired();
 
+            builder.Property(p => p.RejectionReason)
+                .HasMaxLength(1000)
+                .IsRequired(false);
+
+            builder.Property(p => p.CancellationReason)
+                .HasMaxLength(1000)
+                .IsRequired(false);
+
             builder.Property(p => p.ScheduledOn)
                 .HasColumnType("datetimeoffset(7)");
         }

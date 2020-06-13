@@ -33,3 +33,18 @@ Build using `docker build -t petdoctor-api .`
 Run using `docker run -d -p 5640:80 petdoctor-api`
 
 Omit `-d` if you don't want the container to run past the scope of your terminal session
+
+
+### Database Migrations
+
+This project uses code-first migrations. You'll need to install dotnet-ef:
+
+```
+dotnet tool update --global dotnet-ef
+```
+
+Example command to generate a migration:
+
+```
+dotnet ef migrations add InitialPetDoctorMigration -c PetDoctorContext -o Infrastructure/Migrations/PetDoctor/PetDoctorDb --startup-project src/PetDoctor.API
+```
