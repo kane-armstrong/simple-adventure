@@ -27,7 +27,8 @@ namespace PetDoctor.API.Application.DomainEventHandlers
                 Owner = notification.Data.Owner,
                 Pet = notification.Data.Pet,
                 CancellationReason = notification.Data.CancellationReason,
-                RejectionReason = notification.Data.RejectionReason
+                RejectionReason = notification.Data.RejectionReason,
+                ReasonForVisit = notification.Data.ReasonForVisit
             });
             return _db.SaveChangesAsync(cancellationToken);
         }
