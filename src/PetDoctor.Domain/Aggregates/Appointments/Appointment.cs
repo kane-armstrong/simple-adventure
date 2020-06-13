@@ -175,7 +175,9 @@ namespace PetDoctor.Domain.Aggregates.Appointments
                 Owner = Owner,
                 Pet = Pet,
                 ReasonForVisit = ReasonForVisit,
-                ScheduledOn = ScheduledOn
+                ScheduledOn = ScheduledOn,
+                RejectionReason = RejectionReason,
+                CancellationReason = CancellationReason
             };
         }
     }

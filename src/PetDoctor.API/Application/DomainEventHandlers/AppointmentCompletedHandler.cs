@@ -3,14 +3,24 @@ using PetDoctor.Domain.Aggregates.Appointments.Events;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PetDoctor.Infrastructure;
 
 namespace PetDoctor.API.Application.DomainEventHandlers
 {
     public class AppointmentCompletedHandler : INotificationHandler<AppointmentCompleted>
     {
-        public Task Handle(AppointmentCompleted notification, CancellationToken cancellationToken)
+        private readonly PetDoctorContext _db;
+
+        public AppointmentCompletedHandler(PetDoctorContext db)
         {
-            throw new NotImplementedException();
+            _db = db;
+        }
+
+        public async Task Handle(AppointmentCompleted notification, CancellationToken cancellationToken)
+        {
+            var snapshot = await _db.AppointmentSnapshots.FindAsync(notification.AppointmentId);
+            snapshot.State = notification.State;
+            await _db.SaveChangesAsync(cancellationToken);
         }
     }
 }

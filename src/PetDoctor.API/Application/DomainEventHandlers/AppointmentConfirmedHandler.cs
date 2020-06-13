@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
-using System;
+using PetDoctor.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,9 +8,19 @@ namespace PetDoctor.API.Application.DomainEventHandlers
 {
     public class AppointmentConfirmedHandler : INotificationHandler<AppointmentConfirmed>
     {
-        public Task Handle(AppointmentConfirmed notification, CancellationToken cancellationToken)
+        private readonly PetDoctorContext _db;
+
+        public AppointmentConfirmedHandler(PetDoctorContext db)
         {
-            throw new NotImplementedException();
+            _db = db;
+        }
+
+        public async Task Handle(AppointmentConfirmed notification, CancellationToken cancellationToken)
+        {
+            var snapshot = await _db.AppointmentSnapshots.FindAsync(notification.AppointmentId);
+            snapshot.State = notification.State;
+            snapshot.AttendingVeterinarianId = notification.AttendingVeterinarianId;
+            await _db.SaveChangesAsync(cancellationToken);
         }
     }
 }
