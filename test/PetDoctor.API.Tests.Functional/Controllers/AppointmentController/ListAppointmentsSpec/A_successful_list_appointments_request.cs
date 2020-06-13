@@ -8,6 +8,7 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.ListAppointmentsSpec
 {
+    [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_list_appointments_request : IClassFixture<TestFixture>
     {
         private const string EndpointRoute = "api/v1/appointments";
@@ -20,6 +21,7 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.ListA
         }
 
         [Fact]
+        [ResetDatabase]
         public async Task returns_200_ok()
         {
             var client = _testFixture.Client;
@@ -31,6 +33,7 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.ListA
         }
 
         [Fact]
+        [ResetDatabase]
         public async Task returns_an_empty_page_when_there_are_no_appointments()
         {
             var client = _testFixture.Client;
@@ -46,6 +49,7 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.ListA
         }
 
         [Fact]
+        [ResetDatabase]
         public async Task returns_a_single_page_when_page_size_exceeds_appointment_count()
         {
             var client = _testFixture.Client;
