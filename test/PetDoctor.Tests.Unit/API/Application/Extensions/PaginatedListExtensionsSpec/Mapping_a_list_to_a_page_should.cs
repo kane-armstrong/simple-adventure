@@ -7,7 +7,7 @@ using Xunit;
 
 namespace PetDoctor.Tests.Unit.API.Application.Extensions.PaginatedListExtensionsSpec
 {
-    public class Mapping_a_list_should
+    public class Mapping_a_list_to_a_page_should
     {
         [Fact]
         public void set_page_index_correctly()
