@@ -75,7 +75,8 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         public void Reschedule(DateTimeOffset date)
         {
             State = AppointmentState.Requested;
-            AppendEvent(new AppointmentRescheduled(Id, CreateMemento()));
+            ScheduledOn = date;
+            AppendEvent(new AppointmentRescheduled(Id, date));
         }
 
         public void Cancel()

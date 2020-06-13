@@ -5,12 +5,12 @@ namespace PetDoctor.Domain.Aggregates.Appointments.Events
     public class AppointmentRescheduled : DomainEvent
     {
         public Guid AppointmentId { get; }
-        public AppointmentMemento Data { get; }
+        public DateTimeOffset Date { get; }
 
-        public AppointmentRescheduled(Guid appointmentId, AppointmentMemento data)
+        public AppointmentRescheduled(Guid appointmentId, DateTimeOffset date)
         {
             AppointmentId = appointmentId;
-            Data = data;
+            Date = date;
         }
     }
 }
