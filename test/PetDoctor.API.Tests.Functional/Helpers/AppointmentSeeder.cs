@@ -14,7 +14,7 @@ namespace PetDoctor.API.Tests.Functional.Helpers
         {
             const string route = "api/v1/appointments";
             var result = await client.PostAsJsonAsync(route, appointment);
-            result.EnsureSuccessStatusCode();
+            await result.ThrowWithBodyIfUnsuccessfulStatusCode();
             var foundIdInLocationHeader = Guid.TryParse(result.Headers.Location.AbsoluteUri.Split('/').Last(), out var id);
             foundIdInLocationHeader.Should().BeTrue();
             return id;
