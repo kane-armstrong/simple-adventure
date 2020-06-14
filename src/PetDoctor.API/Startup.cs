@@ -1,4 +1,3 @@
-using System;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +12,7 @@ using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Infrastructure;
 using PetDoctor.Infrastructure.Repositories;
 using SqlStreamStore;
+using System;
 using System.Reflection;
 
 namespace PetDoctor.API
@@ -65,6 +65,13 @@ namespace PetDoctor.API
 
             services.AddTransient<IAppointmentRepository, AppointmentRepository>();
 
+            ConfigureDatabaseServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            ConfigureServices(services);
+
             services.AddApplicationInsightsTelemetry(Configuration);
 
             var hostingEnvironment = Configuration.GetValue<string>("hostenv");
@@ -72,8 +79,6 @@ namespace PetDoctor.API
             {
                 services.AddApplicationInsightsKubernetesEnricher();
             }
-
-            ConfigureDatabaseServices(services);
         }
 
         protected virtual void ConfigureDatabaseServices(IServiceCollection services)

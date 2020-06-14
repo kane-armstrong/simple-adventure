@@ -6,7 +6,6 @@ namespace PetDoctor.API.Tests.Functional.Setup
 {
     public static class TestResources
     {
-
         private static IConfiguration _configuration;
 
         public static IConfiguration Configuration
