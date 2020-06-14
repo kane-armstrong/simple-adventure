@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using PetDoctor.API.Application.Commands;
 using System;
+using Humanizer;
 
 namespace PetDoctor.API.Application.Validators
 {
@@ -10,7 +11,7 @@ namespace PetDoctor.API.Application.Validators
         {
             RuleFor(p => p.NewDate)
                 .Must(BeInTheFuture)
-                .WithMessage($"{nameof(RescheduleAppointment.NewDate)} must be in the future");
+                .WithMessage($"{nameof(RescheduleAppointment.NewDate).Humanize()} must be in the future");
         }
 
         private static bool BeInTheFuture(DateTimeOffset argument)
