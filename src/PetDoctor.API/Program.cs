@@ -10,6 +10,9 @@ using Serilog.Events;
 using SqlStreamStore;
 using System;
 using System.IO;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 
 namespace PetDoctor.API
 {
@@ -73,6 +76,20 @@ namespace PetDoctor.API
                     .AddJsonFile($"appsettings.{CurrentEnvironment}.json", true)
                     .AddUserSecrets<Startup>()
                     .AddEnvironmentVariables();
+
+                var isProd = CurrentEnvironment.ToLower() == "production";
+                if (!isProd) 
+                    return builder.Build();
+                
+                var cfg = builder.Build();
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+                var kvUrl = cfg.GetValue<string>("kevault:url");
+                if (string.IsNullOrEmpty(kvUrl))
+                    throw new ArgumentException("A KeyVault URL is required (KEYVAULT__URL)");
+                if (!Uri.IsWellFormedUriString(kvUrl, UriKind.Absolute))
+                    throw new ArgumentException($"Invalid KeyVault URI: {kvUrl} (must be a well formed URI string)");
+                builder.AddAzureKeyVault(kvUrl, keyVaultClient, new DefaultKeyVaultSecretManager());
 
                 return builder.Build();
             }
