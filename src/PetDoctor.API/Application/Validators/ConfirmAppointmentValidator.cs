@@ -5,5 +5,11 @@ namespace PetDoctor.API.Application.Validators
 {
     public class ConfirmAppointmentValidator : AbstractValidator<ConfirmAppointment>
     {
+        public ConfirmAppointmentValidator()
+        {
+            RuleFor(p => p.AttendingVeterinarianId)
+                .NotEmpty()
+                .WithMessage($"{nameof(ConfirmAppointment.AttendingVeterinarianId)} is required");
+        }
     }
 }
