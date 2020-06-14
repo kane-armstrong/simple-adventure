@@ -1,9 +1,15 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PetDoctor.Infrastructure;
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 using SqlStreamStore;
+using System;
+using System.IO;
 
 namespace PetDoctor.API
 {
@@ -11,11 +17,27 @@ namespace PetDoctor.API
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
+            try
+            {
+                Log.Logger = CreateLogger();
 
-            MigrateDatabases(host);
+                var host = CreateHostBuilder(args).Build();
 
-            host.Run();
+                Log.Information("Migrating database");
+                MigrateDatabases(host);
+
+                Log.Information("Starting host");
+                host.Run();
+                Log.Information("Stopped host");
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "An error occurred while attempting to start the host: {message}", e.Message);
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -23,6 +45,7 @@ namespace PetDoctor.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseSerilog();
                 });
 
         private static void MigrateDatabases(IHost host)
@@ -36,6 +59,36 @@ namespace PetDoctor.API
             var schemaCheck = streamStore.CheckSchema().GetAwaiter().GetResult();
             if (!schemaCheck.IsMatch())
                 streamStore.CreateSchema().GetAwaiter().GetResult();
+        }
+
+        private static readonly string CurrentEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
+        private static IConfiguration Configuration
+        {
+            get
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", false, true)
+                    .AddJsonFile($"appsettings.{CurrentEnvironment}.json", true)
+                    .AddUserSecrets<Startup>()
+                    .AddEnvironmentVariables();
+
+                return builder.Build();
+            }
+        }
+
+        private static Logger CreateLogger()
+        {
+            var loggerConfiguration = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .Enrich.FromLogContext()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                .MinimumLevel.Override("System", LogEventLevel.Warning)
+                .WriteTo.Console();
+
+            return loggerConfiguration.CreateLogger();
         }
     }
 }
