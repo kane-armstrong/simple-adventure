@@ -1,15 +1,14 @@
 # Simple Event Sourced Application
 
-This repository contains the source code for a simple event sourced application. A simplified veterinary domain
-is used to aid in breathing some life into the project.
+This repository contains the source code for a simple toy project using CQRS and event sourcing.
 
 The scope for this project is:
 
 * Create an API-driven application for managing verterinary appointments for canine companions
-* Use event sourcing as a persistence mechanism
+* Use event sourcing and CQRS for persistence
 * Provision a Kubernetes cluster in Azure
-* Deploy the application to Kubernetes and access the application over the public internet
-* Ensure adequate test coverage
+* Package and deploy the application to the cluster
+* Include both unit and integration tests
 
 Additional work that isn't in scope but may be done anyway:
 
