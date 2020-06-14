@@ -12,6 +12,7 @@ using PetDoctor.Infrastructure;
 using PetDoctor.Infrastructure.Repositories;
 using SqlStreamStore;
 using System.Reflection;
+using FluentValidation.AspNetCore;
 
 namespace PetDoctor.API
 {
@@ -26,7 +27,9 @@ namespace PetDoctor.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson()
+            services.AddControllers()
+                .AddNewtonsoftJson()
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
                 // Fixes 404s in TestServer
                 .AddApplicationPart(typeof(Startup).Assembly);
 

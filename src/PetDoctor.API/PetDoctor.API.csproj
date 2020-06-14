@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="fluentvalidation" Version="8.6.2" />
+    <PackageReference Include="fluentvalidation.aspnetcore" Version="8.6.2" />
     <PackageReference Include="mediatr.extensions.microsoft.dependencyinjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
