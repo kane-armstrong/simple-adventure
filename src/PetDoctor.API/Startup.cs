@@ -1,3 +1,5 @@
+using System;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +14,6 @@ using PetDoctor.Infrastructure;
 using PetDoctor.Infrastructure.Repositories;
 using SqlStreamStore;
 using System.Reflection;
-using FluentValidation.AspNetCore;
 
 namespace PetDoctor.API
 {
@@ -63,6 +64,14 @@ namespace PetDoctor.API
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddTransient<IAppointmentRepository, AppointmentRepository>();
+
+            services.AddApplicationInsightsTelemetry(Configuration);
+
+            var hostingEnvironment = Configuration.GetValue<string>("hostenv");
+            if (!string.IsNullOrEmpty(hostingEnvironment) && hostingEnvironment.Equals("K8S", StringComparison.InvariantCultureIgnoreCase))
+            {
+                services.AddApplicationInsightsKubernetesEnricher();
+            }
 
             ConfigureDatabaseServices(services);
         }
