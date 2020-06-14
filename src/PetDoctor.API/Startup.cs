@@ -111,6 +111,8 @@ namespace PetDoctor.API
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("");
+                endpoints.MapHealthChecks("live");
+                endpoints.MapHealthChecks("ready");
             });
 
             app.UseOpenApi();
