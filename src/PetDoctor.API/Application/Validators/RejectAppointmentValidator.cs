@@ -7,7 +7,7 @@ namespace PetDoctor.API.Application.Validators
     {
         public RejectAppointmentValidator()
         {
-            var maxReasonLength = 1000;
+            const int maxReasonLength = 1000;
             RuleFor(p => p.Reason)
                 .NotEmpty()
                 .WithMessage($"{nameof(CancelAppointment.Reason)} is required")
