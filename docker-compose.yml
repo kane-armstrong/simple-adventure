@@ -1,0 +1,31 @@
+version: '3'
+services:
+  database:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      SA_PASSWORD: "Supercalifragilisticexpialidocious1#"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1400:1433"
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5650:5650"
+    environment:
+      ASPNETCORE_URLS: http://+:5650
+      ASPNETCORE_ENVIRONMENT: Development
+      CONNECTIONSTRINGS__PETDOCTORCONTEXT: "Data Source=database;Initial Catalog=petdoctordb;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+    depends_on: [ "database" ]
+  integrationtests:
+    build:
+      context: .
+      dockerfile: Dockerfile.IntegrationTests
+    depends_on: ["database"]
+    environment:
+      CONNECTIONSTRINGS__PETDOCTORCONTEXT: "Data Source=database;Initial Catalog=petdoctordb_tests;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+  unittests:
+    build:
+      context: .
+      dockerfile: Dockerfile.UnitTests

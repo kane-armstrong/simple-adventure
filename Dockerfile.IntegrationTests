@@ -1,0 +1,5 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.301-alpine3.12 AS build
+ARG Configuration=Release
+WORKDIR /app
+COPY . ./
+CMD dotnet test ./test/PetDoctor.API.Tests.Functional/PetDoctor.API.Tests.Functional.csproj

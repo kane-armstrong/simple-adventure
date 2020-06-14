@@ -24,6 +24,7 @@ namespace PetDoctor.API.Tests.Functional.Setup
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true)
+                .AddEnvironmentVariables()
                 .Build();
         }
 
