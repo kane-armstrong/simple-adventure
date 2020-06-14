@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
@@ -33,7 +34,8 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Resch
             var client = _testFixture.Client;
             var seeder = new AppointmentSeeder();
             var id = await seeder.CreateAppointment(client);
-            var request = _fixture.Create<RescheduleAppointment>();
+            var request = _fixture.Build<RescheduleAppointment>()
+                .With(p => p.NewDate, () => DateTimeOffset.UtcNow.AddDays(3)).Create();
             var uri = $"{EndpointRoute}/{id}/reschedule";
 
             var response = await client.PutAsJsonAsync(uri, request);
@@ -49,7 +51,8 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Resch
             var client = _testFixture.Client;
             var seeder = new AppointmentSeeder();
             var id = await seeder.CreateAppointment(client);
-            var request = _fixture.Create<RescheduleAppointment>();
+            var request = _fixture.Build<RescheduleAppointment>()
+                .With(p => p.NewDate, () => DateTimeOffset.UtcNow.AddDays(3)).Create();
             var uri = $"{EndpointRoute}/{id}/reschedule";
 
             var response = await client.PutAsJsonAsync(uri, request);
@@ -66,7 +69,8 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Resch
             var client = _testFixture.Client;
             var seeder = new AppointmentSeeder();
             var id = await seeder.CreateAppointment(client);
-            var request = _fixture.Create<RescheduleAppointment>();
+            var request = _fixture.Build<RescheduleAppointment>()
+                .With(p => p.NewDate, () => DateTimeOffset.UtcNow.AddDays(3)).Create();
             var uri = $"{EndpointRoute}/{id}/reschedule";
 
             var response = await client.PutAsJsonAsync(uri, request);

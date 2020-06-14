@@ -1,6 +1,7 @@
-﻿using System.Reflection;
-using AutoFixture.Kernel;
+﻿using AutoFixture.Kernel;
 using PetDoctor.API.Application.Commands;
+using System;
+using System.Reflection;
 
 namespace PetDoctor.API.Tests.Functional.Helpers
 {
@@ -8,24 +9,42 @@ namespace PetDoctor.API.Tests.Functional.Helpers
     {
         public object Create(object request, ISpecimenContext context)
         {
-            // Override default string generation to avoid binary data would be truncated errors
-
-            if (request is ParameterInfo paramInfo
-                && paramInfo.ParameterType == typeof(string)
-                && paramInfo.Name == nameof(CreateAppointment.OwnerPhone))
+            if (request is ParameterInfo paramInfo)
             {
-                return "212-000-0000";
+                var result = Build(paramInfo.ParameterType, paramInfo.Name);
+                if (result != null)
+                    return result;
             }
 
             var propInfo = request as PropertyInfo;
-            if (propInfo != null
-                && propInfo.PropertyType == typeof(string)
-                && propInfo.Name == nameof(CreateAppointment.OwnerPhone))
+            if (propInfo != null)
+            {
+                var result = Build(propInfo.PropertyType, propInfo.Name);
+                if (result != null)
+                    return result;
+            }
+
+            return new NoSpecimen();
+        }
+
+        private static object Build(Type type, string name)
+        {
+            if (type == typeof(string) && name == nameof(CreateAppointment.OwnerPhone))
             {
                 return "212-000-0000";
             }
 
-            return new NoSpecimen();
+            if (type == typeof(DateTimeOffset) && name == nameof(CreateAppointment.PetDateOfBirth))
+            {
+                return DateTimeOffset.UtcNow.AddYears(-10);
+            }
+
+            if (type == typeof(DateTimeOffset) && name == nameof(CreateAppointment.DesiredDate))
+            {
+                return DateTimeOffset.UtcNow.AddDays(3);
+            }
+
+            return null;
         }
     }
 }

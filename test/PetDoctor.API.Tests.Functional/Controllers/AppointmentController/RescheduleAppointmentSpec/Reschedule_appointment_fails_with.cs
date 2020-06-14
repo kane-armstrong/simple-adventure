@@ -32,7 +32,8 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Resch
         {
             var client = _testFixture.Client;
             var id = Guid.NewGuid();
-            var request = _fixture.Create<RescheduleAppointment>();
+            var request = _fixture.Build<RescheduleAppointment>()
+                .With(p => p.NewDate, () => DateTimeOffset.UtcNow.AddDays(3)).Create();
             var uri = $"{EndpointRoute}/{id}/reschedule";
 
             var response = await client.PutAsJsonAsync(uri, request);
