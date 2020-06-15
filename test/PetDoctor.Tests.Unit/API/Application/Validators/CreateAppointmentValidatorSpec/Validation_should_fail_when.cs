@@ -40,7 +40,7 @@ namespace PetDoctor.Tests.Unit.API.Application.Validators.CreateAppointmentValid
         {
             var request = new CreateAppointment
             {
-                ReasonForVisit = string.Join("", Enumerable.Range(1, 1001))
+                ReasonForVisit = new string('x', 1001)
             };
 
             var sut = new CreateAppointmentValidator();
@@ -92,7 +92,7 @@ namespace PetDoctor.Tests.Unit.API.Application.Validators.CreateAppointmentValid
         {
             var request = new CreateAppointment
             {
-                OwnerFirstName = string.Join("", Enumerable.Range(1, 101))
+                OwnerFirstName = new string('x', 101)
             };
 
             var sut = new CreateAppointmentValidator();
@@ -131,7 +131,7 @@ namespace PetDoctor.Tests.Unit.API.Application.Validators.CreateAppointmentValid
         {
             var request = new CreateAppointment
             {
-                OwnerLastName = string.Join("", Enumerable.Range(1, 101))
+                OwnerLastName = new string('x', 101)
             };
 
             var sut = new CreateAppointmentValidator();
@@ -170,7 +170,7 @@ namespace PetDoctor.Tests.Unit.API.Application.Validators.CreateAppointmentValid
         {
             var request = new CreateAppointment
             {
-                OwnerEmail = string.Join("", Enumerable.Range(1, 101))
+                OwnerEmail = new string('x', 101)
             };
 
             var sut = new CreateAppointmentValidator();
@@ -209,7 +209,7 @@ namespace PetDoctor.Tests.Unit.API.Application.Validators.CreateAppointmentValid
         {
             var request = new CreateAppointment
             {
-                OwnerPhone = string.Join("", Enumerable.Range(1, 26))
+                OwnerPhone = new string('x', 26)
             };
 
             var sut = new CreateAppointmentValidator();
@@ -248,7 +248,7 @@ namespace PetDoctor.Tests.Unit.API.Application.Validators.CreateAppointmentValid
         {
             var request = new CreateAppointment
             {
-                PetName = string.Join("", Enumerable.Range(1, 101))
+                PetName = new string('x', 101)
             };
 
             var sut = new CreateAppointmentValidator();
@@ -287,7 +287,7 @@ namespace PetDoctor.Tests.Unit.API.Application.Validators.CreateAppointmentValid
         {
             var request = new CreateAppointment
             {
-                PetBreed = string.Join("", Enumerable.Range(1, 101))
+                PetBreed = new string('x', 101)
             };
 
             var sut = new CreateAppointmentValidator();

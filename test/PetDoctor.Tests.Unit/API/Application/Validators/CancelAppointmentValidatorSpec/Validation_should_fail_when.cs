@@ -39,7 +39,7 @@ namespace PetDoctor.Tests.Unit.API.Application.Validators.CancelAppointmentValid
         {
             var request = new CancelAppointment
             {
-                Reason = string.Join("", Enumerable.Range(1, 1001))
+                Reason = new string('x', 1001)
             };
 
             var sut = new CancelAppointmentValidator();
