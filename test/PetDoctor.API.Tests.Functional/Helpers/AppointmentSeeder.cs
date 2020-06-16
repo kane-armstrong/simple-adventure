@@ -12,7 +12,7 @@ namespace PetDoctor.API.Tests.Functional.Helpers
     {
         public async Task<Guid> CreateAppointment(HttpClient client, CreateAppointment appointment)
         {
-            const string route = "api/v1/appointments";
+            const string route = "v1/appointments";
             var result = await client.PostAsJsonAsync(route, appointment);
             await result.ThrowWithBodyIfUnsuccessfulStatusCode();
             var foundIdInLocationHeader = Guid.TryParse(result.Headers.Location.AbsoluteUri.Split('/').Last(), out var id);

@@ -12,7 +12,7 @@ namespace PetDoctor.API.Controllers
 {
     [ApiController]
     [ApiVersion("1")]
-    [Route("api/v{version:apiVersion}/appointments")]
+    [Route("v{version:apiVersion}/appointments")]
     public class AppointmentsController : ControllerBase
     {
         private readonly IMediator _mediator;

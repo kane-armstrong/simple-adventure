@@ -10,7 +10,7 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.GetAp
     [Collection(TestCollections.RealDatabaseTests)]
     public class Get_appointment_by_id_fails_with
     {
-        private const string EndpointRoute = "api/v1/appointments";
+        private const string EndpointRoute = "v1/appointments";
 
         private readonly TestFixture _testFixture;
 

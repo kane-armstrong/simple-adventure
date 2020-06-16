@@ -15,7 +15,7 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Resch
     [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_reschedule_appointment_request
     {
-        private const string EndpointRoute = "api/v1/appointments";
+        private const string EndpointRoute = "v1/appointments";
 
         private readonly TestFixture _testFixture;
         private readonly Fixture _fixture;

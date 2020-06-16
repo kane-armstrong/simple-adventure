@@ -100,6 +100,10 @@ namespace PetDoctor.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var pathBase = Configuration.GetValue<string>("PATH_BASE");
+            if (!string.IsNullOrEmpty(pathBase))
+                app.UsePathBase($"/{pathBase.TrimStart('/')}");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -14,7 +14,7 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Rejec
     [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_reject_appointment_request
     {
-        private const string EndpointRoute = "api/v1/appointments";
+        private const string EndpointRoute = "v1/appointments";
 
         private readonly TestFixture _testFixture;
         private readonly Fixture _fixture;

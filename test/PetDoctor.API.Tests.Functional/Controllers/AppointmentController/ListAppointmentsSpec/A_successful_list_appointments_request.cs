@@ -11,7 +11,7 @@ namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.ListA
     [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_list_appointments_request : IClassFixture<TestFixture>
     {
-        private const string EndpointRoute = "api/v1/appointments";
+        private const string EndpointRoute = "v1/appointments";
 
         private readonly TestFixture _testFixture;
 
