@@ -86,7 +86,7 @@ namespace PetDoctor.API
                     var cfg = builder.Build();
                     var azureServiceTokenProvider = new AzureServiceTokenProvider();
                     var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
-                    var kvUrl = cfg.GetValue<string>("kevault:url");
+                    var kvUrl = cfg.GetValue<string>("keyvault:url");
                     if (string.IsNullOrEmpty(kvUrl))
                         throw new ArgumentException("A KeyVault URL is required (KEYVAULT__URL)");
                     if (!Uri.IsWellFormedUriString(kvUrl, UriKind.Absolute))
