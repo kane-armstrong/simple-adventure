@@ -1,32 +1,42 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PetDoctor.Infrastructure;
 using Serilog;
-using Serilog.Core;
-using Serilog.Events;
 using SqlStreamStore;
 using System;
 using System.IO;
-using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.Extensions.Configuration.AzureKeyVault;
 
 namespace PetDoctor.API
 {
     public class Program
     {
+        private static readonly string CurrentEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
         public static void Main(string[] args)
         {
             try
             {
-                Log.Logger = CreateLogger();
+                var configBuilder = CreateConfigurationBuilder();
+                var loggerConfiguration = new LoggerConfiguration().ReadFrom.Configuration(configBuilder.Build());
+                Log.Logger = loggerConfiguration.CreateLogger();
 
-                var host = CreateHostBuilder(args).Build();
+                Log.Logger.Information("Application starting");
+                var isProd = CurrentEnvironment.ToLower() == "production";
+                if (isProd)
+                {
+                    Log.Logger.Information("Running in production; adding KeyVault as a configuration provider");
+                    AddKeyVaultConfigurationProvider(configBuilder);
+                }
 
-                Log.Information("Migrating database");
+                var host = CreateHostBuilder(args, configBuilder.Build()).Build();
+
+                Log.Information("Migrating databases");
                 MigrateDatabases(host);
 
                 Log.Information("Starting host");
@@ -43,13 +53,42 @@ namespace PetDoctor.API
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args, IConfigurationRoot configuration) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseSerilog();
+                    webBuilder.UseConfiguration(configuration);
                 });
+
+        private static IConfigurationBuilder CreateConfigurationBuilder() => new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", false, true)
+            .AddJsonFile($"appsettings.{CurrentEnvironment}.json", true)
+            .AddUserSecrets<Startup>()
+            .AddEnvironmentVariables();
+
+        private static void AddKeyVaultConfigurationProvider(IConfigurationBuilder builder)
+        {
+            try
+            {
+                var cfg = builder.Build();
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+                var kvUrl = cfg.GetValue<string>("keyvault:url");
+                if (string.IsNullOrEmpty(kvUrl))
+                    throw new ArgumentException("A KeyVault URL is required (KEYVAULT__URL)");
+                if (!Uri.IsWellFormedUriString(kvUrl, UriKind.Absolute))
+                    throw new ArgumentException($"Invalid KeyVault URI: {kvUrl} (must be a well formed URI string)");
+                builder.AddAzureKeyVault(kvUrl, keyVaultClient, new DefaultKeyVaultSecretManager());
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e, "Failed to add KeyVault as a configuration provider.");
+                throw;
+            }
+        }
 
         private static void MigrateDatabases(IHost host)
         {
@@ -62,56 +101,6 @@ namespace PetDoctor.API
             var schemaCheck = streamStore.CheckSchema().GetAwaiter().GetResult();
             if (!schemaCheck.IsMatch())
                 streamStore.CreateSchema().GetAwaiter().GetResult();
-        }
-
-        private static readonly string CurrentEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-
-        private static IConfiguration Configuration
-        {
-            get
-            {
-                var builder = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", false, true)
-                    .AddJsonFile($"appsettings.{CurrentEnvironment}.json", true)
-                    .AddUserSecrets<Startup>()
-                    .AddEnvironmentVariables();
-
-                var isProd = CurrentEnvironment.ToLower() == "production";
-                if (!isProd) 
-                    return builder.Build();
-
-                try
-                {
-                    var cfg = builder.Build();
-                    var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                    var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
-                    var kvUrl = cfg.GetValue<string>("keyvault:url");
-                    if (string.IsNullOrEmpty(kvUrl))
-                        throw new ArgumentException("A KeyVault URL is required (KEYVAULT__URL)");
-                    if (!Uri.IsWellFormedUriString(kvUrl, UriKind.Absolute))
-                        throw new ArgumentException($"Invalid KeyVault URI: {kvUrl} (must be a well formed URI string)");
-                    builder.AddAzureKeyVault(kvUrl, keyVaultClient, new DefaultKeyVaultSecretManager());
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-                return builder.Build();
-            }
-        }
-
-        private static Logger CreateLogger()
-        {
-            var loggerConfiguration = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-                .Enrich.FromLogContext()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-                .MinimumLevel.Override("System", LogEventLevel.Warning)
-                .WriteTo.Console();
-
-            return loggerConfiguration.CreateLogger();
         }
     }
 }
