@@ -1,0 +1,21 @@
+containerRegistry: kanearmstrongdev.azurecr.io
+
+namespace: petdoctor-dev
+name: pet-doctor
+
+secretName: pet-doctor-secrets
+
+aadPodIdentityBindingName: pet-doctor-api-dev
+managedIdentityResourceId: /subscriptions/14da8473-5d2f-4fb5-ae7f-841c16bd0651/resourceGroups/PetDoctor/providers/Microsoft.ManagedIdentity/userAssignedIdentities/petdoctorapidev
+managedIdentityClientId: 124c97ea-eacd-4b79-8a74-aafdd0165ab7
+
+petdoctor:
+  api:
+    port: 80
+    replicaCount : 1
+    memory:
+      requests: "250Mi"
+      limits: "400Mi"
+    cpu:
+      requests: "25m"
+      limits: "50m"
