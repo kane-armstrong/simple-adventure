@@ -67,3 +67,8 @@ Tests can be run as usual using Visual Studio//ReSharper. They can also be run i
 To build the integration tests, use `docker-compose build integrationtests` and then `docker-compose up integrationtests` to run them
 
 To build the unit tests, use `docker-compose build unittests` and then `docker-compose up unittests` to run them
+
+## Infrastructure & Deployment
+
+I did most of the provisioning by hand with a mixture of Azure Portal, Azure Cloud Shell, Terraform, Azure CLI, WSL, kubectl, helm, and Lens. Next steps are to document
+and automate the process.
