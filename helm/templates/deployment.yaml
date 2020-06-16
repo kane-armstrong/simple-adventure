@@ -22,6 +22,22 @@ spec:
         ports:
         - containerPort: {{ .Values.petdoctor.api.port }}
           protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: {{ .Values.petdoctor.api.port }}
+          initialDelaySeconds: 15
+          timeoutSeconds: 2
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /live
+            port: {{ .Values.petdoctor.api.port }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 2
+          periodSeconds: 5
+          failureThreshold: 3
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
