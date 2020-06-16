@@ -1,5 +1,7 @@
 # Simple Event Sourced Application
 
+[![CodeFactor](https://www.codefactor.io/repository/github/kane-armstrong/simple-adventure/badge)](https://www.codefactor.io/repository/github/kane-armstrong/simple-adventure)
+
 This repository contains the source code for a simple toy project using CQRS and event sourcing.
 
 The scope for this project is:
