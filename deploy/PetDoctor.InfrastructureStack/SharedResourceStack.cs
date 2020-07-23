@@ -15,9 +15,9 @@ using VirtualNetworkArgs = Pulumi.Azure.Network.VirtualNetworkArgs;
 
 namespace PetDoctor.InfrastructureStack
 {
-    public class MyStack : Stack
+    public class SharedResourceStack : Stack
     {
-        public MyStack()
+        public SharedResourceStack()
         {
             const string prefix = "petdoctor";
             const string password = "";
@@ -36,6 +36,8 @@ namespace PetDoctor.InfrastructureStack
                 Location = "East US 2",
                 Tags = tags
             });
+
+            // Setup Service Principal for AKS
 
             var app = new Application("aks-app", new ApplicationArgs
             {
@@ -57,6 +59,8 @@ namespace PetDoctor.InfrastructureStack
                 Value = password
             });
 
+            // Setup network and assignment contributor rights to the AKS SP
+
             var vnet = new VirtualNetwork("vnet", new VirtualNetworkArgs
             {
                 Name = $"{prefix}vnet",
@@ -73,6 +77,15 @@ namespace PetDoctor.InfrastructureStack
                 AddressPrefixes = { "10.0.0.0/24" },
                 VirtualNetworkName = vnet.Name
             });
+
+            var subnetAssignment = new Assignment("subnet-assignment", new AssignmentArgs
+            {
+                PrincipalId = sp.Id,
+                RoleDefinitionName = "Network Contributor",
+                Scope = subnet.Id
+            });
+
+            // Setup container registry and allow the AKS SP pull permissions
 
             var registry = new Registry("acr", new RegistryArgs
             {
@@ -91,12 +104,7 @@ namespace PetDoctor.InfrastructureStack
                 Scope = registry.Id
             });
 
-            var subnetAssignment = new Assignment("subnet-assignment", new AssignmentArgs
-            {
-                PrincipalId = sp.Id,
-                RoleDefinitionName = "Network Contributor",
-                Scope = subnet.Id
-            });
+            // Setup log analytics for containers in AKS to use
 
             var logAnalyticsWorkspace = new AnalyticsWorkspace("log-analytics", new AnalyticsWorkspaceArgs
             {
@@ -120,6 +128,8 @@ namespace PetDoctor.InfrastructureStack
                     Publisher = "Microsoft"
                 }
             });
+
+            // Create the AKS cluster
 
             var aks = new KubernetesCluster("aks", new KubernetesClusterArgs
             {
