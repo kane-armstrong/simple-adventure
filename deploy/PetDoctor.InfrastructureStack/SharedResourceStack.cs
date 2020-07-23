@@ -119,7 +119,7 @@ namespace PetDoctor.InfrastructureStack
             {
                 ResourceGroupName = resourceGroup.Name,
                 Location = resourceGroup.Location,
-                SolutionName = "ContainerInsights",
+                SolutionName = "petdoctorcontainerinsights",
                 WorkspaceName = logAnalyticsWorkspace.Name,
                 WorkspaceResourceId = logAnalyticsWorkspace.Id,
                 Plan = new AnalyticsSolutionPlanArgs
