@@ -6,6 +6,8 @@ using Pulumi.Azure.Core;
 using Pulumi.Azure.Network;
 using Pulumi.AzureAD;
 using System;
+using Pulumi.Azure.OperationalInsights;
+using Pulumi.Azure.OperationalInsights.Inputs;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using VirtualNetwork = Pulumi.Azure.Network.VirtualNetwork;
@@ -15,11 +17,8 @@ namespace PetDoctor.InfrastructureStack
 {
     public class MyStack : Stack
     {
-        //public MyStack(IOptions<MyStackOptions> options)
         public MyStack()
         {
-
-
             const string prefix = "petdoctor";
             const string password = "";
             const int nodeCount = 2;
@@ -99,14 +98,35 @@ namespace PetDoctor.InfrastructureStack
                 Scope = subnet.Id
             });
 
+            var logAnalyticsWorkspace = new AnalyticsWorkspace("log-analytics", new AnalyticsWorkspaceArgs
+            {
+                Name = "petdoctorloganalyticsworkspace",
+                Sku = "PerGB2018",
+                Location = resourceGroup.Location,
+                ResourceGroupName = resourceGroup.Name,
+                Tags = tags
+            });
+
+            var logAnalyticsSolution = new AnalyticsSolution("analytics-solution", new AnalyticsSolutionArgs
+            {
+                ResourceGroupName = resourceGroup.Name,
+                Location = resourceGroup.Location,
+                SolutionName = "ContainerInsights",
+                WorkspaceName = logAnalyticsWorkspace.Name,
+                WorkspaceResourceId = logAnalyticsWorkspace.Id,
+                Plan = new AnalyticsSolutionPlanArgs
+                {
+                    Product = "OMSGallery/ContainerInsights",
+                    Publisher = "Microsoft"
+                }
+            });
+
             var aks = new KubernetesCluster("aks", new KubernetesClusterArgs
             {
                 Name = $"{prefix}aks",
                 ResourceGroupName = resourceGroup.Name,
                 Location = resourceGroup.Location,
                 DnsPrefix = "dns",
-                // TODO confirm that this is synonymous with agent_pool_profile from tf
-
                 DefaultNodePool = new KubernetesClusterDefaultNodePoolArgs
                 {
                     Name = "default",
@@ -124,7 +144,7 @@ namespace PetDoctor.InfrastructureStack
                 },
                 ServicePrincipal = new KubernetesClusterServicePrincipalArgs
                 {
-                    ClientId = app.Id,
+                    ClientId = sp.ApplicationId,
                     ClientSecret = sppwd.Value
                 },
                 RoleBasedAccessControl = new KubernetesClusterRoleBasedAccessControlArgs
@@ -137,6 +157,14 @@ namespace PetDoctor.InfrastructureStack
                     ServiceCidr = "10.10.0.0/16",
                     DnsServiceIp = "10.10.0.10",
                     DockerBridgeCidr = "172.17.0.1/16"
+                },
+                AddonProfile = new KubernetesClusterAddonProfileArgs
+                {
+                    OmsAgent = new KubernetesClusterAddonProfileOmsAgentArgs
+                    {
+                        Enabled = true,
+                        LogAnalyticsWorkspaceId = logAnalyticsWorkspace.Id
+                    }
                 },
                 Tags = tags
             },
