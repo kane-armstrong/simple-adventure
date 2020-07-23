@@ -21,6 +21,7 @@ namespace PetDoctor.InfrastructureStack
         {
             const string prefix = "petdoctor";
             const string password = "";
+            const string passwordExpiryDate = "2023-07-23T21:51:48.5512401Z";
             const int nodeCount = 2;
             const string sshKey = "";
 
@@ -55,7 +56,7 @@ namespace PetDoctor.InfrastructureStack
             var sppwd = new ServicePrincipalPassword("aks-app-sp-pwd", new ServicePrincipalPasswordArgs
             {
                 ServicePrincipalId = sp.ObjectId,
-                EndDate = DateTime.UtcNow.AddYears(3).ToString("O"),
+                EndDate = DateTime.Parse(passwordExpiryDate).ToString("O"),
                 Value = password
             });
 
