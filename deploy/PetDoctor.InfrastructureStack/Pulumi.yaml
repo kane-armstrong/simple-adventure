@@ -1,0 +1,3 @@
+name: petdoctor
+runtime: dotnet
+description: A C# Pulumi program
