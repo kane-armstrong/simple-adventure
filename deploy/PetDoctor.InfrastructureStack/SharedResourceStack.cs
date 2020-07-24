@@ -22,12 +22,13 @@ namespace PetDoctor.InfrastructureStack
     {
         public SharedResourceStack()
         {
-            const string prefix = "petdoctor";
-            const string passwordExpiryDate = "2025-01-01T00:00:00Z";
-            const int nodeCount = 2;
-
             var config = new Pulumi.Config();
             var kubernetesVersion = config.Get("kubernetesVersion") ?? "1.16.10";
+            var kubernetesNodeCount = config.GetInt32("kubernetesNodeCount") ?? 2;
+            var prefix = config.Get("prefix") ?? "petdoctor";
+            var environmentCode = config.Get("environmentCode");
+            var adSpPasswordExpiryDate = config.Get("spPasswordExpiresOn") ?? "2025-01-01T00:00:00Z";
+
             var environment = config.Get("environment") ?? "development";
             var createdBy = config.Get("createdBy") ?? "default";
             var sqlUser = config.Get("sqlAdmin") ?? "petdoctoradmin";
@@ -81,7 +82,7 @@ namespace PetDoctor.InfrastructureStack
             var adSpPassword = new ServicePrincipalPassword("aks-app-sp-pwd", new ServicePrincipalPasswordArgs
             {
                 ServicePrincipalId = adSp.ObjectId,
-                EndDate = DateTime.Parse(passwordExpiryDate).ToString("O"),
+                EndDate = DateTime.Parse(adSpPasswordExpiryDate).ToString("O"),
                 Value = password.Result
             });
 
@@ -146,7 +147,7 @@ namespace PetDoctor.InfrastructureStack
                 DefaultNodePool = new KubernetesClusterDefaultNodePoolArgs
                 {
                     Name = "aksagentpool",
-                    NodeCount = nodeCount,
+                    NodeCount = kubernetesNodeCount,
                     VmSize = "Standard_D2_v2",
                     OsDiskSizeGb = 30,
                     VnetSubnetId = subnet.Id
