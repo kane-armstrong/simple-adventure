@@ -1,2 +1,5 @@
 config:
+  petdoctor:createdBy: Kane Armstrong
+  petdoctor:environment: development
+  petdoctor:kubernetesVersion: 1.18.4
   pulumi:template: petdoctor
