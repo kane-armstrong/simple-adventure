@@ -56,18 +56,16 @@ namespace PetDoctor.InfrastructureStack
             });
 
             // Create a virtual network and subnet for the AKS cluster
-            var vnet = new VirtualNetwork("vnet", new VirtualNetworkArgs
+            var vnet = new VirtualNetwork($"{prefix}vnet", new VirtualNetworkArgs
             {
-                Name = $"{prefix}vnet",
                 Location = resourceGroup.Location,
                 ResourceGroupName = resourceGroup.Name,
                 AddressSpaces = { "10.5.0.0/16" },
                 Tags = tags
             });
 
-            var subnet = new Subnet("subnet", new SubnetArgs
+            var subnet = new Subnet($"{prefix}subnet", new SubnetArgs
             {
-                Name = $"{prefix}subnet",
                 ResourceGroupName = resourceGroup.Name,
                 AddressPrefixes = { "10.5.1.0/24" },
                 VirtualNetworkName = vnet.Name,
