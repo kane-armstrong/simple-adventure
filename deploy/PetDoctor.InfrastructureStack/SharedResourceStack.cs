@@ -4,12 +4,13 @@ using Pulumi.Azure.ContainerService;
 using Pulumi.Azure.ContainerService.Inputs;
 using Pulumi.Azure.Core;
 using Pulumi.Azure.Network;
-using Pulumi.AzureAD;
-using System;
 using Pulumi.Azure.OperationalInsights;
 using Pulumi.Azure.OperationalInsights.Inputs;
+using Pulumi.Azure.Sql;
+using Pulumi.AzureAD;
 using Pulumi.Random;
 using Pulumi.Tls;
+using System;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using VirtualNetwork = Pulumi.Azure.Network.VirtualNetwork;
@@ -25,6 +26,13 @@ namespace PetDoctor.InfrastructureStack
             const string passwordExpiryDate = "2025-01-01T00:00:00Z";
             const int nodeCount = 2;
 
+            var config = new Pulumi.Config();
+            var kubernetesVersion = config.Get("kubernetesVersion") ?? "1.16.10";
+            var environment = config.Get("environment") ?? "development";
+            var createdBy = config.Get("createdBy") ?? "default";
+            var sqlUser = config.Get("sqlAdmin") ?? "petdoctoradmin";
+            var sqlPassword = config.RequireSecret("sqlPassword");
+
             var password = new RandomPassword("aks-app-sp-password", new RandomPasswordArgs
             {
                 Length = 20,
@@ -36,11 +44,6 @@ namespace PetDoctor.InfrastructureStack
                 Algorithm = "RSA",
                 RsaBits = 4096,
             });
-
-            var config = new Pulumi.Config();
-            var kubernetesVersion = config.Get("kubernetesVersion") ?? "1.16.10";
-            var environment = config.Get("environment") ?? "development";
-            var createdBy = config.Get("createdBy") ?? "default";
 
             var tags = new InputMap<string>
             {
@@ -69,7 +72,7 @@ namespace PetDoctor.InfrastructureStack
                 ResourceGroupName = resourceGroup.Name,
                 AddressPrefixes = { "10.5.1.0/24" },
                 VirtualNetworkName = vnet.Name,
-                
+
             });
 
             // Setup the AD Service Principal for the AKS cluster
@@ -181,6 +184,17 @@ namespace PetDoctor.InfrastructureStack
                     }
                 },
                 Tags = tags
+            });
+
+            // Create a SQL Server instance
+            var sqlServer = new SqlServer($"{prefix}sql", new SqlServerArgs
+            {
+                Location = resourceGroup.Location,
+                ResourceGroupName = resourceGroup.Name,
+                Tags = tags,
+                Version = "12.0",
+                AdministratorLogin = sqlUser,
+                AdministratorLoginPassword = sqlPassword
             });
         }
     }
