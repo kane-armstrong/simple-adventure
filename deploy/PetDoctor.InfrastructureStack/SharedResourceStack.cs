@@ -1,8 +1,11 @@
 ﻿using Pulumi;
+using Pulumi.Azure.AppInsights;
 using Pulumi.Azure.Authorization;
 using Pulumi.Azure.ContainerService;
 using Pulumi.Azure.ContainerService.Inputs;
 using Pulumi.Azure.Core;
+using Pulumi.Azure.KeyVault;
+using Pulumi.Azure.KeyVault.Inputs;
 using Pulumi.Azure.Network;
 using Pulumi.Azure.OperationalInsights;
 using Pulumi.Azure.OperationalInsights.Inputs;
@@ -11,7 +14,6 @@ using Pulumi.AzureAD;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
-using Pulumi.Azure.AppInsights;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using VirtualNetwork = Pulumi.Azure.Network.VirtualNetwork;
@@ -34,6 +36,8 @@ namespace PetDoctor.InfrastructureStack
             var createdBy = config.Get("createdBy") ?? "default";
             var sqlUser = config.Get("sqlAdmin") ?? "petdoctoradmin";
             var sqlPassword = config.RequireSecret("sqlPassword");
+
+            var tenantId = config.Require("tenantId");
 
             var password = new RandomPassword("aks-app-sp-password", new RandomPasswordArgs
             {
@@ -215,6 +219,40 @@ namespace PetDoctor.InfrastructureStack
                 ApplicationType = "Web",
                 Location = resourceGroup.Location,
                 ResourceGroupName = resourceGroup.Name,
+                Tags = tags
+            });
+
+            // Create a KeyVault instance
+            var keyVault = new KeyVault($"{prefix}kv", new KeyVaultArgs
+            {
+                Location = resourceGroup.Location,
+                ResourceGroupName = resourceGroup.Name,
+                EnabledForDiskEncryption = true,
+                TenantId = tenantId,
+                SkuName = "standard",
+                AccessPolicies = new InputList<KeyVaultAccessPolicyArgs>
+                {
+                    new KeyVaultAccessPolicyArgs
+                        {
+                            TenantId = tenantId,
+                            ObjectId = adSp.ObjectId,
+                            SecretPermissions = new[]
+                            {
+                                "get",
+                                "list"
+                            },
+                            KeyPermissions = new[]
+                            {
+                                "wrapKey",
+                                "unwrapKey"
+                            }
+                        }
+                },
+                NetworkAcls = new KeyVaultNetworkAclsArgs
+                {
+                    DefaultAction = "Deny",
+                    Bypass = "AzureServices"
+                },
                 Tags = tags
             });
         }
