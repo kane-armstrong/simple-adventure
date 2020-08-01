@@ -11,6 +11,7 @@ using Pulumi.AzureAD;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
+using Pulumi.Azure.AppInsights;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using VirtualNetwork = Pulumi.Azure.Network.VirtualNetwork;
@@ -205,6 +206,15 @@ namespace PetDoctor.InfrastructureStack
                 ResourceGroupName = resourceGroup.Name,
                 ServerName = sqlServer.Name,
                 RequestedServiceObjectiveName = "S0",
+                Tags = tags
+            });
+
+            // Create an Application Insights instance
+            var appInsights = new Insights($"{prefix}insights", new InsightsArgs
+            {
+                ApplicationType = "Web",
+                Location = resourceGroup.Location,
+                ResourceGroupName = resourceGroup.Name,
                 Tags = tags
             });
         }

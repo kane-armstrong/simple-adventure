@@ -1,9 +1,3 @@
-// Application Insights
-
-variable app_insights_instance_name {
-    default = "petdoctor-dev"
-}
-
 // KeyVault
 
 variable vault_name {
