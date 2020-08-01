@@ -58,18 +58,3 @@ resource "azurerm_key_vault" "keyvault" {
     CreatedBy = "${var.created_by}"
   }
 }
-
-// SQL Database
-
-resource "azurerm_sql_database" "sqlserver" {
-  name                             = "${var.database_name}"
-  location                         = "${azurerm_resource_group.sqlserver.location}"
-  resource_group_name              = "${azurerm_resource_group.sqlserver.name}"
-  server_name                      = "${azurerm_sql_server.sqlserver.name}"
-  requested_service_objective_name = "S0"
-
-  tags = {
-    Environment = "${var.environment}",
-    CreatedBy = "${var.created_by}"
-  }
-}

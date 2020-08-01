@@ -197,6 +197,16 @@ namespace PetDoctor.InfrastructureStack
                 AdministratorLogin = sqlUser,
                 AdministratorLoginPassword = sqlPassword
             });
+
+            // Create a SQL database
+            var sqlDb = new Database($"{prefix}db", new DatabaseArgs
+            {
+                Location = resourceGroup.Location,
+                ResourceGroupName = resourceGroup.Name,
+                ServerName = sqlServer.Name,
+                RequestedServiceObjectiveName = "S0",
+                Tags = tags
+            });
         }
     }
 }
