@@ -64,14 +64,14 @@ namespace PetDoctor.InfrastructureStack
             {
                 Location = resourceGroup.Location,
                 ResourceGroupName = resourceGroup.Name,
-                AddressSpaces = { "10.5.0.0/16" },
+                AddressSpaces = { "10.0.0.0/8" },
                 Tags = tags
             });
 
             var subnet = new Subnet($"{prefix}subnet", new SubnetArgs
             {
                 ResourceGroupName = resourceGroup.Name,
-                AddressPrefixes = { "10.5.1.0/24" },
+                AddressPrefixes = { "10.240.0.0/16" },
                 VirtualNetworkName = vnet.Name,
 
             });
@@ -172,8 +172,8 @@ namespace PetDoctor.InfrastructureStack
                 NetworkProfile = new KubernetesClusterNetworkProfileArgs
                 {
                     NetworkPlugin = "azure",
-                    ServiceCidr = "10.5.2.0/24",
-                    DnsServiceIp = "10.5.2.254",
+                    ServiceCidr = "10.2.0.0/24",
+                    DnsServiceIp = "10.2.0.10",
                     DockerBridgeCidr = "172.17.0.1/16"
                 },
                 AddonProfile = new KubernetesClusterAddonProfileArgs
