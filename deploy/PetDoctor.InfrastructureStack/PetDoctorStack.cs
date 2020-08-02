@@ -23,6 +23,15 @@ namespace PetDoctor.InfrastructureStack
 {
     public class PetDoctorStack : Stack
     {
+        [Output] public Output<string> ContainerRegistryLoginServer { get; set; }
+
+        [Output] public Output<string> KubeConfig { get; set; }
+
+        [Output] public Output<string> AppInsightsInstrumentationKey { get; set; }
+
+        [Output] public Output<string> KeyVaultUri { get; set; }
+
+
         public PetDoctorStack()
         {
             var config = new Pulumi.Config();
@@ -109,6 +118,8 @@ namespace PetDoctor.InfrastructureStack
                 Tags = tags
             });
 
+            ContainerRegistryLoginServer = registry.LoginServer;
+
             var acrAssignment = new Assignment("acr-assignment", new AssignmentArgs
             {
                 PrincipalId = adSp.Id,
@@ -191,6 +202,8 @@ namespace PetDoctor.InfrastructureStack
                 Tags = tags
             });
 
+            KubeConfig = cluster.KubeConfigRaw;
+
             // Create a SQL Server instance
             var sqlServer = new SqlServer($"{prefix}sql", new SqlServerArgs
             {
@@ -220,6 +233,8 @@ namespace PetDoctor.InfrastructureStack
                 ResourceGroupName = resourceGroup.Name,
                 Tags = tags
             });
+
+            AppInsightsInstrumentationKey = appInsights.InstrumentationKey;
 
             // Create a KeyVault instance
             var keyVault = new KeyVault($"{prefix}kv", new KeyVaultArgs
@@ -254,6 +269,8 @@ namespace PetDoctor.InfrastructureStack
                 },
                 Tags = tags
             });
+
+            KeyVaultUri = keyVault.VaultUri;
         }
     }
 }
