@@ -1,0 +1,9 @@
+config:
+  petdoctor:createdBy: Kane Armstrong
+  petdoctor:environment: development
+  petdoctor:kubernetesVersion: 1.18.4
+  petdoctor:sqlPassword:
+    secure: AAABAEwY1DnP4SsMXK1ckhPsXNVkTHIMovpReRkI2Hs/Z/I22CuNEkjzCdchYA==
+  petdoctor:tenantId:
+    secure: AAABANwU7Yp1eQYDTjqcGXBWus35VHKIl009iJ7G+A7V4QGAiMcLvwLUEivBch7J9lp4DNX+3T/7ag9IGChBN2mvFrA=
+  pulumi:template: petdoctor
