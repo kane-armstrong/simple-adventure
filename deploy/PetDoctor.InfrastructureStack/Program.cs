@@ -5,6 +5,6 @@ namespace PetDoctor.InfrastructureStack
 {
     class Program
     {
-        static Task<int> Main() => Deployment.RunAsync<SharedResourceStack>();
+        static Task<int> Main() => Deployment.RunAsync<PetDoctorStack>();
     }
 }

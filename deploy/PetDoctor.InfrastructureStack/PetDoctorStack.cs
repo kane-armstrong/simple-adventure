@@ -21,9 +21,9 @@ using VirtualNetworkArgs = Pulumi.Azure.Network.VirtualNetworkArgs;
 
 namespace PetDoctor.InfrastructureStack
 {
-    public class SharedResourceStack : Stack
+    public class PetDoctorStack : Stack
     {
-        public SharedResourceStack()
+        public PetDoctorStack()
         {
             var config = new Pulumi.Config();
             var kubernetesVersion = config.Get("kubernetesVersion") ?? "1.16.10";
