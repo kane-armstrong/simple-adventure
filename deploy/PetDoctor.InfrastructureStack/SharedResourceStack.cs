@@ -214,7 +214,7 @@ namespace PetDoctor.InfrastructureStack
             });
 
             // Create an Application Insights instance
-            var appInsights = new Insights($"{prefix}insights", new InsightsArgs
+            var appInsights = new Insights($"{prefix}-ai", new InsightsArgs
             {
                 ApplicationType = "Web",
                 Location = resourceGroup.Location,
