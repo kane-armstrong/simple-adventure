@@ -33,11 +33,12 @@ namespace PetDoctor.InfrastructureStack
 
         public PetDoctorStack()
         {
+            #region Configuration
+
             var config = new Pulumi.Config();
             var kubernetesVersion = config.Get("kubernetesVersion") ?? "1.16.10";
             var kubernetesNodeCount = config.GetInt32("kubernetesNodeCount") ?? 2;
             var prefix = config.Get("prefix") ?? "petdoctor";
-            var environmentCode = config.Get("environmentCode");
             var adSpPasswordExpiryDate = config.Get("spPasswordExpiresOn") ?? "2025-01-01T00:00:00Z";
 
             var environment = config.Get("environment") ?? "development";
@@ -47,23 +48,15 @@ namespace PetDoctor.InfrastructureStack
 
             var tenantId = config.RequireSecret("tenantId");
 
-            var password = new RandomPassword("aks-app-sp-password", new RandomPasswordArgs
-            {
-                Length = 20,
-                Special = true,
-            });
-
-            var sshPublicKey = new PrivateKey("ssh-key", new PrivateKeyArgs
-            {
-                Algorithm = "RSA",
-                RsaBits = 4096,
-            });
-
             var tags = new InputMap<string>
             {
                 { "Environment", environment },
                 { "CreatedBy", createdBy }
             };
+
+            #endregion
+
+            #region Resource group
 
             var resourceGroup = new ResourceGroup("rg", new ResourceGroupArgs
             {
@@ -71,6 +64,10 @@ namespace PetDoctor.InfrastructureStack
                 Location = "East US 2",
                 Tags = tags
             });
+
+            #endregion
+
+            #region Network setup
 
             // Create a virtual network and subnet for the AKS cluster
             var vnet = new VirtualNetwork($"{prefix}vnet", new VirtualNetworkArgs
@@ -88,7 +85,32 @@ namespace PetDoctor.InfrastructureStack
                 VirtualNetworkName = vnet.Name
             });
 
-            // Setup the AD Service Principal for the AKS cluster
+            #endregion
+
+            #region Container registry setup
+
+            var registry = new Registry("acr", new RegistryArgs
+            {
+                Name = $"{prefix}acr",
+                ResourceGroupName = resourceGroup.Name,
+                Location = resourceGroup.Location,
+                Sku = "Standard",
+                AdminEnabled = false,
+                Tags = tags
+            });
+
+            ContainerRegistryLoginServer = registry.LoginServer;
+
+            #endregion
+
+            #region Cluster service principal setup
+
+            var password = new RandomPassword("aks-app-sp-password", new RandomPasswordArgs
+            {
+                Length = 20,
+                Special = true,
+            });
+
             var adApp = new Application("aks-app", new ApplicationArgs { Name = $"{prefix}aksapp" });
             var adSp = new ServicePrincipal("aks-app-sp", new ServicePrincipalArgs { ApplicationId = adApp.ApplicationId });
             var adSpPassword = new ServicePrincipalPassword("aks-app-sp-pwd", new ServicePrincipalPasswordArgs
@@ -106,19 +128,6 @@ namespace PetDoctor.InfrastructureStack
                 Scope = subnet.Id
             });
 
-            // Setup container registry and allow the AKS SP to pull from it
-            var registry = new Registry("acr", new RegistryArgs
-            {
-                Name = $"{prefix}acr",
-                ResourceGroupName = resourceGroup.Name,
-                Location = resourceGroup.Location,
-                Sku = "Standard",
-                AdminEnabled = false,
-                Tags = tags
-            });
-
-            ContainerRegistryLoginServer = registry.LoginServer;
-
             var acrAssignment = new Assignment("acr-assignment", new AssignmentArgs
             {
                 PrincipalId = adSp.Id,
@@ -126,7 +135,10 @@ namespace PetDoctor.InfrastructureStack
                 Scope = registry.Id
             });
 
-            // Setup log analytics for the AKS cluster
+            #endregion
+
+            #region Cluster logging setup
+
             var logAnalyticsWorkspace = new AnalyticsWorkspace("log-analytics", new AnalyticsWorkspaceArgs
             {
                 Name = "petdoctorloganalyticsworkspace",
@@ -150,7 +162,16 @@ namespace PetDoctor.InfrastructureStack
                 }
             });
 
-            // Provision the AKS cluster
+            #endregion
+
+            #region Kubernetes cluster setup
+
+            var sshPublicKey = new PrivateKey("ssh-key", new PrivateKeyArgs
+            {
+                Algorithm = "RSA",
+                RsaBits = 4096,
+            });
+
             var cluster = new KubernetesCluster("aks", new KubernetesClusterArgs
             {
                 Name = $"{prefix}aks",
@@ -203,7 +224,10 @@ namespace PetDoctor.InfrastructureStack
 
             KubeConfig = cluster.KubeConfigRaw;
 
-            // Create a SQL Server instance
+            #endregion
+
+            #region SQL Server instance/database(s) setup
+
             var sqlServer = new SqlServer($"{prefix}sql", new SqlServerArgs
             {
                 Location = resourceGroup.Location,
@@ -214,7 +238,6 @@ namespace PetDoctor.InfrastructureStack
                 AdministratorLoginPassword = sqlPassword
             });
 
-            // Create a SQL database
             var sqlDb = new Database($"{prefix}db", new DatabaseArgs
             {
                 Location = resourceGroup.Location,
@@ -223,6 +246,10 @@ namespace PetDoctor.InfrastructureStack
                 RequestedServiceObjectiveName = "S0",
                 Tags = tags
             });
+
+            #endregion
+
+            #region Application Insights setup
 
             // Create an Application Insights instance
             var appInsights = new Insights($"{prefix}-ai", new InsightsArgs
@@ -234,6 +261,10 @@ namespace PetDoctor.InfrastructureStack
             });
 
             AppInsightsInstrumentationKey = appInsights.InstrumentationKey;
+
+            #endregion
+
+            #region KeyVault setup
 
             // Create a KeyVault instance
             var keyVault = new KeyVault($"{prefix}kv", new KeyVaultArgs
@@ -270,6 +301,8 @@ namespace PetDoctor.InfrastructureStack
             });
 
             KeyVaultUri = keyVault.VaultUri;
+
+            #endregion
         }
     }
 }
