@@ -37,7 +37,7 @@ namespace PetDoctor.InfrastructureStack
             var sqlUser = config.Get("sqlAdmin") ?? "petdoctoradmin";
             var sqlPassword = config.RequireSecret("sqlPassword");
 
-            var tenantId = config.Require("tenantId");
+            var tenantId = config.RequireSecret("tenantId");
 
             var password = new RandomPassword("aks-app-sp-password", new RandomPasswordArgs
             {
