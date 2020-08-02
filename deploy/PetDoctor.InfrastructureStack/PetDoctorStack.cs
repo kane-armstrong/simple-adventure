@@ -77,8 +77,7 @@ namespace PetDoctor.InfrastructureStack
             {
                 ResourceGroupName = resourceGroup.Name,
                 AddressPrefixes = { "10.240.0.0/16" },
-                VirtualNetworkName = vnet.Name,
-
+                VirtualNetworkName = vnet.Name
             });
 
             // Setup the AD Service Principal for the AKS cluster
