@@ -31,7 +31,6 @@ namespace PetDoctor.InfrastructureStack
 
         [Output] public Output<string> KeyVaultUri { get; set; }
 
-
         public PetDoctorStack()
         {
             var config = new Pulumi.Config();
