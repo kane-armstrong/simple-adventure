@@ -14,6 +14,7 @@ using Pulumi.AzureAD;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
+using Pulumi.Kubernetes.Yaml;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using VirtualNetwork = Pulumi.Azure.Network.VirtualNetwork;
@@ -301,6 +302,25 @@ namespace PetDoctor.InfrastructureStack
             });
 
             KeyVaultUri = keyVault.VaultUri;
+
+            #endregion
+
+            #region Managed identities setup
+
+            var appointmentApiIdentity = new UserAssignedIdentity("appointment-api", new UserAssignedIdentityArgs
+            {
+                ResourceGroupName = resourceGroup.Name,
+                Location = resourceGroup.Location,
+                Tags = tags
+            });
+
+            var appointmentApiKeyVaultPolicy = new AccessPolicy("", new AccessPolicyArgs
+            {
+                ObjectId = appointmentApiIdentity.PrincipalId,
+                TenantId = tenantId,
+                SecretPermissions = new [] { "get", "list" },
+                KeyVaultId = keyVault.Id
+            });
 
             #endregion
         }
