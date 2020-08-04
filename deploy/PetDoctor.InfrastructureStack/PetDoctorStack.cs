@@ -11,10 +11,10 @@ using Pulumi.Azure.OperationalInsights;
 using Pulumi.Azure.OperationalInsights.Inputs;
 using Pulumi.Azure.Sql;
 using Pulumi.AzureAD;
+using Pulumi.Kubernetes.Yaml;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
-using Pulumi.Kubernetes.Yaml;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using VirtualNetwork = Pulumi.Azure.Network.VirtualNetwork;
@@ -318,9 +318,31 @@ namespace PetDoctor.InfrastructureStack
             {
                 ObjectId = appointmentApiIdentity.PrincipalId,
                 TenantId = tenantId,
-                SecretPermissions = new [] { "get", "list" },
+                SecretPermissions = new[] { "get", "list" },
                 KeyVaultId = keyVault.Id
             });
+
+            // Assigning the AKS SP the correct role membership (Managed Identity Operator) for the user assigned identities is mandatory
+
+            var aksSpAppointmentApiAccessPolicy = new Assignment("aks-sp-appontment-api", new AssignmentArgs
+            {
+                PrincipalId = adSp.ObjectId,
+                RoleDefinitionName = "Managed Identity Operator",
+                Scope = appointmentApiIdentity.Urn
+            });
+
+            #endregion
+
+            #region Cluster setup
+
+            var aadPodIdentityDeployment = new ConfigFile("aad-pod-identity", new ConfigFileArgs
+            {
+                File = "https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml"
+            });
+
+            // TODO: nginx
+
+            // TODO: cert-manager   -  https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/deploy/manifests/00-crds.yaml
 
             #endregion
         }
