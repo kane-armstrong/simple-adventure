@@ -307,7 +307,7 @@ namespace PetDoctor.InfrastructureStack
 
             #region Managed identities setup
 
-            var appointmentApiIdentity = new UserAssignedIdentity("appointment-api", new UserAssignedIdentityArgs
+            var appointmentApiIdentity = new UserAssignedIdentity("appointment-api-identity", new UserAssignedIdentityArgs
             {
                 ResourceGroupName = resourceGroup.Name,
                 Location = resourceGroup.Location,
