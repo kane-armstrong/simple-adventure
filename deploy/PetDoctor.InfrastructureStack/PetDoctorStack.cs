@@ -307,14 +307,14 @@ namespace PetDoctor.InfrastructureStack
 
             #region Managed identities setup
 
-            var appointmentApiIdentity = new UserAssignedIdentity("appointment-api-identity", new UserAssignedIdentityArgs
+            var appointmentApiIdentity = new UserAssignedIdentity("appointment-api", new UserAssignedIdentityArgs
             {
                 ResourceGroupName = resourceGroup.Name,
                 Location = resourceGroup.Location,
                 Tags = tags
             });
 
-            var appointmentApiKeyVaultPolicy = new AccessPolicy("", new AccessPolicyArgs
+            var appointmentApiKeyVaultPolicy = new AccessPolicy("appointment-api", new AccessPolicyArgs
             {
                 ObjectId = appointmentApiIdentity.PrincipalId,
                 TenantId = tenantId,
