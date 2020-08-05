@@ -428,34 +428,39 @@ namespace PetDoctor.InfrastructureStack
 
             #endregion
 
-            #region Pet doctor - appointment api
+            SetupAppointmentApiInKubernetes(values, appointmentApiIdentity);
+        }
 
-            var appointmentApiPodIdentity = new CustomResource(values.AppointmentApi.AadPodIdentityName, new AzureIdentityResourceArgs
-            {
-                Metadata = new ObjectMetaArgs
+        private static void SetupAppointmentApiInKubernetes(PetDoctorValues values, UserAssignedIdentity appointmentApiIdentity)
+        {
+            var appointmentApiPodIdentity = new CustomResource(values.AppointmentApi.AadPodIdentityName,
+                new AzureIdentityResourceArgs
                 {
-                    Name = values.AppointmentApi.AadPodIdentityName
-                },
-                Spec = new AzureIdentitySpecArgs
-                {
-                    Type = 0,
-                    ResourceId = appointmentApiIdentity.Urn.ToString(),
-                    ClientId = appointmentApiIdentity.ClientId.ToString()
-                }
-            });
+                    Metadata = new ObjectMetaArgs
+                    {
+                        Name = values.AppointmentApi.AadPodIdentityName
+                    },
+                    Spec = new AzureIdentitySpecArgs
+                    {
+                        Type = 0,
+                        ResourceId = appointmentApiIdentity.Urn.ToString(),
+                        ClientId = appointmentApiIdentity.ClientId.ToString()
+                    }
+                });
 
-            var appointmentApiPodIdentityBinding = new CustomResource(values.AppointmentApi.AadPodIdentityBindingName, new AzureIdentityBindingResourceArgs
-            {
-                Metadata = new ObjectMetaArgs
+            var appointmentApiPodIdentityBinding = new CustomResource(values.AppointmentApi.AadPodIdentityBindingName,
+                new AzureIdentityBindingResourceArgs
                 {
-                    Name = values.AppointmentApi.AadPodIdentityBindingName
-                },
-                Spec = new AzureIdentityBindingSpecArgs
-                {
-                    AzureIdentity = values.AppointmentApi.AadPodIdentityName,
-                    Selector = values.AppointmentApi.AadPodIdentitySelector
-                }
-            });
+                    Metadata = new ObjectMetaArgs
+                    {
+                        Name = values.AppointmentApi.AadPodIdentityBindingName
+                    },
+                    Spec = new AzureIdentityBindingSpecArgs
+                    {
+                        AzureIdentity = values.AppointmentApi.AadPodIdentityName,
+                        Selector = values.AppointmentApi.AadPodIdentitySelector
+                    }
+                });
 
             var appointmentApiDeployment = new Deployment("appointment-api-deployment", new DeploymentArgs
             {
@@ -467,7 +472,7 @@ namespace PetDoctor.InfrastructureStack
                     Namespace = values.Namespace,
                     Labels = new InputMap<string>
                     {
-                        { "app", values.AppointmentApi.DeploymentName }
+                        {"app", values.AppointmentApi.DeploymentName}
                     }
                 },
                 Spec = new DeploymentSpecArgs
@@ -477,7 +482,7 @@ namespace PetDoctor.InfrastructureStack
                     {
                         MatchLabels = new InputMap<string>
                         {
-                            { "app", values.AppointmentApi.DeploymentName }
+                            {"app", values.AppointmentApi.DeploymentName}
                         }
                     },
                     Template = new PodTemplateSpecArgs
@@ -486,8 +491,8 @@ namespace PetDoctor.InfrastructureStack
                         {
                             Labels = new InputMap<string>
                             {
-                                { "app", values.AppointmentApi.DeploymentName },
-                                { "aadpodidbinding", values.AppointmentApi.AadPodIdentitySelector }
+                                {"app", values.AppointmentApi.DeploymentName},
+                                {"aadpodidbinding", values.AppointmentApi.AadPodIdentitySelector}
                             }
                         },
                         Spec = new PodSpecArgs
@@ -591,8 +596,8 @@ namespace PetDoctor.InfrastructureStack
                     Namespace = values.Namespace,
                     Annotations = new InputMap<string>
                     {
-                        { "kubernetes.io/ingress.class", "nginx" },
-                        { "certmanager.k8s.io/cluster-issuer", "letsencrypt-prod" }
+                        {"kubernetes.io/ingress.class", "nginx"},
+                        {"certmanager.k8s.io/cluster-issuer", "letsencrypt-prod"}
                     }
                 },
                 Spec = new IngressSpecArgs
@@ -646,7 +651,7 @@ namespace PetDoctor.InfrastructureStack
                 {
                     Selector = new InputMap<string>
                     {
-                        { "app", values.AppointmentApi.DeploymentName }
+                        {"app", values.AppointmentApi.DeploymentName}
                     },
                     Type = "ClusterIP",
                     ClusterIP = "None",
@@ -662,8 +667,6 @@ namespace PetDoctor.InfrastructureStack
                     }
                 }
             });
-
-            #endregion
         }
     }
 }
