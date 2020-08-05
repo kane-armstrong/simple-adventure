@@ -1,4 +1,5 @@
-﻿using Pulumi;
+﻿using PetDoctor.InfrastructureStack.Core;
+using Pulumi;
 using Pulumi.Azure.AppInsights;
 using Pulumi.Azure.Authorization;
 using Pulumi.Azure.ContainerService;
@@ -11,18 +12,14 @@ using Pulumi.Azure.OperationalInsights;
 using Pulumi.Azure.OperationalInsights.Inputs;
 using Pulumi.Azure.Sql;
 using Pulumi.AzureAD;
-using Pulumi.Kubernetes.ApiExtensions;
+using Pulumi.Kubernetes.Core.V1;
+using Pulumi.Kubernetes.Types.Inputs.Core.V1;
 using Pulumi.Kubernetes.Types.Inputs.Meta.V1;
+using Pulumi.Kubernetes.Types.Inputs.Networking.V1Beta1;
 using Pulumi.Kubernetes.Yaml;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
-using System.Windows.Markup;
-using Pulumi.Kubernetes.Core.V1;
-using Pulumi.Kubernetes.Extensions.V1Beta1;
-using Pulumi.Kubernetes.Networking.V1Beta1;
-using Pulumi.Kubernetes.Types.Inputs.Core.V1;
-using Pulumi.Kubernetes.Types.Inputs.Networking.V1Beta1;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using CustomResource = Pulumi.Kubernetes.ApiExtensions.CustomResource;
@@ -666,72 +663,5 @@ namespace PetDoctor.InfrastructureStack
 
             #endregion
         }
-    }
-
-    public class PetDoctorValues
-    {
-        public string Name { get; set; }
-        public string Host { get; set; }
-        public string Namespace { get; set; }
-        public string SecretName { get; set; }
-        public string AppVersion { get; set; }
-        public string Registry { get; set; }
-        public ReplicaSetConfiguration AppointmentApi { get; set; }
-    }
-
-    public class ReplicaSetConfiguration
-    {
-        public int Port { get; set; }
-        public int ReplicaCount { get; set; }
-        public string AadPodIdentityName { get; set; }
-        public string AadPodIdentityBindingName { get; set; }
-        public string AadPodIdentitySelector { get; set; }
-        public string DeploymentName { get; set; }
-        public string IngressName { get; set; }
-        public string ServiceName { get; set; }
-        public ResourceLimit Memory { get; set; }
-        public ResourceLimit Cpu { get; set; }
-    }
-
-    public class ResourceLimit
-    {
-        public string Request { get; set; }
-        public string Limit { get; set; }
-    }
-
-    public class AzureIdentityResourceArgs : CustomResourceArgs
-    {
-        public AzureIdentityResourceArgs() : base("aadpodidentity.k8s.io/v1", "AzureIdentity")
-        {
-        }
-
-        public AzureIdentitySpecArgs Spec { get; set; }
-    }
-
-    public class AzureIdentitySpecArgs
-    {
-        [Input("type", true)]
-        public int Type { get; set; }
-        [Input("resourceID", true)]
-        public string ResourceId { get; set; }
-        [Input("clientID", true)]
-        public string ClientId { get; set; }
-    }
-
-    public class AzureIdentityBindingResourceArgs : CustomResourceArgs
-    {
-        public AzureIdentityBindingResourceArgs() : base("aadpodidentity.k8s.io/v1", "AzureIdentityBinding")
-        {
-        }
-
-        public AzureIdentityBindingSpecArgs Spec { get; set; }
-    }
-
-    public class AzureIdentityBindingSpecArgs
-    {
-        [Input("azureIdentity", true)]
-        public string AzureIdentity { get; set; }
-        [Input("selector", true)]
-        public string Selector { get; set; }
     }
 }
