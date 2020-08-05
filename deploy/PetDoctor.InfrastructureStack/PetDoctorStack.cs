@@ -36,6 +36,8 @@ namespace PetDoctor.InfrastructureStack
 {
     public class PetDoctorStack : Stack
     {
+        // TODO Make sure everything is being output properly
+
         [Output] public Output<string> ContainerRegistryLoginServer { get; set; }
 
         [Output] public Output<string> KubeConfig { get; set; }
