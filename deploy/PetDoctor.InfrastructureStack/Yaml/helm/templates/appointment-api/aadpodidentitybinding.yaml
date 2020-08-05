@@ -1,7 +1,0 @@
-apiVersion: "aadpodidentity.k8s.io/v1"
-kind: AzureIdentityBinding
-metadata:
-  name: pet-doctor-pod-identity-binding
-spec:
-  azureIdentity: pet-doctor-pod-identity
-  selector: pet-doctor-api-dev

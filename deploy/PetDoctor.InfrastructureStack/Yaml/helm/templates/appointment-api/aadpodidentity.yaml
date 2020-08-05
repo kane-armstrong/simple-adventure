@@ -1,8 +1,0 @@
-apiVersion: "aadpodidentity.k8s.io/v1"
-kind: AzureIdentity
-metadata:
-  name: pet-doctor-pod-identity
-spec:
-  type: 0
-  resourceID: /subscriptions/14da8473-5d2f-4fb5-ae7f-841c16bd0651/resourceGroups/PetDoctor/providers/Microsoft.ManagedIdentity/userAssignedIdentities/petdoctorapidev
-  clientID: "124c97ea-eacd-4b79-8a74-aafdd0165ab7"

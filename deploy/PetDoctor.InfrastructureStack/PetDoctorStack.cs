@@ -11,12 +11,27 @@ using Pulumi.Azure.OperationalInsights;
 using Pulumi.Azure.OperationalInsights.Inputs;
 using Pulumi.Azure.Sql;
 using Pulumi.AzureAD;
+using Pulumi.Kubernetes.ApiExtensions;
+using Pulumi.Kubernetes.Types.Inputs.Meta.V1;
 using Pulumi.Kubernetes.Yaml;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
+using System.Windows.Markup;
+using Pulumi.Kubernetes.Core.V1;
+using Pulumi.Kubernetes.Extensions.V1Beta1;
+using Pulumi.Kubernetes.Networking.V1Beta1;
+using Pulumi.Kubernetes.Types.Inputs.Core.V1;
+using Pulumi.Kubernetes.Types.Inputs.Networking.V1Beta1;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
+using CustomResource = Pulumi.Kubernetes.ApiExtensions.CustomResource;
+using Deployment = Pulumi.Kubernetes.Apps.V1.Deployment;
+using DeploymentArgs = Pulumi.Kubernetes.Types.Inputs.Apps.V1.DeploymentArgs;
+using DeploymentSpecArgs = Pulumi.Kubernetes.Types.Inputs.Apps.V1.DeploymentSpecArgs;
+using Ingress = Pulumi.Kubernetes.Networking.V1Beta1.Ingress;
+using Secret = Pulumi.Kubernetes.Core.V1.Secret;
+using SecretArgs = Pulumi.Kubernetes.Types.Inputs.Core.V1.SecretArgs;
 using VirtualNetwork = Pulumi.Azure.Network.VirtualNetwork;
 using VirtualNetworkArgs = Pulumi.Azure.Network.VirtualNetworkArgs;
 
@@ -32,13 +47,23 @@ namespace PetDoctor.InfrastructureStack
 
         [Output] public Output<string> KeyVaultUri { get; set; }
 
+        [Output] public Output<string> AppointmentApiIdentityResourceId { get; set; }
+
+        [Output] public Output<string> AppointmentApiIdentityClientId { get; set; }
+
         public PetDoctorStack()
         {
+            // TODO this whole thing is nasty. surely we can break this down without regions? how about builders?
+
             #region Configuration
 
             var config = new Pulumi.Config();
+
             var kubernetesVersion = config.Get("kubernetesVersion") ?? "1.16.10";
             var kubernetesNodeCount = config.GetInt32("kubernetesNodeCount") ?? 2;
+
+            var kubeNamespace = config.Get("chartNamespace") ?? "pet-doctor-dev";
+
             var prefix = config.Get("prefix") ?? "petdoctor";
             var adSpPasswordExpiryDate = config.Get("spPasswordExpiresOn") ?? "2025-01-01T00:00:00Z";
 
@@ -253,7 +278,7 @@ namespace PetDoctor.InfrastructureStack
             #region Application Insights setup
 
             // Create an Application Insights instance
-            var appInsights = new Insights($"{prefix}-ai", new InsightsArgs
+            var sharedAppInsights = new Insights($"{prefix}-ai", new InsightsArgs
             {
                 ApplicationType = "web",
                 Location = resourceGroup.Location,
@@ -261,14 +286,16 @@ namespace PetDoctor.InfrastructureStack
                 Tags = tags
             });
 
-            AppInsightsInstrumentationKey = appInsights.InstrumentationKey;
+            AppInsightsInstrumentationKey = sharedAppInsights.InstrumentationKey;
 
             #endregion
+
+            // TODO it'd be better to group things by the deployable than by the type of thing
 
             #region KeyVault setup
 
             // Create a KeyVault instance
-            var keyVault = new KeyVault($"{prefix}kv", new KeyVaultArgs
+            var appointmentApiKeyVault = new KeyVault($"{prefix}kv", new KeyVaultArgs
             {
                 Location = resourceGroup.Location,
                 ResourceGroupName = resourceGroup.Name,
@@ -301,7 +328,7 @@ namespace PetDoctor.InfrastructureStack
                 Tags = tags
             });
 
-            KeyVaultUri = keyVault.VaultUri;
+            KeyVaultUri = appointmentApiKeyVault.VaultUri;
 
             #endregion
 
@@ -314,12 +341,16 @@ namespace PetDoctor.InfrastructureStack
                 Tags = tags
             });
 
+            AppointmentApiIdentityResourceId = appointmentApiIdentity.Urn;
+
+            AppointmentApiIdentityClientId = appointmentApiIdentity.ClientId;
+
             var appointmentApiKeyVaultPolicy = new AccessPolicy("appointment-api", new AccessPolicyArgs
             {
                 ObjectId = appointmentApiIdentity.PrincipalId,
                 TenantId = tenantId,
                 SecretPermissions = new[] { "get", "list" },
-                KeyVaultId = keyVault.Id
+                KeyVaultId = appointmentApiKeyVault.Id
             });
 
             // Assigning the AKS SP the correct role membership (Managed Identity Operator) for the user assigned identities is mandatory
@@ -345,6 +376,362 @@ namespace PetDoctor.InfrastructureStack
             // TODO: cert-manager   -  https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/deploy/manifests/00-crds.yaml
 
             #endregion
+
+            #region Pet doctor k8s secrets
+
+            var values = new PetDoctorValues
+            {
+                Name = "pet-doctor",
+                Host = "petdoctor.kanearmstrong.com",
+                Namespace = kubeNamespace,
+                SecretName = "pet-doctor-secrets",
+                Registry = $"{registry.Name}.azurecr.io",
+                AppVersion = config.Require("appVersion"),
+                AppointmentApi = new ReplicaSetConfiguration
+                {
+                    AadPodIdentityBindingName = "appointment-api-pod-identity-binding",
+                    AadPodIdentityName = "appointment-api-pod-identity",
+                    AadPodIdentitySelector = "appointment-api",
+                    DeploymentName = "pet-doctor-appointment-api",
+                    IngressName = "pet-doctor-appointment-api-ingress",
+                    ServiceName = "pet-doctor-appointment-api-svc",
+                    Port = 80,
+                    ReplicaCount = 2,
+                    Cpu = new ResourceLimit
+                    {
+                        Request = "25m",
+                        Limit = "50m"
+                    },
+                    Memory = new ResourceLimit
+                    {
+                        Request = "250Mi",
+                        Limit = "400Mi"
+                    }
+                }
+            };
+
+            var secrets = new Secret(values.SecretName, new SecretArgs
+            {
+                Metadata = new ObjectMetaArgs
+                {
+                    Namespace = kubeNamespace,
+                    Name = values.SecretName
+                },
+                Kind = "Secret",
+                ApiVersion = "1",
+                Type = "Opaque",
+                Data = new InputMap<string>
+                {
+                    { "keyvault-url", appointmentApiKeyVault.VaultUri },
+                    { "appinsights-instrumentationkey", sharedAppInsights.InstrumentationKey }
+                }
+            });
+
+            #endregion
+
+            #region Pet doctor - appointment api
+
+            var appointmentApiPodIdentity = new CustomResource(values.AppointmentApi.AadPodIdentityName, new AzureIdentityResourceArgs
+            {
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = values.AppointmentApi.AadPodIdentityName
+                },
+                Spec = new AzureIdentitySpecArgs
+                {
+                    Type = 0,
+                    ResourceId = appointmentApiIdentity.Urn.ToString(),
+                    ClientId = appointmentApiIdentity.ClientId.ToString()
+                }
+            });
+
+            var appointmentApiPodIdentityBinding = new CustomResource(values.AppointmentApi.AadPodIdentityBindingName, new AzureIdentityBindingResourceArgs
+            {
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = values.AppointmentApi.AadPodIdentityBindingName
+                },
+                Spec = new AzureIdentityBindingSpecArgs
+                {
+                    AzureIdentity = values.AppointmentApi.AadPodIdentityName,
+                    Selector = values.AppointmentApi.AadPodIdentitySelector
+                }
+            });
+
+            var appointmentApiDeployment = new Deployment("appointment-api-deployment", new DeploymentArgs
+            {
+                ApiVersion = "apps/v1beta1",
+                Kind = "Deployment",
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = values.AppointmentApi.DeploymentName,
+                    Namespace = values.Namespace,
+                    Labels = new InputMap<string>
+                    {
+                        { "app", values.AppointmentApi.DeploymentName }
+                    }
+                },
+                Spec = new DeploymentSpecArgs
+                {
+                    Replicas = values.AppointmentApi.ReplicaCount,
+                    Selector = new LabelSelectorArgs
+                    {
+                        MatchLabels = new InputMap<string>
+                        {
+                            { "app", values.AppointmentApi.DeploymentName }
+                        }
+                    },
+                    Template = new PodTemplateSpecArgs
+                    {
+                        Metadata = new ObjectMetaArgs
+                        {
+                            Labels = new InputMap<string>
+                            {
+                                { "app", values.AppointmentApi.DeploymentName },
+                                { "aadpodidbinding", values.AppointmentApi.AadPodIdentitySelector }
+                            }
+                        },
+                        Spec = new PodSpecArgs
+                        {
+                            Containers = new InputList<ContainerArgs>
+                            {
+                                new ContainerArgs
+                                {
+                                    Name = values.AppointmentApi.DeploymentName,
+                                    Image = $"{values.Registry}/pet-doctor/appointments/api:{values.AppVersion}",
+                                    Ports = new InputList<ContainerPortArgs>
+                                    {
+                                        new ContainerPortArgs
+                                        {
+                                            ContainerPortValue = values.AppointmentApi.Port,
+                                            Protocol = "TCP"
+                                        }
+                                    },
+                                    ReadinessProbe = new ProbeArgs
+                                    {
+                                        HttpGet = new HTTPGetActionArgs
+                                        {
+                                            Port = values.AppointmentApi.Port,
+                                            Path = "/ready",
+                                            Scheme = "HTTP"
+                                        },
+                                        InitialDelaySeconds = 15,
+                                        TimeoutSeconds = 2,
+                                        PeriodSeconds = 10,
+                                        FailureThreshold = 3
+                                    },
+                                    LivenessProbe = new ProbeArgs
+                                    {
+                                        HttpGet = new HTTPGetActionArgs
+                                        {
+                                            Port = values.AppointmentApi.Port,
+                                            Path = "/live",
+                                            Scheme = "HTTP"
+                                        },
+                                        InitialDelaySeconds = 30,
+                                        TimeoutSeconds = 2,
+                                        PeriodSeconds = 5,
+                                        FailureThreshold = 3
+                                    },
+                                    Env = new InputList<EnvVarArgs>
+                                    {
+                                        new EnvVarArgs
+                                        {
+                                            Name = "ASPNETCORE_ENVIRONMENT",
+                                            Value = "Production"
+                                        },
+                                        new EnvVarArgs
+                                        {
+                                            Name = "KEYVAULT__URL",
+                                            ValueFrom = new EnvVarSourceArgs
+                                            {
+                                                SecretKeyRef = new SecretKeySelectorArgs
+                                                {
+                                                    Name = values.SecretName,
+                                                    Key = "keyvault-url"
+                                                }
+                                            }
+                                        },
+                                        new EnvVarArgs
+                                        {
+                                            Name = "APPLICATIONINSIGHTS__INSTRUMENTATIONKEY",
+                                            ValueFrom = new EnvVarSourceArgs
+                                            {
+                                                SecretKeyRef = new SecretKeySelectorArgs
+                                                {
+                                                    Name = values.SecretName,
+                                                    Key = "appinsights-instrumentationkey"
+                                                }
+                                            }
+                                        },
+                                        new EnvVarArgs
+                                        {
+                                            Name = "HOSTENV",
+                                            Value = "K8S"
+                                        },
+                                        new EnvVarArgs
+                                        {
+                                            Name = "PATH_BASE",
+                                            Value = "api"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            var appointmentApiIngress = new Ingress(values.AppointmentApi.IngressName, new IngressArgs
+            {
+                ApiVersion = "extensions/v1beta1",
+                Kind = "Ingress",
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = values.Name,
+                    Namespace = values.Namespace,
+                    Annotations = new InputMap<string>
+                    {
+                        { "kubernetes.io/ingress.class", "nginx" },
+                        { "certmanager.k8s.io/cluster-issuer", "letsencrypt-prod" }
+                    }
+                },
+                Spec = new IngressSpecArgs
+                {
+                    Tls = new InputList<IngressTLSArgs>
+                    {
+                        new IngressTLSArgs
+                        {
+                            Hosts = new InputList<string>
+                            {
+                                values.Host
+                            },
+                            SecretName = "tls-secret"
+                        }
+                    },
+                    Rules = new InputList<IngressRuleArgs>
+                    {
+                        new IngressRuleArgs
+                        {
+                            Host = values.Host,
+                            Http = new HTTPIngressRuleValueArgs
+                            {
+                                Paths = new InputList<HTTPIngressPathArgs>
+                                {
+                                    new HTTPIngressPathArgs
+                                    {
+                                        Path = "/api",
+                                        Backend = new IngressBackendArgs
+                                        {
+                                            ServiceName = values.AppointmentApi.ServiceName,
+                                            ServicePort = values.AppointmentApi.Port
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            var appointmentApiService = new Service(values.AppointmentApi.ServiceName, new ServiceArgs
+            {
+                ApiVersion = "v1",
+                Kind = "Service",
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = values.AppointmentApi.ServiceName,
+                    Namespace = values.Namespace
+                },
+                Spec = new ServiceSpecArgs
+                {
+                    Selector = new InputMap<string>
+                    {
+                        { "app", values.AppointmentApi.DeploymentName }
+                    },
+                    Type = "ClusterIP",
+                    ClusterIP = "None",
+                    Ports = new InputList<ServicePortArgs>
+                    {
+                        new ServicePortArgs
+                        {
+                            Name = "http",
+                            Protocol = "TCP",
+                            Port = 80,
+                            TargetPort = values.AppointmentApi.Port
+                        }
+                    }
+                }
+            });
+
+            #endregion
         }
+    }
+
+    public class PetDoctorValues
+    {
+        public string Name { get; set; }
+        public string Host { get; set; }
+        public string Namespace { get; set; }
+        public string SecretName { get; set; }
+        public string AppVersion { get; set; }
+        public string Registry { get; set; }
+        public ReplicaSetConfiguration AppointmentApi { get; set; }
+    }
+
+    public class ReplicaSetConfiguration
+    {
+        public int Port { get; set; }
+        public int ReplicaCount { get; set; }
+        public string AadPodIdentityName { get; set; }
+        public string AadPodIdentityBindingName { get; set; }
+        public string AadPodIdentitySelector { get; set; }
+        public string DeploymentName { get; set; }
+        public string IngressName { get; set; }
+        public string ServiceName { get; set; }
+        public ResourceLimit Memory { get; set; }
+        public ResourceLimit Cpu { get; set; }
+    }
+
+    public class ResourceLimit
+    {
+        public string Request { get; set; }
+        public string Limit { get; set; }
+    }
+
+    public class AzureIdentityResourceArgs : CustomResourceArgs
+    {
+        public AzureIdentityResourceArgs() : base("aadpodidentity.k8s.io/v1", "AzureIdentity")
+        {
+        }
+
+        public AzureIdentitySpecArgs Spec { get; set; }
+    }
+
+    public class AzureIdentitySpecArgs
+    {
+        [Input("type", true)]
+        public int Type { get; set; }
+        [Input("resourceID", true)]
+        public string ResourceId { get; set; }
+        [Input("clientID", true)]
+        public string ClientId { get; set; }
+    }
+
+    public class AzureIdentityBindingResourceArgs : CustomResourceArgs
+    {
+        public AzureIdentityBindingResourceArgs() : base("aadpodidentity.k8s.io/v1", "AzureIdentityBinding")
+        {
+        }
+
+        public AzureIdentityBindingSpecArgs Spec { get; set; }
+    }
+
+    public class AzureIdentityBindingSpecArgs
+    {
+        [Input("azureIdentity", true)]
+        public string AzureIdentity { get; set; }
+        [Input("selector", true)]
+        public string Selector { get; set; }
     }
 }
