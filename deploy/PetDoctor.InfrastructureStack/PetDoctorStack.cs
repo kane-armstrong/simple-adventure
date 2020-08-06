@@ -431,8 +431,6 @@ namespace PetDoctor.InfrastructureStack
                 Host = "petdoctor.kanearmstrong.com",
                 Namespace = kubeNamespace,
                 SecretName = "pet-doctor-secrets",
-                Registry = $"{registry.Name}.azurecr.io",
-                BuildVersion = config.Require("appVersion"),
                 AppointmentApi = new ReplicaSetConfiguration
                 {
                     AadPodIdentityBindingName = "appointment-api-pod-identity-binding",
@@ -441,6 +439,7 @@ namespace PetDoctor.InfrastructureStack
                     DeploymentName = "pet-doctor-appointment-api",
                     IngressName = "pet-doctor-appointment-api-ingress",
                     ServiceName = "pet-doctor-appointment-api-svc",
+                    Image = registry.LoginServer.Apply(loginServer => $"{loginServer}/pet-doctor/appointments/api:{config.Require("appVersion")}"),
                     Port = 80,
                     ReplicaCount = 2,
                     Cpu = new ResourceLimit
@@ -486,7 +485,7 @@ namespace PetDoctor.InfrastructureStack
                     Username = registry.AdminUsername,
                     Password = registry.AdminPassword
                 },
-                ImageName = registry.LoginServer.Apply(value => $"{value}/pet-doctor/appointments/api:{values.BuildVersion}")
+                ImageName = values.AppointmentApi.Image
             }, new ComponentResourceOptions
             {
                 DependsOn = new InputList<Resource> { cluster, registry },
@@ -576,7 +575,7 @@ namespace PetDoctor.InfrastructureStack
                                 new ContainerArgs
                                 {
                                     Name = values.AppointmentApi.DeploymentName,
-                                    Image = $"{values.Registry}/pet-doctor/appointments/api:{values.BuildVersion}",
+                                    Image = values.AppointmentApi.Image,
                                     Ports = new InputList<ContainerPortArgs>
                                     {
                                         new ContainerPortArgs

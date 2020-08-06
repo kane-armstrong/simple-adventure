@@ -1,4 +1,6 @@
-﻿namespace PetDoctor.InfrastructureStack.Core
+﻿using Pulumi;
+
+namespace PetDoctor.InfrastructureStack.Core
 {
     public class ReplicaSetConfiguration
     {
@@ -10,6 +12,7 @@
         public string DeploymentName { get; set; }
         public string IngressName { get; set; }
         public string ServiceName { get; set; }
+        public Output<string> Image { get; set; }
         public ResourceLimit Memory { get; set; }
         public ResourceLimit Cpu { get; set; }
     }
