@@ -232,7 +232,7 @@ namespace PetDoctor.InfrastructureStack
                 },
                 ServicePrincipal = new KubernetesClusterServicePrincipalArgs
                 {
-                    ClientId = adSp.ApplicationId,
+                    ClientId = adApp.ApplicationId,
                     ClientSecret = adSpPassword.Value
                 },
                 RoleBasedAccessControl = new KubernetesClusterRoleBasedAccessControlArgs
