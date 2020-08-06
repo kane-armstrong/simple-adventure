@@ -20,6 +20,7 @@ using Pulumi.Random;
 using Pulumi.Tls;
 using System;
 using System.IO;
+using System.Net.Http.Headers;
 using Pulumi.Docker;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
@@ -372,23 +373,30 @@ namespace PetDoctor.InfrastructureStack
             var aadPodIdentityDeployment = new ConfigFile("aad-pod-identity", new ConfigFileArgs
             {
                 File = "https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml"
+            }, new ComponentResourceOptions
+            {
+                DependsOn = cluster
             });
 
             var certManagerDeployment = new ConfigFile("cert-manager", new ConfigFileArgs
             {
                 File = "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/deploy/manifests/00-crds.yaml"
+            }, new ComponentResourceOptions
+            {
+                DependsOn = cluster
             });
 
             var nginxDeployment = new ConfigFile("nginx", new ConfigFileArgs
             {
                 File = "https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml"
+            }, new ComponentResourceOptions
+            {
+                DependsOn = cluster
             });
 
-            // nginx lb needs a public ip address
-
+            // nginx lb needs a public ip address ?
 
             #endregion
-
 
             var values = new PetDoctorValues
             {
@@ -436,6 +444,9 @@ namespace PetDoctor.InfrastructureStack
                     { "keyvault-url", appointmentApiKeyVault.VaultUri },
                     { "appinsights-instrumentationkey", sharedAppInsights.InstrumentationKey }
                 }
+            }, new CustomResourceOptions
+            {
+                DependsOn = cluster
             });
 
             var image = new Image("appointment-api-docker", new ImageArgs
@@ -448,12 +459,15 @@ namespace PetDoctor.InfrastructureStack
                     Password = registry.AdminPassword
                 },
                 ImageName = registry.LoginServer.Apply(value => $"{value}/pet-doctor/appointments/api:{values.BuildVersion}")
+            }, new ComponentResourceOptions
+            {
+                DependsOn = cluster
             });
 
-            SetupAppointmentApiInKubernetes(values, appointmentApiIdentity);
+            SetupAppointmentApiInKubernetes(values, appointmentApiIdentity, cluster);
         }
 
-        private static void SetupAppointmentApiInKubernetes(PetDoctorValues values, UserAssignedIdentity appointmentApiIdentity)
+        private static void SetupAppointmentApiInKubernetes(PetDoctorValues values, UserAssignedIdentity appointmentApiIdentity, KubernetesCluster cluster)
         {
             var appointmentApiPodIdentity = new CustomResource(values.AppointmentApi.AadPodIdentityName,
                 new AzureIdentityResourceArgs
@@ -468,6 +482,9 @@ namespace PetDoctor.InfrastructureStack
                         ResourceId = appointmentApiIdentity.Urn.ToString(),
                         ClientId = appointmentApiIdentity.ClientId.ToString()
                     }
+                }, new CustomResourceOptions
+                {
+                    DependsOn = cluster
                 });
 
             var appointmentApiPodIdentityBinding = new CustomResource(values.AppointmentApi.AadPodIdentityBindingName,
@@ -482,6 +499,9 @@ namespace PetDoctor.InfrastructureStack
                         AzureIdentity = values.AppointmentApi.AadPodIdentityName,
                         Selector = values.AppointmentApi.AadPodIdentitySelector
                     }
+                }, new CustomResourceOptions
+                {
+                    DependsOn = new InputList<Resource> { cluster, appointmentApiIdentity }
                 });
 
             var appointmentApiDeployment = new Deployment("appointment-api-deployment", new DeploymentArgs
@@ -606,6 +626,9 @@ namespace PetDoctor.InfrastructureStack
                         }
                     }
                 }
+            }, new CustomResourceOptions
+            {
+                DependsOn = new InputList<Resource> { cluster, appointmentApiIdentity, appointmentApiPodIdentityBinding }
             });
 
             var appointmentApiIngress = new Ingress(values.AppointmentApi.IngressName, new IngressArgs
@@ -658,6 +681,9 @@ namespace PetDoctor.InfrastructureStack
                         }
                     }
                 }
+            }, new CustomResourceOptions
+            {
+                DependsOn = cluster
             });
 
             var appointmentApiService = new Service(values.AppointmentApi.ServiceName, new ServiceArgs
@@ -688,6 +714,9 @@ namespace PetDoctor.InfrastructureStack
                         }
                     }
                 }
+            }, new CustomResourceOptions
+            {
+                DependsOn = cluster
             });
         }
     }
