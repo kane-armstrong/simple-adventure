@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Net.Http.Headers;
 using Pulumi.Docker;
+using Pulumi.Kubernetes.Core.V1;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using ContainerArgs = Pulumi.Kubernetes.Types.Inputs.Core.V1.ContainerArgs;
@@ -398,6 +399,18 @@ namespace PetDoctor.InfrastructureStack
             {
                 File = "https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml"
             }, new ComponentResourceOptions
+            {
+                DependsOn = cluster,
+                Provider = k8sProvider
+            });
+
+            var clusterNamespace = new Namespace(kubeNamespace, new NamespaceArgs
+            {
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = kubeNamespace
+                }
+            }, new CustomResourceOptions
             {
                 DependsOn = cluster,
                 Provider = k8sProvider
