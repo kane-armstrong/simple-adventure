@@ -19,8 +19,11 @@ using Pulumi.Kubernetes.Yaml;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Text;
 using Pulumi.Docker;
 using Pulumi.Kubernetes.Core.V1;
 using Application = Pulumi.AzureAD.Application;
@@ -134,7 +137,7 @@ namespace PetDoctor.InfrastructureStack
                 AdminEnabled = true,
                 Tags = tags
             });
-
+            
             ContainerRegistryLoginServer = registry.LoginServer;
 
             #endregion
@@ -430,6 +433,7 @@ namespace PetDoctor.InfrastructureStack
                 Host = "petdoctor.kanearmstrong.com",
                 Namespace = kubeNamespace,
                 SecretName = "pet-doctor-secrets",
+                DockerConfigSecretName = "dockercfg-secret",
                 AppointmentApi = new ReplicaSetConfiguration
                 {
                     AadPodIdentityBindingName = "appointment-api-pod-identity-binding",
@@ -468,6 +472,43 @@ namespace PetDoctor.InfrastructureStack
                 {
                     { "keyvault-url", appointmentApiKeyVault.VaultUri.Apply(kvUrl => Convert.ToBase64String(Encoding.UTF8.GetBytes(kvUrl))) },
                     { "appinsights-instrumentationkey", sharedAppInsights.InstrumentationKey.Apply(key => Convert.ToBase64String(Encoding.UTF8.GetBytes(key))) }
+                }
+            }, new CustomResourceOptions
+            {
+                DependsOn = cluster,
+                Provider = k8sProvider
+            });
+
+
+            // Create a k8s secret for use when pulling images from the container registry when deploying the sample application.
+            var dockerCfg = Output.All(registry.LoginServer, registry.AdminUsername, registry.AdminPassword).Apply(
+                v =>
+                {
+                    var r = new Dictionary<string, object>();
+                    var server = v[0];
+
+                    r[server] = new
+                    {
+                        email = "notneeded@notneeded.com",
+                        username = v[1],
+                        password = v[2]
+                    };
+
+                    return r;
+                });
+
+            var dockerCfgString = dockerCfg.Apply(x => Convert.ToBase64String(Encoding.UTF8.GetBytes(System.Text.Json.JsonSerializer.Serialize(x))));
+
+            var dockerCfgSecret = new Secret(values.DockerConfigSecretName, new SecretArgs
+            {
+                Data =
+                {
+                    {".dockercfg", dockerCfgString}
+                },
+                Type = "kubernetes.io/dockercfg",
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = values.DockerConfigSecretName,
                 }
             }, new CustomResourceOptions
             {
@@ -652,6 +693,11 @@ namespace PetDoctor.InfrastructureStack
                                         }
                                     }
                                 }
+                            },
+                            // TODO: This shouldn't be necessary since we've configured the AKS SP to be able to AcrPull from the ACR...
+                            ImagePullSecrets = new LocalObjectReferenceArgs
+                            {
+                                Name = values.DockerConfigSecretName
                             }
                         }
                     }
