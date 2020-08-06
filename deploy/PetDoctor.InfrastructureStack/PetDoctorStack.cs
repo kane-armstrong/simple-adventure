@@ -507,8 +507,8 @@ namespace PetDoctor.InfrastructureStack
                     Spec = new AzureIdentitySpecArgs
                     {
                         Type = 0,
-                        ResourceId = appointmentApiIdentity.Urn.ToString(),
-                        ClientId = appointmentApiIdentity.ClientId.ToString()
+                        ResourceId = appointmentApiIdentity.Id,
+                        ClientId = appointmentApiIdentity.ClientId
                     }
                 }, new CustomResourceOptions
                 {

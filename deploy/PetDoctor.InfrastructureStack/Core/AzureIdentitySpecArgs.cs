@@ -7,8 +7,8 @@ namespace PetDoctor.InfrastructureStack.Core
         [Input("type", true)]
         public int Type { get; set; }
         [Input("resourceID", true)]
-        public string ResourceId { get; set; }
+        public Output<string> ResourceId { get; set; }
         [Input("clientID", true)]
-        public string ClientId { get; set; }
+        public Output<string> ClientId { get; set; }
     }
 }
