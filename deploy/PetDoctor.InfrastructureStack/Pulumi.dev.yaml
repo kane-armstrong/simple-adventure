@@ -1,4 +1,5 @@
 config:
+  petdoctor:appVersion: 0.0.1
   petdoctor:createdBy: Kane Armstrong
   petdoctor:environment: development
   petdoctor:kubernetesVersion: 1.18.4
