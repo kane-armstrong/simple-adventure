@@ -44,10 +44,15 @@ using VirtualNetworkArgs = Pulumi.Azure.Network.VirtualNetworkArgs;
 
 namespace PetDoctor.InfrastructureStack
 {
+    // TODO: There are a bunch of things that I don't like about this class that I want to fix:
+    // - [Output] props - we need to review these. Are any missing? Any not necessary? Does the naming make sense?
+    // - The ctor is huge, unwieldy, and unmaintainable. My first cut at mitigating this was regions, but that sucks. Need an alternative
+    // - Configuration needs to be revised. Some variables may be droppable, location should be passed in (e.g. eastus2), and we should use the azure:region notation for keys
+    // - Resources declarations are not very cohesive. Grouping would probably be better done by deployable than resource type
+    // - AKS is using a docker secret to pull images, but this shouldn't be necessary since the AKS SP has AcrPull on the registry
+
     public class PetDoctorStack : Stack
     {
-        // TODO Make sure everything is being output properly
-
         [Output] public Output<string> ContainerRegistryLoginServer { get; set; }
 
         [Output] public Output<string> KubeConfig { get; set; }
@@ -62,13 +67,6 @@ namespace PetDoctor.InfrastructureStack
 
         public PetDoctorStack()
         {
-            // TODO this whole thing is nasty. surely we can break this down without regions? how about builders?
-            // Other issues
-            // - location should follow the eastus2 format and be provided by config
-            // - we might be able to drop the specification of location all over the place - probably inferred from the resource group
-            // - perhaps we can drop prefix?
-            // - lets change the variable naming convention: kubernetesVersion -> kubernetes:version, etc
-
             #region Configuration
 
             var config = new Pulumi.Config();
@@ -308,8 +306,6 @@ namespace PetDoctor.InfrastructureStack
 
             #endregion
 
-            // TODO it'd be better to group things by the deployable than by the type of thing
-
             #region KeyVault setup
 
             // Create a KeyVault instance
@@ -478,7 +474,6 @@ namespace PetDoctor.InfrastructureStack
                 DependsOn = cluster,
                 Provider = k8sProvider
             });
-
 
             // Create a k8s secret for use when pulling images from the container registry when deploying the sample application.
             var dockerCfg = Output.All(registry.LoginServer, registry.AdminUsername, registry.AdminPassword).Apply(
