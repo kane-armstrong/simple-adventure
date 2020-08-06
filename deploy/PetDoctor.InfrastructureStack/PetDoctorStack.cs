@@ -463,12 +463,12 @@ namespace PetDoctor.InfrastructureStack
                     Name = values.SecretName
                 },
                 Kind = "Secret",
-                ApiVersion = "1",
+                ApiVersion = "v1",
                 Type = "Opaque",
                 Data = new InputMap<string>
                 {
-                    { "keyvault-url", appointmentApiKeyVault.VaultUri },
-                    { "appinsights-instrumentationkey", sharedAppInsights.InstrumentationKey }
+                    { "keyvault-url", appointmentApiKeyVault.VaultUri.Apply(kvUrl => Convert.ToBase64String(Encoding.UTF8.GetBytes(kvUrl))) },
+                    { "appinsights-instrumentationkey", sharedAppInsights.InstrumentationKey.Apply(key => Convert.ToBase64String(Encoding.UTF8.GetBytes(key))) }
                 }
             }, new CustomResourceOptions
             {
