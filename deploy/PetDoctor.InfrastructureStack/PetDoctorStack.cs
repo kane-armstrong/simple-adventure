@@ -12,7 +12,6 @@ using Pulumi.Azure.OperationalInsights;
 using Pulumi.Azure.OperationalInsights.Inputs;
 using Pulumi.Azure.Sql;
 using Pulumi.AzureAD;
-using Pulumi.Kubernetes.Core.V1;
 using Pulumi.Kubernetes.Types.Inputs.Core.V1;
 using Pulumi.Kubernetes.Types.Inputs.Meta.V1;
 using Pulumi.Kubernetes.Types.Inputs.Networking.V1Beta1;
@@ -20,8 +19,11 @@ using Pulumi.Kubernetes.Yaml;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
+using System.IO;
+using Pulumi.Docker;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
+using ContainerArgs = Pulumi.Kubernetes.Types.Inputs.Core.V1.ContainerArgs;
 using CustomResource = Pulumi.Kubernetes.ApiExtensions.CustomResource;
 using Deployment = Pulumi.Kubernetes.Apps.V1.Deployment;
 using DeploymentArgs = Pulumi.Kubernetes.Types.Inputs.Apps.V1.DeploymentArgs;
@@ -29,6 +31,8 @@ using DeploymentSpecArgs = Pulumi.Kubernetes.Types.Inputs.Apps.V1.DeploymentSpec
 using Ingress = Pulumi.Kubernetes.Networking.V1Beta1.Ingress;
 using Secret = Pulumi.Kubernetes.Core.V1.Secret;
 using SecretArgs = Pulumi.Kubernetes.Types.Inputs.Core.V1.SecretArgs;
+using Service = Pulumi.Kubernetes.Core.V1.Service;
+using ServiceArgs = Pulumi.Kubernetes.Types.Inputs.Core.V1.ServiceArgs;
 using VirtualNetwork = Pulumi.Azure.Network.VirtualNetwork;
 using VirtualNetworkArgs = Pulumi.Azure.Network.VirtualNetworkArgs;
 
@@ -376,7 +380,6 @@ namespace PetDoctor.InfrastructureStack
 
             #endregion
 
-            #region Pet doctor k8s secrets
 
             var values = new PetDoctorValues
             {
@@ -385,7 +388,7 @@ namespace PetDoctor.InfrastructureStack
                 Namespace = kubeNamespace,
                 SecretName = "pet-doctor-secrets",
                 Registry = $"{registry.Name}.azurecr.io",
-                AppVersion = config.Require("appVersion"),
+                BuildVersion = config.Require("appVersion"),
                 AppointmentApi = new ReplicaSetConfiguration
                 {
                     AadPodIdentityBindingName = "appointment-api-pod-identity-binding",
@@ -426,7 +429,18 @@ namespace PetDoctor.InfrastructureStack
                 }
             });
 
-            #endregion
+
+            var image = new Image("appointment-api-docker", new ImageArgs
+            {
+                Build = $"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}Dockerfile",
+                Registry = new ImageRegistry
+                {
+                    Server = registry.LoginServer,
+                    Username = registry.AdminUsername,
+                    Password = registry.AdminPassword
+                },
+                ImageName = registry.LoginServer.Apply(value => $"{value}/pet-doctor/appointments/api:{values.BuildVersion}")
+            });
 
             SetupAppointmentApiInKubernetes(values, appointmentApiIdentity);
         }
@@ -502,7 +516,7 @@ namespace PetDoctor.InfrastructureStack
                                 new ContainerArgs
                                 {
                                     Name = values.AppointmentApi.DeploymentName,
-                                    Image = $"{values.Registry}/pet-doctor/appointments/api:{values.AppVersion}",
+                                    Image = $"{values.Registry}/pet-doctor/appointments/api:{values.BuildVersion}",
                                     Ports = new InputList<ContainerPortArgs>
                                     {
                                         new ContainerPortArgs
