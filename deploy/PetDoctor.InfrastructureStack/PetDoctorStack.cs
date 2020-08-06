@@ -76,7 +76,6 @@ namespace PetDoctor.InfrastructureStack
             var kubeNamespace = config.Get("chartNamespace") ?? "pet-doctor-dev";
 
             var prefix = config.Get("prefix") ?? "petdoctor";
-            var adSpPasswordExpiryDate = config.Get("spPasswordExpiresOn") ?? "2025-01-01T00:00:00Z";
 
             var environment = config.Get("environment") ?? "development";
             var createdBy = config.Get("createdBy") ?? "default";
@@ -153,7 +152,7 @@ namespace PetDoctor.InfrastructureStack
             var adSpPassword = new ServicePrincipalPassword("aks-app-sp-pwd", new ServicePrincipalPasswordArgs
             {
                 ServicePrincipalId = adSp.ObjectId,
-                EndDate = DateTime.Parse(adSpPasswordExpiryDate).ToString("O"),
+                EndDate = "2099-01-01T00:00:00Z",
                 Value = password.Result
             });
 
