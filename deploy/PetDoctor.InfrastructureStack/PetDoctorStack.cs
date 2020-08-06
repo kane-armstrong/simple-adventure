@@ -374,9 +374,18 @@ namespace PetDoctor.InfrastructureStack
                 File = "https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml"
             });
 
-            // TODO: nginx
+            var certManagerDeployment = new ConfigFile("cert-manager", new ConfigFileArgs
+            {
+                File = "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/deploy/manifests/00-crds.yaml"
+            });
 
-            // TODO: cert-manager   -  https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/deploy/manifests/00-crds.yaml
+            var nginxDeployment = new ConfigFile("nginx", new ConfigFileArgs
+            {
+                File = "https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml"
+            });
+
+            // nginx lb needs a public ip address
+
 
             #endregion
 
@@ -428,7 +437,6 @@ namespace PetDoctor.InfrastructureStack
                     { "appinsights-instrumentationkey", sharedAppInsights.InstrumentationKey }
                 }
             });
-
 
             var image = new Image("appointment-api-docker", new ImageArgs
             {
