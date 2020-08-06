@@ -60,6 +60,11 @@ namespace PetDoctor.InfrastructureStack
         public PetDoctorStack()
         {
             // TODO this whole thing is nasty. surely we can break this down without regions? how about builders?
+            // Other issues
+            // - location should follow the eastus2 format and be provided by config
+            // - we might be able to drop the specification of location all over the place - probably inferred from the resource group
+            // - perhaps we can drop prefix?
+            // - lets change the variable naming convention: kubernetesVersion -> kubernetes:version, etc
 
             #region Configuration
 
