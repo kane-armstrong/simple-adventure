@@ -701,6 +701,40 @@ namespace PetDoctor.InfrastructureStack
                 Provider = provider
             });
 
+            var appointmentApiService = new Service(values.AppointmentApi.ServiceName, new ServiceArgs
+            {
+                ApiVersion = "v1",
+                Kind = "Service",
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = values.AppointmentApi.ServiceName,
+                    Namespace = values.Namespace
+                },
+                Spec = new ServiceSpecArgs
+                {
+                    Selector = new InputMap<string>
+                    {
+                        {"app", values.AppointmentApi.DeploymentName}
+                    },
+                    Type = "ClusterIP",
+                    ClusterIP = "None",
+                    Ports = new InputList<ServicePortArgs>
+                    {
+                        new ServicePortArgs
+                        {
+                            Name = "http",
+                            Protocol = "TCP",
+                            Port = 80,
+                            TargetPort = values.AppointmentApi.Port
+                        }
+                    }
+                }
+            }, new CustomResourceOptions
+            {
+                DependsOn = cluster,
+                Provider = provider
+            });
+
             var appointmentApiIngress = new Ingress(values.AppointmentApi.IngressName, new IngressArgs
             {
                 ApiVersion = "extensions/v1beta1",
@@ -753,41 +787,10 @@ namespace PetDoctor.InfrastructureStack
                 }
             }, new CustomResourceOptions
             {
-                DependsOn = cluster,
-                Provider = provider
-            });
-
-            var appointmentApiService = new Service(values.AppointmentApi.ServiceName, new ServiceArgs
-            {
-                ApiVersion = "v1",
-                Kind = "Service",
-                Metadata = new ObjectMetaArgs
+                DependsOn = new InputList<Resource>
                 {
-                    Name = values.AppointmentApi.ServiceName,
-                    Namespace = values.Namespace
+                    cluster, appointmentApiDeployment, appointmentApiService
                 },
-                Spec = new ServiceSpecArgs
-                {
-                    Selector = new InputMap<string>
-                    {
-                        {"app", values.AppointmentApi.DeploymentName}
-                    },
-                    Type = "ClusterIP",
-                    ClusterIP = "None",
-                    Ports = new InputList<ServicePortArgs>
-                    {
-                        new ServicePortArgs
-                        {
-                            Name = "http",
-                            Protocol = "TCP",
-                            Port = 80,
-                            TargetPort = values.AppointmentApi.Port
-                        }
-                    }
-                }
-            }, new CustomResourceOptions
-            {
-                DependsOn = cluster,
                 Provider = provider
             });
         }
