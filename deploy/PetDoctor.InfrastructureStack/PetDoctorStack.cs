@@ -132,7 +132,7 @@ namespace PetDoctor.InfrastructureStack
                 ResourceGroupName = resourceGroup.Name,
                 Location = resourceGroup.Location,
                 Sku = "Standard",
-                AdminEnabled = false,
+                AdminEnabled = true,
                 Tags = tags
             });
 
