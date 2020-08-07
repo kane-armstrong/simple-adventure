@@ -1,10 +1,9 @@
 config:
-  petdoctor:appVersion: 0.0.1
+  petdoctor:appVersion: 0.0.2
   petdoctor:createdBy: Kane Armstrong
-  petdoctor:environment: development
+  petdoctor:environment: Development
   petdoctor:kubernetesVersion: 1.18.4
   petdoctor:sqlPassword:
-    secure: AAABAEwY1DnP4SsMXK1ckhPsXNVkTHIMovpReRkI2Hs/Z/I22CuNEkjzCdchYA==
+    secure: AAABACeojBA4jnB0aEOPNQt7S1Ole6CYfUXja9En5q1qLZE0NRSaMHQYduHKNtW+2m3aovkWZDs=
   petdoctor:tenantId:
-    secure: AAABANwU7Yp1eQYDTjqcGXBWus35VHKIl009iJ7G+A7V4QGAiMcLvwLUEivBch7J9lp4DNX+3T/7ag9IGChBN2mvFrA=
-  pulumi:template: petdoctor
+    secure: AAABAJoupYpemamNSqat8UiIdsk5F5MIGzVLPeQIXpXKawO0T/hVgQlyCfUrZV3kHyncc9bs/583iQhrcikdf37fPAo=
