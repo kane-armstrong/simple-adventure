@@ -22,6 +22,7 @@ using Pulumi.Random;
 using Pulumi.Tls;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using Application = Pulumi.AzureAD.Application;
@@ -31,6 +32,7 @@ using CustomResource = Pulumi.Kubernetes.ApiExtensions.CustomResource;
 using Deployment = Pulumi.Kubernetes.Apps.V1.Deployment;
 using DeploymentArgs = Pulumi.Kubernetes.Types.Inputs.Apps.V1.DeploymentArgs;
 using DeploymentSpecArgs = Pulumi.Kubernetes.Types.Inputs.Apps.V1.DeploymentSpecArgs;
+using GetClientConfig = Pulumi.AzureAD.GetClientConfig;
 using Ingress = Pulumi.Kubernetes.Networking.V1Beta1.Ingress;
 using Provider = Pulumi.Kubernetes.Provider;
 using Secret = Pulumi.Kubernetes.Core.V1.Secret;
@@ -333,9 +335,22 @@ namespace PetDoctor.InfrastructureStack
                 Scope = appointmentApiIdentity.Id
             });
 
+            var sqlAdmin = new ActiveDirectoryAdministrator("sqladmin", new ActiveDirectoryAdministratorArgs
+            {
+                ResourceGroupName = resourceGroup.Name,
+                TenantId = tenantId,
+                ObjectId = appointmentApiIdentity.PrincipalId,
+                Login = "sqladmin",
+                ServerName = sqlServer.Name
+            });
+
             #endregion
 
             #region KeyVault setup
+
+            var clientConfig = Output.Create(GetClientConfig.InvokeAsync());
+            var currentPrincipalTenantId = clientConfig.Apply(c => c.TenantId);
+            var currentPrincipal = clientConfig.Apply(c => c.ObjectId);
 
             // Create a KeyVault instance
             var appointmentApiKeyVault = new KeyVault($"{prefix}kv", new KeyVaultArgs
@@ -351,26 +366,19 @@ namespace PetDoctor.InfrastructureStack
                     {
                         TenantId = tenantId,
                         ObjectId = adSp.ObjectId,
-                        SecretPermissions = new[]
-                        {
-                            "get",
-                            "list"
-                        },
-                        KeyPermissions = new[]
-                        {
-                            "wrapKey",
-                            "unwrapKey"
-                        }
+                        SecretPermissions = new[] {"get", "list"}
                     },
                     new KeyVaultAccessPolicyArgs
                     {
                         TenantId = tenantId,
                         ObjectId = appointmentApiIdentity.PrincipalId,
-                        SecretPermissions = new[]
-                        {
-                            "get",
-                            "list"
-                        }
+                        SecretPermissions = new[] {"get", "list"}
+                    },
+                    new KeyVaultAccessPolicyArgs
+                    {
+                        TenantId = currentPrincipalTenantId,
+                        ObjectId = currentPrincipal,
+                        SecretPermissions = {"delete", "get", "list", "set"},
                     }
                 },
                 NetworkAcls = new KeyVaultNetworkAclsArgs
@@ -380,12 +388,30 @@ namespace PetDoctor.InfrastructureStack
                     VirtualNetworkSubnetIds = new InputList<string>
                     {
                         subnet.Id
+                    },
+                    IpRules = new InputList<string>
+                    {
+                        GetMyPublicIpAddress()
                     }
                 },
                 Tags = tags
             });
 
             KeyVaultUri = appointmentApiKeyVault.VaultUri;
+
+            var secret = new Pulumi.Azure.KeyVault.Secret("appointApiDbConnectionString", new Pulumi.Azure.KeyVault.SecretArgs
+            {
+                KeyVaultId = appointmentApiKeyVault.Id,
+                Name = "ConnectionStrings--PetDoctorContext",
+                Value = Output.Tuple(sqlServer.Name, sqlServer.Name, sqlServer.AdministratorLogin, sqlServer.AdministratorLoginPassword).Apply(t =>
+                {
+                    var (server, database, administratorLogin, administratorLoginPassword) = t;
+                    return $"Server=tcp:{server}.database.windows.net;Database={database};User ID={administratorLogin};Password={administratorLoginPassword}";
+                })
+            }, new CustomResourceOptions
+            {
+                DependsOn = sqlServer
+            });
 
             #endregion
 
@@ -791,6 +817,12 @@ namespace PetDoctor.InfrastructureStack
                 },
                 Provider = provider
             });
+        }
+
+        public static string GetMyPublicIpAddress()
+        {
+            using var wc = new WebClient();
+            return wc.DownloadString("http://icanhazip.com");
         }
     }
 }
