@@ -21,12 +21,9 @@ using Pulumi.Kubernetes.Yaml;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using System.Text;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
@@ -53,6 +50,7 @@ namespace PetDoctor.InfrastructureStack
     // - Configuration needs to be revised. Some variables may be droppable, location should be passed in (e.g. eastus2), and we should use the azure:region notation for keys
     // - Resources declarations are not very cohesive. Grouping would probably be better done by deployable than resource type
 
+    [SuppressMessage("ReSharper", "UnusedVariable")]
     public class PetDoctorStack : Stack
     {
         [Output] public Output<string> ContainerRegistryLoginServer { get; set; }
@@ -140,7 +138,7 @@ namespace PetDoctor.InfrastructureStack
                 AdminEnabled = true,
                 Tags = tags
             });
-            
+
             ContainerRegistryLoginServer = registry.LoginServer;
 
             #endregion
@@ -266,7 +264,7 @@ namespace PetDoctor.InfrastructureStack
 
             KubeConfig = cluster.KubeConfigRaw;
 
-            var k8sProvider = new Provider("k8s", new Pulumi.Kubernetes.ProviderArgs
+            var provider = new Provider("k8s", new Pulumi.Kubernetes.ProviderArgs
             {
                 KubeConfig = cluster.KubeConfigRaw
             });
@@ -430,7 +428,7 @@ namespace PetDoctor.InfrastructureStack
             }, new ComponentResourceOptions
             {
                 DependsOn = cluster,
-                Provider = k8sProvider
+                Provider = provider
             });
 
             var certManagerDeployment = new ConfigFile("cert-manager", new ConfigFileArgs
@@ -439,7 +437,7 @@ namespace PetDoctor.InfrastructureStack
             }, new ComponentResourceOptions
             {
                 DependsOn = cluster,
-                Provider = k8sProvider
+                Provider = provider
             });
 
             var nginxDeployment = new ConfigFile("nginx", new ConfigFileArgs
@@ -448,7 +446,7 @@ namespace PetDoctor.InfrastructureStack
             }, new ComponentResourceOptions
             {
                 DependsOn = cluster,
-                Provider = k8sProvider
+                Provider = provider
             });
 
             var clusterNamespace = new Namespace(kubeNamespace, new NamespaceArgs
@@ -460,7 +458,7 @@ namespace PetDoctor.InfrastructureStack
             }, new CustomResourceOptions
             {
                 DependsOn = cluster,
-                Provider = k8sProvider
+                Provider = provider
             });
 
             var clusterIssuer = new CustomResource("cert-manager-cluster-issuer", new CertManagerClusterIssuerResourceArgs
@@ -485,10 +483,8 @@ namespace PetDoctor.InfrastructureStack
             }, new CustomResourceOptions
             {
                 DependsOn = cluster,
-                Provider = k8sProvider
+                Provider = provider
             });
-
-            // nginx lb needs a public ip address ?
 
             #endregion
 
@@ -541,7 +537,7 @@ namespace PetDoctor.InfrastructureStack
             }, new CustomResourceOptions
             {
                 DependsOn = cluster,
-                Provider = k8sProvider
+                Provider = provider
             });
 
             var image = new Image("appointment-api-docker", new ImageArgs
@@ -557,10 +553,10 @@ namespace PetDoctor.InfrastructureStack
             }, new ComponentResourceOptions
             {
                 DependsOn = new InputList<Resource> { cluster, registry },
-                Provider = k8sProvider
+                Provider = provider
             });
 
-            SetupAppointmentApiInKubernetes(values, appointmentApiIdentity, cluster, k8sProvider);
+            SetupAppointmentApiInKubernetes(values, appointmentApiIdentity, cluster, provider);
         }
 
         private static void SetupAppointmentApiInKubernetes(PetDoctorValues values,
