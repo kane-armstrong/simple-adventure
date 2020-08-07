@@ -24,6 +24,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
@@ -121,10 +124,7 @@ namespace PetDoctor.InfrastructureStack
                 ResourceGroupName = resourceGroup.Name,
                 AddressPrefixes = { "10.240.0.0/16" },
                 VirtualNetworkName = vnet.Name,
-                ServiceEndpoints = new InputList<string>
-                {
-                    "Microsoft.KeyVault"
-                }
+                ServiceEndpoints = new InputList<string> { "Microsoft.KeyVault", "Microsoft.Sql" }
             });
 
             #endregion
@@ -283,6 +283,13 @@ namespace PetDoctor.InfrastructureStack
                 Version = "12.0",
                 AdministratorLogin = sqlUser,
                 AdministratorLoginPassword = sqlPassword
+            });
+
+            var sqlvnetrule = new VirtualNetworkRule($"sqlvnetrule", new VirtualNetworkRuleArgs
+            {
+                ResourceGroupName = resourceGroup.Name,
+                ServerName = sqlServer.Name,
+                SubnetId = subnet.Id,
             });
 
             var sqlDb = new Database($"{prefix}db", new DatabaseArgs
