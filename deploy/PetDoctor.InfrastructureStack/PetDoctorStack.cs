@@ -309,50 +309,6 @@ namespace PetDoctor.InfrastructureStack
 
             #endregion
 
-            #region KeyVault setup
-
-            // Create a KeyVault instance
-            var appointmentApiKeyVault = new KeyVault($"{prefix}kv", new KeyVaultArgs
-            {
-                Location = resourceGroup.Location,
-                ResourceGroupName = resourceGroup.Name,
-                EnabledForDiskEncryption = true,
-                TenantId = tenantId,
-                SkuName = "standard",
-                AccessPolicies = new InputList<KeyVaultAccessPolicyArgs>
-                {
-                    new KeyVaultAccessPolicyArgs
-                        {
-                            TenantId = tenantId,
-                            ObjectId = adSp.ObjectId,
-                            SecretPermissions = new[]
-                            {
-                                "get",
-                                "list"
-                            },
-                            KeyPermissions = new[]
-                            {
-                                "wrapKey",
-                                "unwrapKey"
-                            }
-                        }
-                },
-                NetworkAcls = new KeyVaultNetworkAclsArgs
-                {
-                    DefaultAction = "Deny",
-                    Bypass = "AzureServices",
-                    VirtualNetworkSubnetIds = new InputList<string>
-                    {
-                        subnet.Id
-                    }
-                },
-                Tags = tags
-            });
-
-            KeyVaultUri = appointmentApiKeyVault.VaultUri;
-
-            #endregion
-
             #region Managed identities setup
 
             var appointmentApiIdentity = new UserAssignedIdentity("appointment-api", new UserAssignedIdentityArgs
@@ -368,15 +324,6 @@ namespace PetDoctor.InfrastructureStack
 
             AppointmentApiIdentityObjectId = appointmentApiIdentity.PrincipalId;
 
-            var appointmentApiKeyVaultPolicy = new AccessPolicy("appointment-api", new AccessPolicyArgs
-            {
-                ObjectId = appointmentApiIdentity.PrincipalId,
-                TenantId = tenantId,
-                SecretPermissions = new[] { "get", "list" },
-                KeyVaultId = appointmentApiKeyVault.Id,
-                ApplicationId = appointmentApiIdentity.ClientId
-            });
-
             // Assigning the AKS SP the correct role membership (Managed Identity Operator) for the user assigned identities is mandatory
 
             var aksSpAppointmentApiAccessPolicy = new Assignment("aks-sp-appontment-api", new AssignmentArgs
@@ -385,6 +332,60 @@ namespace PetDoctor.InfrastructureStack
                 RoleDefinitionName = "Managed Identity Operator",
                 Scope = appointmentApiIdentity.Id
             });
+
+            #endregion
+
+            #region KeyVault setup
+
+            // Create a KeyVault instance
+            var appointmentApiKeyVault = new KeyVault($"{prefix}kv", new KeyVaultArgs
+            {
+                Location = resourceGroup.Location,
+                ResourceGroupName = resourceGroup.Name,
+                EnabledForDiskEncryption = true,
+                TenantId = tenantId,
+                SkuName = "standard",
+                AccessPolicies = new InputList<KeyVaultAccessPolicyArgs>
+                {
+                    new KeyVaultAccessPolicyArgs
+                    {
+                        TenantId = tenantId,
+                        ObjectId = adSp.ObjectId,
+                        SecretPermissions = new[]
+                        {
+                            "get",
+                            "list"
+                        },
+                        KeyPermissions = new[]
+                        {
+                            "wrapKey",
+                            "unwrapKey"
+                        }
+                    },
+                    new KeyVaultAccessPolicyArgs
+                    {
+                        TenantId = tenantId,
+                        ObjectId = appointmentApiIdentity.PrincipalId,
+                        SecretPermissions = new[]
+                        {
+                            "get",
+                            "list"
+                        }
+                    }
+                },
+                NetworkAcls = new KeyVaultNetworkAclsArgs
+                {
+                    DefaultAction = "Deny",
+                    Bypass = "AzureServices",
+                    VirtualNetworkSubnetIds = new InputList<string>
+                    {
+                        subnet.Id
+                    }
+                },
+                Tags = tags
+            });
+
+            KeyVaultUri = appointmentApiKeyVault.VaultUri;
 
             #endregion
 
@@ -579,7 +580,8 @@ namespace PetDoctor.InfrastructureStack
                     Namespace = values.Namespace,
                     Labels = new InputMap<string>
                     {
-                        {"app", values.AppointmentApi.DeploymentName}
+                        {"app", values.AppointmentApi.DeploymentName},
+                        {"aadpodidbinding", values.AppointmentApi.AadPodIdentitySelector}
                     }
                 },
                 Spec = new DeploymentSpecArgs
