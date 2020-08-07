@@ -47,7 +47,6 @@ namespace PetDoctor.InfrastructureStack
     // - The ctor is huge, unwieldy, and unmaintainable. My first cut at mitigating this was regions, but that sucks. Need an alternative
     // - Configuration needs to be revised. Some variables may be droppable, location should be passed in (e.g. eastus2), and we should use the azure:region notation for keys
     // - Resources declarations are not very cohesive. Grouping would probably be better done by deployable than resource type
-    // - AKS is using a docker secret to pull images, but this shouldn't be necessary since the AKS SP has AcrPull on the registry
 
     public class PetDoctorStack : Stack
     {
@@ -473,42 +472,6 @@ namespace PetDoctor.InfrastructureStack
                 Provider = k8sProvider
             });
 
-            // Create a k8s secret for use when pulling images from the container registry when deploying the sample application.
-            var dockerCfg = Output.All(registry.LoginServer, registry.AdminUsername, registry.AdminPassword).Apply(
-                v =>
-                {
-                    var r = new Dictionary<string, object>();
-                    var server = v[0];
-
-                    r[server] = new
-                    {
-                        email = "notneeded@notneeded.com",
-                        username = v[1],
-                        password = v[2]
-                    };
-
-                    return r;
-                });
-
-            var dockerCfgString = dockerCfg.Apply(x => Convert.ToBase64String(Encoding.UTF8.GetBytes(System.Text.Json.JsonSerializer.Serialize(x))));
-
-            var dockerCfgSecret = new Secret(values.DockerConfigSecretName, new SecretArgs
-            {
-                Data =
-                {
-                    {".dockercfg", dockerCfgString}
-                },
-                Type = "kubernetes.io/dockercfg",
-                Metadata = new ObjectMetaArgs
-                {
-                    Name = values.DockerConfigSecretName,
-                }
-            }, new CustomResourceOptions
-            {
-                DependsOn = cluster,
-                Provider = k8sProvider
-            });
-
             var image = new Image("appointment-api-docker", new ImageArgs
             {
                 Build = $".{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}",
@@ -686,11 +649,6 @@ namespace PetDoctor.InfrastructureStack
                                         }
                                     }
                                 }
-                            },
-                            // TODO: This shouldn't be necessary since we've configured the AKS SP to be able to AcrPull from the ACR...
-                            ImagePullSecrets = new LocalObjectReferenceArgs
-                            {
-                                Name = values.DockerConfigSecretName
                             }
                         }
                     }
