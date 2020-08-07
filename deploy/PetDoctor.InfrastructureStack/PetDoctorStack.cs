@@ -429,7 +429,7 @@ namespace PetDoctor.InfrastructureStack
                     {
                         Email = "kane.armstrong@outlook.com",
                         Server = "https://acme-v02.api.letsencrypt.org/directory",
-                        PrivateKeySecretRef = new SecretKeySelectorArgs
+                        PrivateKeySecretRef = new CertManagerClusterIssuerAcmeSecretArgs
                         {
                             Name = "letsencrypt-prod"
                         }

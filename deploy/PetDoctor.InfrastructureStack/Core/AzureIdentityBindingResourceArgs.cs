@@ -1,4 +1,5 @@
-﻿using Pulumi.Kubernetes.ApiExtensions;
+﻿using Pulumi;
+using Pulumi.Kubernetes.ApiExtensions;
 
 namespace PetDoctor.InfrastructureStack.Core
 {
@@ -8,6 +9,7 @@ namespace PetDoctor.InfrastructureStack.Core
         {
         }
 
-        public AzureIdentityBindingSpecArgs Spec { get; set; }
+        [Input("spec", true)]
+        public Input<AzureIdentityBindingSpecArgs> Spec { get; set; }
     }
 }

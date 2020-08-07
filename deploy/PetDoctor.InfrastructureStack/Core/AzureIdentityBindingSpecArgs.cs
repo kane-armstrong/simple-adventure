@@ -2,11 +2,11 @@
 
 namespace PetDoctor.InfrastructureStack.Core
 {
-    public class AzureIdentityBindingSpecArgs
+    public class AzureIdentityBindingSpecArgs : ResourceArgs
     {
         [Input("azureIdentity", true)]
-        public string AzureIdentity { get; set; }
+        public Input<string> AzureIdentity { get; set; }
         [Input("selector", true)]
-        public string Selector { get; set; }
+        public Input<string> Selector { get; set; }
     }
 }
