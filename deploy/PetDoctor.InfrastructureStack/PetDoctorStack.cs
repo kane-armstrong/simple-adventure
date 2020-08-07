@@ -116,7 +116,11 @@ namespace PetDoctor.InfrastructureStack
             {
                 ResourceGroupName = resourceGroup.Name,
                 AddressPrefixes = { "10.240.0.0/16" },
-                VirtualNetworkName = vnet.Name
+                VirtualNetworkName = vnet.Name,
+                ServiceEndpoints = new InputList<string>
+                {
+                    "Microsoft.KeyVault"
+                }
             });
 
             #endregion
@@ -334,7 +338,11 @@ namespace PetDoctor.InfrastructureStack
                 NetworkAcls = new KeyVaultNetworkAclsArgs
                 {
                     DefaultAction = "Deny",
-                    Bypass = "AzureServices"
+                    Bypass = "AzureServices",
+                    VirtualNetworkSubnetIds = new InputList<string>
+                    {
+                        subnet.Id
+                    }
                 },
                 Tags = tags
             });
