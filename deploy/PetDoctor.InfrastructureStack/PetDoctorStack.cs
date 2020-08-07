@@ -494,7 +494,6 @@ namespace PetDoctor.InfrastructureStack
                 Host = "petdoctor.kanearmstrong.com",
                 Namespace = kubeNamespace,
                 SecretName = "pet-doctor-secrets",
-                DockerConfigSecretName = "dockercfg-secret",
                 AppointmentApi = new ReplicaSetConfiguration
                 {
                     AadPodIdentityBindingName = "appointment-api-pod-identity-binding",
@@ -768,7 +767,7 @@ namespace PetDoctor.InfrastructureStack
                 Kind = "Ingress",
                 Metadata = new ObjectMetaArgs
                 {
-                    Name = values.Name,
+                    Name = values.AppointmentApi.IngressName,
                     Namespace = values.Namespace,
                     Annotations = new InputMap<string>
                     {
