@@ -416,6 +416,31 @@ namespace PetDoctor.InfrastructureStack
                 Provider = k8sProvider
             });
 
+            var clusterIssuer = new CustomResource("cert-manager-cluster-issuer", new CertManagerClusterIssuerResourceArgs
+            {
+                Metadata = new ObjectMetaArgs
+                {
+                    Name = "letsencrypt-prod",
+                    Namespace = kubeNamespace
+                },
+                Spec = new CertManagerClusterIssuerSpecArgs
+                {
+                    Acme = new CertManagerClusterIssuerAcmeArgs
+                    {
+                        Email = "kane.armstrong@outlook.com",
+                        Server = "https://acme-v02.api.letsencrypt.org/directory",
+                        PrivateKeySecretRef = new SecretKeySelectorArgs
+                        {
+                            Name = "letsencrypt-prod"
+                        }
+                    }
+                }
+            }, new CustomResourceOptions
+            {
+                DependsOn = cluster,
+                Provider = k8sProvider
+            });
+
             // nginx lb needs a public ip address ?
 
             #endregion
