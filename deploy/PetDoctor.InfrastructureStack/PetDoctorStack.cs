@@ -62,6 +62,8 @@ namespace PetDoctor.InfrastructureStack
 
         [Output] public Output<string> AppointmentApiIdentityClientId { get; set; }
 
+        [Output] public Output<string> AppointmentApiIdentityObjectId { get; set; }
+
         public PetDoctorStack()
         {
             #region Configuration
@@ -364,12 +366,15 @@ namespace PetDoctor.InfrastructureStack
 
             AppointmentApiIdentityClientId = appointmentApiIdentity.ClientId;
 
+            AppointmentApiIdentityObjectId = appointmentApiIdentity.PrincipalId;
+
             var appointmentApiKeyVaultPolicy = new AccessPolicy("appointment-api", new AccessPolicyArgs
             {
                 ObjectId = appointmentApiIdentity.PrincipalId,
                 TenantId = tenantId,
                 SecretPermissions = new[] { "get", "list" },
-                KeyVaultId = appointmentApiKeyVault.Id
+                KeyVaultId = appointmentApiKeyVault.Id,
+                ApplicationId = appointmentApiIdentity.ClientId
             });
 
             // Assigning the AKS SP the correct role membership (Managed Identity Operator) for the user assigned identities is mandatory
