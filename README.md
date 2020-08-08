@@ -72,10 +72,25 @@ To build the unit tests, use `docker-compose build unittests` and then `docker-c
 
 ## Infrastructure & Deployment
 
-Infrastructure is provisioned using pulumi. cd to the `Petdoctor.InfrastructureStack` csproj and run:
+This application can be deployed to a Kubernetes cluster hosted in Azure by running `pulumi up` after cd'ing to `deploy/PetDoctor.InfrastructureStack`. This takes care of:
 
-`pulumi up`
+* Provisioning shared Azure infrastructure
+* Provisioning Azure services dedicated to the appointments API
+* Deploying things to Kubernetes (both shared concerns and application-specific, with ingress/service/deployment/secrets/etc)
+
+Steps to get this to work properly:
+
+1. Open a terminal
+2. cd to `PetDoctor.Infrastructure` 
+3. Change config as appropriate (see `Pulumi.yaml` and `Pulumi.dev.yaml`)
+4. Run `pulumi up`
+5. If it falls over, running `pulumi up` again typically works
+6. Run `kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller` and note down the value of `EXTERNAL-IP`
+7. Create an A record pointing the domain specified in your `Pulumi.dev.yaml` file (in the `PetDoctor.Infrastructure` directory) to the IP address obtained in the previous step
+8. Give DNS a some time to propagate
+9. Browse to `<the domain you provided>/api` or `<the domain you provided>/api/swagger` - if the page loads, you're good
 
 To tear the resources down run:
 
 `pulumi destroy`
+
