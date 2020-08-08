@@ -1,3 +1,41 @@
-name: petdoctor
+name: pet-doctor
 runtime: dotnet
-description: A C# Pulumi program
+description: Creates all of the necessary Azure and Kubernetes resources to host the Pet Doctor solution
+template:
+  config:
+    azure-location:
+      description: The location in which to create the Azure resources (e.g. East US 2)
+      secret: false
+    azure-sqlserver-password:
+      description: SQL Server password (complex enough to satisfy Azure policy)
+      secret: true
+    azure-sqlserver-username:
+      description: SQL Server username
+      secret: true
+    azure-tags-createdby:
+      description: A tag representing the user who created the stack; in a real application this would be useful for e.g. billing
+      secret: false
+    azure-tags-owner:
+      description: A tag representing the user who owns the resources the stack; in a real application this would be useful for e.g. billing
+      secret: false
+    azure-tags-environment:
+      description: A tag representing the environment; in a real application this would be useful for e.g. billing
+      secret: false
+    azure-tags-tenantid:
+      description: The id of the Azure tenant in which to create the Azure resources
+      secret: true
+    cert-manager-acme-email:
+      description: The email address to provide the cert-manager cluster certificate issuer
+      secret: false
+    domain:
+      description: The domain to use when configuring ingress rules for Kubernetes deployments
+      secret: false
+    kubernetes-namespace:
+      description: The name of the namespace in which to create resources
+      secret: false
+    kubernetes-scaling-nodecount:
+      description: The number of nodes to provision for the cluster (at least 2 is recommended)
+      secret: false
+    kubernetes-version:
+      description: The version of Kubernetes to run (e.g. 1.17.9). Different Azure regions have different version availability; see https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions for more
+      secret: false
