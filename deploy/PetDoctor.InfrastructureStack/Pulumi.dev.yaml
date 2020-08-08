@@ -1,9 +1,16 @@
 config:
-  petdoctor:appVersion: 0.0.2
-  petdoctor:createdBy: Kane Armstrong
-  petdoctor:environment: Development
-  petdoctor:kubernetesVersion: 1.18.4
-  petdoctor:sqlPassword:
-    secure: AAABACeojBA4jnB0aEOPNQt7S1Ole6CYfUXja9En5q1qLZE0NRSaMHQYduHKNtW+2m3aovkWZDs=
-  petdoctor:tenantId:
-    secure: AAABAJoupYpemamNSqat8UiIdsk5F5MIGzVLPeQIXpXKawO0T/hVgQlyCfUrZV3kHyncc9bs/583iQhrcikdf37fPAo=
+  pet-doctor:azure-location: East US 2
+  pet-doctor:azure-sqlserver-password:
+    secure: AAABAC8X41+sa9QnHgUzdp3Zl3vFerAgb8xlp2quFSoXkXo5MFvsiEF4YrCHRoFts4QtJoNfVmmHK8xiEUmKEgRi
+  pet-doctor:azure-sqlserver-username:
+    secure: AAABAODFnjFl9w+cyviZ9PThIFVqBSf+yShWgWStWQtOE3cbqOCUYY6OIM8h
+  pet-doctor:azure-tags-createdby: Kane Armstrong
+  pet-doctor:azure-tags-environment: Development
+  pet-doctor:azure-tags-owner: Kane Armstrong
+  pet-doctor:azure-tenantid:
+    secure: AAABAOXkN3T0chgZ0lapEALS8Qxw4Pva5pp7BQ5thG7R5ZH0Kw1f//WHXH/OU3tdlgf+trPNB27izPPRyyapnVEFAVw=
+  pet-doctor:certmanager-acme-email: kane.armstrong@outlook.com
+  pet-doctor:domain: petdoctor.kanearmstrong.com
+  pet-doctor:kubernetes-namespace: pet-doctor-dev
+  pet-doctor:kubernetes-scaling-nodecount: "2"
+  pet-doctor:kubernetes-version: 1.17.9
