@@ -23,6 +23,7 @@ using Pulumi.Kubernetes.Yaml;
 using Pulumi.Random;
 using Pulumi.Tls;
 using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using Application = Pulumi.AzureAD.Application;
@@ -401,7 +402,7 @@ namespace PetDoctor.InfrastructureStack
 
             var image = new Image("appointments-api-docker-image", new ImageArgs
             {
-                Build = imagePath,
+                Build = $".{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}",
                 Registry = new ImageRegistry
                 {
                     Server = azureResources.Registry.LoginServer,
