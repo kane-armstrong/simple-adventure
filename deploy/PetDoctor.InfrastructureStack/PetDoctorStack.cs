@@ -396,7 +396,7 @@ namespace PetDoctor.InfrastructureStack
 
         private static AppointmentApiAzureResourceBag CreateAppointmentApiAzureResources(AzureResourceBag azureResources, Config config, Input<string> registryImageName)
         {
-            var tenantId = config.Require("azure-tenantId");
+            var tenantId = config.Require("azure-tenantid");
 
             var appointmentApiDb = new Database("appointments-api-db", new DatabaseArgs
             {
