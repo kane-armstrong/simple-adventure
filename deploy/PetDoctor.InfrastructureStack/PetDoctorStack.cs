@@ -188,7 +188,7 @@ namespace PetDoctor.InfrastructureStack
             var logAnalyticsWorkspace = new AnalyticsWorkspace("pet-doctor-aks-log-analytics", new AnalyticsWorkspaceArgs
             {
                 ResourceGroupName = resourceGroup.Name,
-                Name = "petdoctorloganalyticsworkspace",
+                Name = "petdoctorloganalytics",
                 Sku = "PerGB2018",
                 Tags = tags
             });
