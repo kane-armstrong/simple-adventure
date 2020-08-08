@@ -14,3 +14,4 @@ config:
   pet-doctor:kubernetes-namespace: pet-doctor-dev
   pet-doctor:kubernetes-scaling-nodecount: "2"
   pet-doctor:kubernetes-version: 1.17.9
+  pet-doctor:versions-appointments-api: 0.0.1

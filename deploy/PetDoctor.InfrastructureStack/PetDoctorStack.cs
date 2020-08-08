@@ -69,7 +69,7 @@ namespace PetDoctor.InfrastructureStack
                     DeploymentName = "appointments-api",
                     IngressName = "appointments-api-ingress",
                     ServiceName = "appointments-api-svc",
-                    Image = azureResources.Registry.LoginServer.Apply(loginServer => $"{loginServer}/pet-doctor/appointments/api:{config.Require("versions:appointmentsApi")}"),
+                    Image = azureResources.Registry.LoginServer.Apply(loginServer => $"{loginServer}/pet-doctor/appointments/api:{config.Require("versions-appointments-api")}"),
                     Port = 80,
                     ReplicaCount = 2,
                     Cpu = new ResourceLimit
