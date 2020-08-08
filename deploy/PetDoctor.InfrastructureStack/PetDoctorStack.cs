@@ -58,8 +58,8 @@ namespace PetDoctor.InfrastructureStack
             var clusterOptions = new PetDoctorClusterOptions
             {
                 Domain = config.Require("domain"),
-                Namespace = config.Require("kubernetes:namespace"),
-                CertificateIssuerAcmeEmail = config.Require("certManager:acme:email"),
+                Namespace = config.Require("kubernetes-namespace"),
+                CertificateIssuerAcmeEmail = config.Require("certmanager-acme-email"),
                 AppointmentApi = new ReplicaSetConfiguration
                 {
                     AadPodIdentityBindingName = "appointments-api-pod-identity-binding",
@@ -94,17 +94,17 @@ namespace PetDoctor.InfrastructureStack
 
         private static AzureResourceBag CreateBaseAzureInfrastructure(Config config)
         {
-            var location = config.Require("azure:location");
+            var location = config.Require("azure-location");
 
-            var environment = config.Require("azure:tags:environment");
-            var owner = config.Require("azure:tags:owner");
-            var createdBy = config.Require("azure:tags:createdBy");
+            var environment = config.Require("azure-tags-environment");
+            var owner = config.Require("azure-tags-owner");
+            var createdBy = config.Require("azure-tags-createdby");
 
-            var kubernetesVersion = config.Require("kubernetes:version");
-            var kubernetesNodeCount = config.RequireInt32("kubernetes:scaling:nodes");
+            var kubernetesVersion = config.Require("kubernetes-version");
+            var kubernetesNodeCount = config.RequireInt32("kubernetes-scaling-nodecount");
 
-            var sqlUser = config.RequireSecret("azure:sqlServer:username");
-            var sqlPassword = config.RequireSecret("azure:sqlServer:password");
+            var sqlUser = config.RequireSecret("azure-sqlserver-username");
+            var sqlPassword = config.RequireSecret("azure-sqlserver-password");
 
             var tags = new InputMap<string>
             {
@@ -388,8 +388,7 @@ namespace PetDoctor.InfrastructureStack
 
         private static AppointmentApiAzureResourceBag CreateAppointmentApiAzureResources(AzureResourceBag azureResources, Config config, Input<string> registryImageName)
         {
-            var tenantId = config.Require("azure:ad:tenantId");
-            var imagePath = config.Require("appointmentApi:dockerfileDirectory");
+            var tenantId = config.Require("azure-tenantId");
 
             var appointmentApiDb = new Database("appointments-api-db", new DatabaseArgs
             {
