@@ -124,6 +124,7 @@ namespace PetDoctor.InfrastructureStack
             var vnet = new VirtualNetwork("pet-doctor-vnet", new VirtualNetworkArgs
             {
                 ResourceGroupName = resourceGroup.Name,
+                Name = "petdoctorvnet",
                 AddressSpaces = { "10.0.0.0/8" },
                 Tags = tags
             });
@@ -131,6 +132,7 @@ namespace PetDoctor.InfrastructureStack
             var subnet = new Subnet("pet-doctor-subnet", new SubnetArgs
             {
                 ResourceGroupName = resourceGroup.Name,
+                Name = "petdoctorsubet",
                 AddressPrefixes = { "10.240.0.0/16" },
                 VirtualNetworkName = vnet.Name,
                 ServiceEndpoints = new InputList<string> { "Microsoft.KeyVault", "Microsoft.Sql" }
@@ -139,6 +141,7 @@ namespace PetDoctor.InfrastructureStack
             var registry = new Registry("pet-doctor-acr", new RegistryArgs
             {
                 ResourceGroupName = resourceGroup.Name,
+                Name = "petdoctoracr",
                 Sku = "Standard",
                 AdminEnabled = true,
                 Tags = tags
@@ -152,7 +155,7 @@ namespace PetDoctor.InfrastructureStack
 
             var clusterAdApp = new Application("pet-doctor-aks-ad-app", new ApplicationArgs
             {
-                Name = "pet-doctor-aks"
+                Name = "petdoctoraks"
             });
 
             var clusterAdServicePrincipal = new ServicePrincipal("aks-app-sp", new ServicePrincipalArgs
@@ -212,6 +215,7 @@ namespace PetDoctor.InfrastructureStack
             var cluster = new KubernetesCluster("pet-doctor-aks", new KubernetesClusterArgs
             {
                 ResourceGroupName = resourceGroup.Name,
+                Name = "petdoctoraks",
                 DnsPrefix = "dns",
                 KubernetesVersion = kubernetesVersion,
                 DefaultNodePool = new KubernetesClusterDefaultNodePoolArgs
@@ -260,6 +264,7 @@ namespace PetDoctor.InfrastructureStack
             var sqlServer = new SqlServer("pet-doctor-sql", new SqlServerArgs
             {
                 ResourceGroupName = resourceGroup.Name,
+                Name = "petdoctorsql",
                 Tags = tags,
                 Version = "12.0",
                 AdministratorLogin = sqlUser,
@@ -269,6 +274,7 @@ namespace PetDoctor.InfrastructureStack
             var sqlvnetrule = new VirtualNetworkRule("pet-doctor-sql", new VirtualNetworkRuleArgs
             {
                 ResourceGroupName = resourceGroup.Name,
+                Name = "petdoctorsql",
                 ServerName = sqlServer.Name,
                 SubnetId = subnet.Id,
             });
@@ -276,6 +282,7 @@ namespace PetDoctor.InfrastructureStack
             var appInsights = new Insights("pet-doctor-ai", new InsightsArgs
             {
                 ApplicationType = "web",
+                Name = "petdoctor",
                 ResourceGroupName = resourceGroup.Name,
                 Tags = tags
             });
@@ -418,6 +425,7 @@ namespace PetDoctor.InfrastructureStack
             var appointmentApiIdentity = new UserAssignedIdentity("appointments-api", new UserAssignedIdentityArgs
             {
                 ResourceGroupName = azureResources.ResourceGroup.Name,
+                Name = "appointments-api",
                 Tags = azureResources.Tags
             });
 
@@ -445,7 +453,7 @@ namespace PetDoctor.InfrastructureStack
             var appointmentApiKeyVault = new KeyVault("appointment-api-keyvault", new KeyVaultArgs
             {
                 ResourceGroupName = azureResources.ResourceGroup.Name,
-                Name = "appointment-api",
+                Name = "appointments-api",
                 EnabledForDiskEncryption = true,
                 TenantId = tenantId,
                 SkuName = "standard",
