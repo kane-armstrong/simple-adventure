@@ -1,11 +1,10 @@
 ﻿namespace PetDoctor.InfrastructureStack.Configuration
 {
-    public class PetDoctorValues
+    public class PetDoctorClusterOptions
     {
-        public string Name { get; set; }
-        public string Host { get; set; }
+        public string Domain { get; set; }
         public string Namespace { get; set; }
-        public string SecretName { get; set; }
+        public string CertificateIssuerAcmeEmail { get; set; }
         public ReplicaSetConfiguration AppointmentApi { get; set; }
     }
 }

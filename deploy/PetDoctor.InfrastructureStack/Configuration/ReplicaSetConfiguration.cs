@@ -15,5 +15,6 @@ namespace PetDoctor.InfrastructureStack.Configuration
         public Output<string> Image { get; set; }
         public ResourceLimit Memory { get; set; }
         public ResourceLimit Cpu { get; set; }
+        public string SecretName { get; set; }
     }
 }
