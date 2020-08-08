@@ -486,6 +486,36 @@ namespace PetDoctor.InfrastructureStack
                 Provider = provider
             });
 
+            var certs = new CustomResource("cert-manager-certificates", new CertManagerCertificateResourceArgs
+            {
+                Metadata = new ObjectMetaArgs
+                {
+                    Namespace = kubeNamespace,
+                    Name = "tls-secret"
+                },
+                Spec = new CertManagerCertificateSpecArgs
+                {
+                    SecretName = "tls-secret",
+                    DnsNames = "kanearmstrong.com",
+                    Acme = new CertManagerCertificateAcmeArgs
+                    {
+                        Config = new CertManagerCertificateAcmeConfigArgs
+                        {
+                            Http = new CertManagerCertificateAcmeConfigHttpArgs
+                            {
+                                IngressClass = "nginx"
+                            },
+                            Domains = "kanearmstrong.com"
+                        }
+                    },
+                    IssuerRef = new CertManagerCertificateIssuerRefArgs
+                    {
+                        Name = "letsencrypt-prod",
+                        Kind = "ClusterIssuer"
+                    }
+                }
+            });
+
             #endregion
 
             var values = new PetDoctorValues
