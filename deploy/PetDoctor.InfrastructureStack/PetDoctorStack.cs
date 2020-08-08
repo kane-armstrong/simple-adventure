@@ -404,7 +404,7 @@ namespace PetDoctor.InfrastructureStack
 
             KeyVaultUri = appointmentApiKeyVault.VaultUri;
 
-            var secret = new Pulumi.Azure.KeyVault.Secret("appointApiDbConnectionString", new Pulumi.Azure.KeyVault.SecretArgs
+            var secret = new Pulumi.Azure.KeyVault.Secret("appointment-db-connection-string", new Pulumi.Azure.KeyVault.SecretArgs
             {
                 KeyVaultId = appointmentApiKeyVault.Id,
                 Name = "ConnectionStrings--PetDoctorContext",
