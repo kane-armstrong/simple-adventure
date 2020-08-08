@@ -1,7 +1,6 @@
 ﻿using Pulumi;
-using Pulumi.Kubernetes.Types.Inputs.Core.V1;
 
-namespace PetDoctor.InfrastructureStack.Core
+namespace PetDoctor.InfrastructureStack.Kubernetes.CertManager
 {
     public class CertManagerClusterIssuerAcmeArgs : ResourceArgs
     {

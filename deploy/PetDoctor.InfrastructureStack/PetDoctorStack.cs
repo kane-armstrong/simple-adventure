@@ -1,5 +1,4 @@
-﻿using PetDoctor.InfrastructureStack.Core;
-using Pulumi;
+﻿using Pulumi;
 using Pulumi.Azure.AppInsights;
 using Pulumi.Azure.Authorization;
 using Pulumi.Azure.ContainerService;
@@ -25,6 +24,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Text;
+using PetDoctor.InfrastructureStack.Configuration;
+using PetDoctor.InfrastructureStack.Kubernetes.AadPodIdentity;
+using PetDoctor.InfrastructureStack.Kubernetes.CertManager;
 using Application = Pulumi.AzureAD.Application;
 using ApplicationArgs = Pulumi.AzureAD.ApplicationArgs;
 using ContainerArgs = Pulumi.Kubernetes.Types.Inputs.Core.V1.ContainerArgs;

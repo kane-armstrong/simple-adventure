@@ -1,7 +1,7 @@
 ﻿using Pulumi;
 using Pulumi.Kubernetes.ApiExtensions;
 
-namespace PetDoctor.InfrastructureStack.Core
+namespace PetDoctor.InfrastructureStack.Kubernetes.AadPodIdentity
 {
     public class AzureIdentityBindingResourceArgs : CustomResourceArgs
     {

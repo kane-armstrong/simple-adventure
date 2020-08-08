@@ -1,4 +1,4 @@
-﻿namespace PetDoctor.InfrastructureStack.Core
+﻿namespace PetDoctor.InfrastructureStack.Configuration
 {
     public class ResourceLimit
     {

@@ -1,6 +1,6 @@
 ﻿using Pulumi;
 
-namespace PetDoctor.InfrastructureStack.Core
+namespace PetDoctor.InfrastructureStack.Kubernetes.AadPodIdentity
 {
     public class AzureIdentitySpecArgs : ResourceArgs
     {

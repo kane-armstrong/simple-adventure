@@ -1,6 +1,6 @@
 ﻿using Pulumi;
 
-namespace PetDoctor.InfrastructureStack.Core
+namespace PetDoctor.InfrastructureStack.Kubernetes.CertManager
 {
     public class CertManagerCertificateAcmeConfigHttpArgs : ResourceArgs
     {
