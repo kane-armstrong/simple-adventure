@@ -2,30 +2,31 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/kane-armstrong/simple-adventure/badge)](https://www.codefactor.io/repository/github/kane-armstrong/simple-adventure)
 
-This repository contains the source code for a simple toy project using CQRS and event sourcing.
+This repository contains the source code for a simple toy project using CQRS and event sourcing. I've built it to stretch muscles I haven't used for a while, to try
+out new stuff, and possibly generate some content for my own future reference. 
 
-The scope for this project is:
+Some of the stuff demonstrated in this codebase:
 
-* Create an API-driven application for managing verterinary appointments for canine companions
-* Use event sourcing and CQRS for persistence
-* Provision a Kubernetes cluster in Azure
-* Package and deploy the application to the cluster
-* Include both unit and integration tests
+* Event sourcing and CQRS (separate read/write stores)
+* Entity Framework Core
+* Rich(er than usual) domain models
+* Integration (aka functional or component) testing
+* Unit testing
+* Running the API in docker and docker compose
+* Running tests in docker and docker compose
+* Using Pulumi to generate both Azure resources and to manage/deploy to a Kubernetes cluster
 
-Additional work that isn't in scope but may be done anyway:
+Some of the stuff I'd like to add to this codebase:
 
-* Authentication
-* Automated build/deploy of both infrastructure and code using Azure DevOps
-* Switch from Azure to AWS
-
-## Motivation
-
-It has been a while since I got to use all of the muscles required by this project, and this is an opportunity to 
-work them.
+* Authentication (probably using Identity Server)
+* Automated build/deploy of both infrastructure and code using Azure DevOps and/or GitHub actions
+* Model more of what happens at a practice than just scheduling appointments (i.e. implement a microservices architecture)
+* Create a couple of different user interfaces (a public facing one and an internal one, in different stacks e.g. React, Blazor)
 
 ## Local Development
 
-Install the latest .NET Core 3.1 SDK
+This project targets .NET 5.0. At the time of writing, you'll need the [latest SDK](https://dotnet.microsoft.com/download/dotnet/5.0) 
+installed (I'm using preview7) and you'll need to use [Visual Studio Preview](https://visualstudio.microsoft.com/vs/preview/).
 
 ### Using Docker
 
@@ -93,4 +94,3 @@ Steps to get this to work properly:
 To tear the resources down run:
 
 `pulumi destroy`
-
