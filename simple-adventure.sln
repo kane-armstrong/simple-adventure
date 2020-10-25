@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile = Dockerfile
 		Dockerfile.IntegrationTests = Dockerfile.IntegrationTests
 		Dockerfile.UnitTests = Dockerfile.UnitTests
+		Jenkinsfile = Jenkinsfile
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{E734D580-1F11-4506-BEB3-E32BBAA50950}"
