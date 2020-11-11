@@ -20,7 +20,12 @@ namespace PetDoctor.API.Application.Commands
             var owner = new Owner(request.OwnerFirstName, request.OwnerLastName, request.OwnerPhone, request.OwnerEmail);
             var appointment = new Appointment(pet, owner, request.DesiredVerterinarianId, request.ReasonForVisit, request.DesiredDate);
             await _appointments.Save(appointment);
-            return new CommandResult(true, appointment.Id);
+
+            return new()
+            {
+                ResourceFound = true,
+                ResourceId = appointment.Id
+            };
         }
     }
 }

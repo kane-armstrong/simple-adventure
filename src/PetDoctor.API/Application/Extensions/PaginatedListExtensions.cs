@@ -8,7 +8,7 @@ namespace PetDoctor.API.Application.Extensions
     {
         public static Page<T> ToPage<T>(this PaginatedList<T> @this) where T : class
         {
-            if (@this == null)
+            if (@this is null)
             {
                 throw new ArgumentNullException(nameof(@this));
             }

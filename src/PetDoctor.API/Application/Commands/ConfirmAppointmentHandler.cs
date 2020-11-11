@@ -17,14 +17,22 @@ namespace PetDoctor.API.Application.Commands
         public async Task<CommandResult> Handle(ConfirmAppointment request, CancellationToken cancellationToken)
         {
             var appointment = await _appointments.Find(request.Id);
-            if (appointment == null)
-                return new CommandResult(false, null);
+            if (appointment is null)
+                return new()
+                {
+                    ResourceFound = false,
+                    ResourceId = null
+                };
 
             appointment.Confirm(request.AttendingVeterinarianId);
 
             await _appointments.Save(appointment);
 
-            return new CommandResult(true, appointment.Id);
+            return new()
+            {
+                ResourceFound = true,
+                ResourceId = appointment.Id
+            };
         }
     }
 }
