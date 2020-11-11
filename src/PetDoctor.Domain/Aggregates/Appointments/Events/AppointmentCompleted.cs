@@ -2,14 +2,8 @@
 
 namespace PetDoctor.Domain.Aggregates.Appointments.Events
 {
-    public record AppointmentCompleted : DomainEvent
+    public record AppointmentCompleted(Guid AppointmentId) : DomainEvent
     {
-        public Guid AppointmentId { get; }
         public readonly AppointmentState State = AppointmentState.Completed;
-
-        public AppointmentCompleted(Guid appointmentId)
-        {
-            AppointmentId = appointmentId;
-        }
     }
 }
