@@ -2,17 +2,17 @@
 
 namespace PetDoctor.API.Application.Commands
 {
-    public class CreateAppointment : Command
+    public record CreateAppointment : Command
     {
-        public string PetName { get; set; }
-        public DateTimeOffset PetDateOfBirth { get; set; }
-        public string PetBreed { get; set; }
-        public string OwnerFirstName { get; set; }
-        public string OwnerLastName { get; set; }
-        public string OwnerPhone { get; set; }
-        public string OwnerEmail { get; set; }
-        public Guid? DesiredVerterinarianId { get; set; }
-        public string ReasonForVisit { get; set; }
-        public DateTimeOffset DesiredDate { get; set; }
+        public string PetName { get; init; } = string.Empty;
+        public DateTimeOffset PetDateOfBirth { get; init; }
+        public string PetBreed { get; init; } = string.Empty;
+        public string OwnerFirstName { get; init; } = string.Empty;
+        public string OwnerLastName { get; init; } = string.Empty;
+        public string OwnerPhone { get; init; } = string.Empty;
+        public string OwnerEmail { get; init; } = string.Empty;
+        public Guid? DesiredVerterinarianId { get; init; }
+        public string ReasonForVisit { get; init; } = string.Empty;
+        public DateTimeOffset DesiredDate { get; init; }
     }
 }
