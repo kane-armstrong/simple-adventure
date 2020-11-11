@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 	<Nullable>enable</Nullable>
-	<LangVersion>latest</LangVersion>
+	<LangVersion>9.0</LangVersion>
 	<UserSecretsId>d727579a-bf3c-4d58-a790-bb3650691873</UserSecretsId>
   </PropertyGroup>
 
