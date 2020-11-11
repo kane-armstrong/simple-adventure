@@ -1,4 +1,6 @@
-﻿using AutoFixture;
+﻿using System;
+using System.Linq;
+using AutoFixture;
 using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
@@ -84,7 +86,14 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
         public void should_set_state_to_requested()
         {
             var fixture = new Fixture();
-            var sut = fixture.Create<Appointment>();
+            var pet = fixture.Create<Pet>();
+            var owner = fixture.Create<Owner>();
+
+            var apt = new Appointment(pet, owner, "reasons", DateTimeOffset.Now.AddDays(3));
+
+            var @event = apt.PendingEvents.First() as AppointmentCreated;
+
+            var sut = new Appointment(@event);
 
             sut.State.Should().Be(AppointmentState.Requested);
         }

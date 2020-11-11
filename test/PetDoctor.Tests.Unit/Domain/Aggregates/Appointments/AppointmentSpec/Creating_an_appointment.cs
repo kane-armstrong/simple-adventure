@@ -78,7 +78,12 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
         public void should_set_state_to_requested()
         {
             var fixture = new Fixture();
-            var sut = fixture.Create<Appointment>();
+            var pet = fixture.Create<Pet>();
+            var owner = fixture.Create<Owner>();
+
+            var vetId = Guid.NewGuid();
+
+            var sut = new Appointment(pet, owner, vetId, "reason", DateTimeOffset.Now);
 
             sut.State.Should().Be(AppointmentState.Requested);
         }
