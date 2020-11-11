@@ -11,96 +11,89 @@ using Serilog;
 using SqlStreamStore;
 using System;
 using System.IO;
+using PetDoctor.API;
 
-namespace PetDoctor.API
+var currentEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
+try
 {
-    public class Program
+    var configBuilder = CreateConfigurationBuilder();
+    var loggerConfiguration = new LoggerConfiguration().ReadFrom.Configuration(configBuilder.Build());
+    Log.Logger = loggerConfiguration.CreateLogger();
+
+    Log.Logger.Information("Application starting");
+    var isProd = currentEnvironment.ToLower() == "production";
+    if (isProd)
     {
-        private static readonly string CurrentEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var configBuilder = CreateConfigurationBuilder();
-                var loggerConfiguration = new LoggerConfiguration().ReadFrom.Configuration(configBuilder.Build());
-                Log.Logger = loggerConfiguration.CreateLogger();
-
-                Log.Logger.Information("Application starting");
-                var isProd = CurrentEnvironment.ToLower() == "production";
-                if (isProd)
-                {
-                    Log.Logger.Information("Running in production; adding KeyVault as a configuration provider");
-                    AddKeyVaultConfigurationProvider(configBuilder);
-                }
-
-                var host = CreateHostBuilder(args, configBuilder.Build()).Build();
-
-                Log.Information("Migrating databases");
-                MigrateDatabases(host);
-
-                Log.Information("Starting host");
-                host.Run();
-                Log.Information("Stopped host");
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "An error occurred while attempting to start the host: {message}", e.Message);
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args, IConfigurationRoot configuration) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseSerilog();
-                    webBuilder.UseConfiguration(configuration);
-                });
-
-        private static IConfigurationBuilder CreateConfigurationBuilder() => new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", false, true)
-            .AddJsonFile($"appsettings.{CurrentEnvironment}.json", true)
-            .AddUserSecrets<Startup>()
-            .AddEnvironmentVariables();
-
-        private static void AddKeyVaultConfigurationProvider(IConfigurationBuilder builder)
-        {
-            try
-            {
-                var cfg = builder.Build();
-                var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
-                var kvUrl = cfg.GetValue<string>("keyvault:url");
-                if (string.IsNullOrEmpty(kvUrl))
-                    throw new ArgumentException("A KeyVault URL is required (KEYVAULT__URL)");
-                if (!Uri.IsWellFormedUriString(kvUrl, UriKind.Absolute))
-                    throw new ArgumentException($"Invalid KeyVault URI: {kvUrl} (must be a well formed URI string)");
-                builder.AddAzureKeyVault(kvUrl, keyVaultClient, new DefaultKeyVaultSecretManager());
-            }
-            catch (Exception e)
-            {
-                Log.Logger.Error(e, "Failed to add KeyVault as a configuration provider.");
-                throw;
-            }
-        }
-
-        private static void MigrateDatabases(IHost host)
-        {
-            using var scope = host.Services.CreateScope();
-            var appDbContext = scope.ServiceProvider.GetRequiredService<PetDoctorContext>();
-            // Ideally this would be done in a separate console app in prod (with version assertions here)
-            appDbContext.Database.Migrate();
-
-            var streamStore = scope.ServiceProvider.GetRequiredService<MsSqlStreamStore>();
-            var schemaCheck = streamStore.CheckSchema().GetAwaiter().GetResult();
-            if (!schemaCheck.IsMatch())
-                streamStore.CreateSchema().GetAwaiter().GetResult();
-        }
+        Log.Logger.Information("Running in production; adding KeyVault as a configuration provider");
+        AddKeyVaultConfigurationProvider(configBuilder);
     }
+
+    var host = CreateHostBuilder(args, configBuilder.Build()).Build();
+
+    Log.Information("Migrating databases");
+    MigrateDatabases(host);
+
+    Log.Information("Starting host");
+    host.Run();
+    Log.Information("Stopped host");
+}
+catch (Exception e)
+{
+    Log.Error(e, "An error occurred while attempting to start the host: {message}", e.Message);
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+
+
+IConfigurationBuilder CreateConfigurationBuilder() => new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile($"appsettings.{currentEnvironment}.json", true)
+    .AddUserSecrets<Startup>()
+    .AddEnvironmentVariables();
+
+static IHostBuilder CreateHostBuilder(string[] args, IConfigurationRoot configuration) =>
+    Host.CreateDefaultBuilder(args)
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+            webBuilder.UseStartup<Startup>();
+            webBuilder.UseSerilog();
+            webBuilder.UseConfiguration(configuration);
+        });
+
+static void AddKeyVaultConfigurationProvider(IConfigurationBuilder builder)
+{
+    try
+    {
+        var cfg = builder.Build();
+        var azureServiceTokenProvider = new AzureServiceTokenProvider();
+        var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+        var kvUrl = cfg.GetValue<string>("keyvault:url");
+        if (string.IsNullOrEmpty(kvUrl))
+            throw new ArgumentException("A KeyVault URL is required (KEYVAULT__URL)");
+        if (!Uri.IsWellFormedUriString(kvUrl, UriKind.Absolute))
+            throw new ArgumentException($"Invalid KeyVault URI: {kvUrl} (must be a well formed URI string)");
+        builder.AddAzureKeyVault(kvUrl, keyVaultClient, new DefaultKeyVaultSecretManager());
+    }
+    catch (Exception e)
+    {
+        Log.Logger.Error(e, "Failed to add KeyVault as a configuration provider.");
+        throw;
+    }
+}
+
+static void MigrateDatabases(IHost host)
+{
+    using var scope = host.Services.CreateScope();
+    var appDbContext = scope.ServiceProvider.GetRequiredService<PetDoctorContext>();
+    // Ideally this would be done in a separate console app in prod (with version assertions here)
+    appDbContext.Database.Migrate();
+
+    var streamStore = scope.ServiceProvider.GetRequiredService<MsSqlStreamStore>();
+    var schemaCheck = streamStore.CheckSchema().GetAwaiter().GetResult();
+    if (!schemaCheck.IsMatch())
+        streamStore.CreateSchema().GetAwaiter().GetResult();
 }
