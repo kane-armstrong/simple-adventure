@@ -2,11 +2,11 @@
 
 namespace PetDoctor.Domain.Aggregates.Appointments.Events
 {
-    public class AppointmentCanceled : DomainEvent
+    public record AppointmentCanceled : DomainEvent
     {
         public Guid AppointmentId { get; }
-        public string CancellationReason { get; set; }
-        public AppointmentState State = AppointmentState.Canceled;
+        public string CancellationReason { get; }
+        public readonly AppointmentState State = AppointmentState.Canceled;
 
         public AppointmentCanceled(Guid appointmentId, string cancellationReason)
         {

@@ -2,11 +2,11 @@
 
 namespace PetDoctor.Domain.Aggregates.Appointments.Events
 {
-    public class AppointmentRescheduled : DomainEvent
+    public record AppointmentRescheduled : DomainEvent
     {
         public Guid AppointmentId { get; }
         public DateTimeOffset Date { get; }
-        public AppointmentState State = AppointmentState.Requested;
+        public readonly AppointmentState State = AppointmentState.Requested;
 
         public AppointmentRescheduled(Guid appointmentId, DateTimeOffset date)
         {

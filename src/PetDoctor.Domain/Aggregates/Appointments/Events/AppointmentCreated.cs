@@ -2,7 +2,7 @@
 
 namespace PetDoctor.Domain.Aggregates.Appointments.Events
 {
-    public class AppointmentCreated : DomainEvent
+    public record AppointmentCreated : DomainEvent
     {
         public Guid AppointmentId { get; }
         public AppointmentMemento Data { get; }
