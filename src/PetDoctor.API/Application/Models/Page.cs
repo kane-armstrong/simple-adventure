@@ -2,14 +2,14 @@
 
 namespace PetDoctor.API.Application.Models
 {
-    public class Page<T> where T : class
+    public record Page<T>
     {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-        public int TotalCount { get; set; }
-        public int TotalPages { get; set; }
-        public bool HasPreviousPage { get; set; }
-        public bool HasNextPage { get; set; }
-        public IReadOnlyList<T> Data { get; set; }
+        public int PageIndex { get; init; }
+        public int PageSize { get; init; }
+        public int TotalCount { get; init; }
+        public int TotalPages { get; init; }
+        public bool HasPreviousPage { get; init; }
+        public bool HasNextPage { get; init; }
+        public IReadOnlyList<T> Data { get; init; } = new List<T>().AsReadOnly();
     }
 }

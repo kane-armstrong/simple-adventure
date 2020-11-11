@@ -3,16 +3,16 @@ using System;
 
 namespace PetDoctor.API.Application.Models
 {
-    public class AppointmentView
+    public record AppointmentView
     {
-        public Guid Id { get; set; }
-        public Pet Pet { get; set; }
-        public Owner Owner { get; set; }
-        public Guid? AttendingVeterinarianId { get; set; }
-        public string ReasonForVisit { get; set; } = string.Empty;
-        public string? RejectionReason { get; set; }
-        public string? CancellationReason { get; set; }
-        public DateTimeOffset ScheduledOn { get; set; }
-        public string State { get; set; }
+        public Guid Id { get; init; }
+        public Pet Pet { get; init; }
+        public Owner Owner { get; init; }
+        public Guid? AttendingVeterinarianId { get; init; }
+        public string ReasonForVisit { get; init; } = string.Empty;
+        public string? RejectionReason { get; init; }
+        public string? CancellationReason { get; init; }
+        public DateTimeOffset ScheduledOn { get; init; }
+        public string State { get; init; }
     }
 }
