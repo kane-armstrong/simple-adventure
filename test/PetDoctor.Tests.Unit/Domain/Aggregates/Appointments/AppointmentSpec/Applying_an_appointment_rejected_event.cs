@@ -14,7 +14,11 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentRejected(sut.Id, "nobody available");
+            var @event = new AppointmentRejected
+            {
+                AppointmentId = sut.Id,
+                RejectionReason = "nobody available"
+            };
 
             sut.Apply(@event);
 
@@ -27,7 +31,11 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentRejected(sut.Id, "nobody available");
+            var @event = new AppointmentRejected
+            {
+                AppointmentId = sut.Id,
+                RejectionReason = "nobody available"
+            };
 
             sut.Apply(@event);
 

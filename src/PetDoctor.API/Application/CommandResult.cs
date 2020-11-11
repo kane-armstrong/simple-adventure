@@ -4,13 +4,7 @@ namespace PetDoctor.API.Application
 {
     public struct CommandResult
     {
-        public bool ResourceFound { get; }
-        public Guid? ResourceId { get; }
-
-        public CommandResult(bool resourceFound, Guid? resourceId)
-        {
-            ResourceFound = resourceFound;
-            ResourceId = resourceId;
-        }
+        public bool ResourceFound { get; init; }
+        public Guid? ResourceId { get; init; }
     }
 }

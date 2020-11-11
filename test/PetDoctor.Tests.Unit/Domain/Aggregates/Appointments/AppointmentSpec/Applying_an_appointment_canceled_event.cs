@@ -14,7 +14,11 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentCanceled(sut.Id, "i went somewhere else");
+            var @event = new AppointmentCanceled
+            {
+                AppointmentId = sut.Id,
+                CancellationReason = "i went somewhere else"
+            };
 
             sut.Apply(@event);
 
@@ -27,7 +31,11 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentCanceled(sut.Id, "i went somewhere else");
+            var @event = new AppointmentCanceled
+            {
+                AppointmentId = sut.Id,
+                CancellationReason = "i went somewhere else"
+            };
 
             sut.Apply(@event);
 

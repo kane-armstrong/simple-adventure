@@ -2,14 +2,9 @@
 
 namespace PetDoctor.Domain.Aggregates.Appointments.Events
 {
-    public class AppointmentMembersCheckedIn : DomainEvent
+    public record AppointmentMembersCheckedIn : DomainEvent
     {
-        public Guid AppointmentId { get; }
-        public AppointmentState State = AppointmentState.CheckedIn;
-
-        public AppointmentMembersCheckedIn(Guid appointmentId)
-        {
-            AppointmentId = appointmentId;
-        }
+        public Guid AppointmentId { get; init; }
+        public readonly AppointmentState State = AppointmentState.CheckedIn;
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
 using PetDoctor.Domain;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -28,8 +28,8 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
         [Theory]
         [MemberData(nameof(TestEvents))]
         public void produces_the_correct_results_given_a_non_empty_set(
-            AppointmentCreated createdEvent, 
-            List<DomainEvent> events, 
+            AppointmentCreated createdEvent,
+            List<DomainEvent> events,
             Appointment expectedState)
         {
             var sut = new Appointment(createdEvent);
@@ -57,9 +57,19 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 
             var events = new List<DomainEvent>
             {
-                new AppointmentConfirmed(appointment.Id, vetId),
-                new AppointmentMembersCheckedIn(appointment.Id),
-                new AppointmentCompleted(appointment.Id)
+                new AppointmentConfirmed
+                {
+                    AppointmentId = appointment.Id,
+                    AttendingVeterinarianId = vetId
+                },
+                new AppointmentMembersCheckedIn
+                {
+                    AppointmentId = appointment.Id
+                },
+                new AppointmentCompleted
+                {
+                    AppointmentId = appointment.Id
+                }
             };
 
             appointment.Confirm(vetId);
@@ -85,11 +95,29 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 
             var events = new List<DomainEvent>
             {
-                new AppointmentConfirmed(appointment.Id, firstVetId),
-                new AppointmentRescheduled(appointment.Id, newDate),
-                new AppointmentConfirmed(appointment.Id, secondVetId),
-                new AppointmentMembersCheckedIn(appointment.Id),
-                new AppointmentCompleted(appointment.Id)
+                new AppointmentConfirmed
+                {
+                    AppointmentId = appointment.Id,
+                    AttendingVeterinarianId = firstVetId
+                },
+                new AppointmentRescheduled
+                {
+                    AppointmentId = appointment.Id,
+                    Date = newDate
+                },
+                new AppointmentConfirmed
+                {
+                    AppointmentId = appointment.Id,
+                    AttendingVeterinarianId = secondVetId
+                },
+                new AppointmentMembersCheckedIn
+                {
+                    AppointmentId = appointment.Id
+                },
+                new AppointmentCompleted
+                {
+                    AppointmentId = appointment.Id
+                }
             };
 
             appointment.Confirm(firstVetId);
@@ -116,8 +144,16 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 
             var events = new List<DomainEvent>
             {
-                new AppointmentConfirmed(appointment.Id, vetId),
-                new AppointmentRejected(appointment.Id, reason)
+                new AppointmentConfirmed
+                {
+                    AppointmentId = appointment.Id,
+                    AttendingVeterinarianId = vetId
+                },
+                new AppointmentRejected
+                {
+                    AppointmentId = appointment.Id,
+                    RejectionReason = reason
+                }
             };
 
             appointment.Confirm(vetId);
@@ -142,9 +178,21 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 
             var events = new List<DomainEvent>
             {
-                new AppointmentConfirmed(appointment.Id, vetId),
-                new AppointmentRescheduled(appointment.Id, newDate),
-                new AppointmentRejected(appointment.Id, reason)
+                new AppointmentConfirmed
+                {
+                    AppointmentId = appointment.Id,
+                    AttendingVeterinarianId = vetId
+                },
+                new AppointmentRescheduled
+                {
+                    AppointmentId = appointment.Id,
+                    Date = newDate
+                },
+                new AppointmentRejected
+                {
+                    AppointmentId = appointment.Id,
+                    RejectionReason = reason
+                }
             };
 
             appointment.Confirm(vetId);
@@ -169,8 +217,16 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
 
             var events = new List<DomainEvent>
             {
-                new AppointmentConfirmed(appointment.Id, vetId),
-                new AppointmentCanceled(appointment.Id, reason)
+                new AppointmentConfirmed
+                {
+                    AppointmentId = appointment.Id,
+                    AttendingVeterinarianId = vetId
+                },
+                new AppointmentCanceled
+                {
+                    AppointmentId = appointment.Id,
+                    CancellationReason = reason
+                }
             };
 
             appointment.Confirm(vetId);

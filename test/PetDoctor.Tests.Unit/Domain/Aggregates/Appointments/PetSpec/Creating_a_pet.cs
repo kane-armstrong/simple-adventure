@@ -12,7 +12,12 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.PetSpec
         {
             const string petName = "Toby";
 
-            var sut = new Pet(petName, DateTimeOffset.Now, "breed");
+            Pet sut = new()
+            {
+                Name = petName,
+                DateOfBirth = DateTimeOffset.Now,
+                Breed = "breed"
+            };
 
             sut.Name.Should().Be(petName);
         }
@@ -22,7 +27,12 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.PetSpec
         {
             var dob = DateTimeOffset.Parse("2012-07-04T12:00:00.0000000+12:00");
 
-            var sut = new Pet("name", dob, "breed");
+            var sut = new Pet
+            {
+                Name = "name",
+                DateOfBirth = dob,
+                Breed = "breed"
+            };
 
             sut.DateOfBirth.Should().Be(dob);
         }
@@ -32,7 +42,12 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.PetSpec
         {
             const string breed = "Japanese Spitz";
 
-            var sut = new Pet("name", DateTimeOffset.Now, breed);
+            var sut = new Pet
+            {
+                Name = "name",
+                DateOfBirth = DateTimeOffset.Now,
+                Breed = breed
+            };
 
             sut.Breed.Should().Be(breed);
         }

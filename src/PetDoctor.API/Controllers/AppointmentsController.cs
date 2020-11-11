@@ -35,7 +35,7 @@ namespace PetDoctor.API.Controllers
         public async Task<ActionResult<AppointmentView>> GetAppointmentById([FromRoute]Guid id)
         {
             var result = await _mediator.Send(new GetAppointmentById { Id = id });
-            if (result == null)
+            if (result is null)
                 return NotFound();
             return Ok(result);
         }
@@ -55,7 +55,7 @@ namespace PetDoctor.API.Controllers
         {
             request.Id = id;
             var result = await _mediator.Send(request);
-            if (!result.ResourceFound)
+            if (result is { ResourceFound: false })
                 return NotFound();
             return NoContent();
         }
@@ -66,7 +66,7 @@ namespace PetDoctor.API.Controllers
         {
             request.Id = id;
             var result = await _mediator.Send(request);
-            if (!result.ResourceFound)
+            if (result is { ResourceFound: false })
                 return NotFound();
             return NoContent();
         }
@@ -77,7 +77,7 @@ namespace PetDoctor.API.Controllers
         {
             request.Id = id;
             var result = await _mediator.Send(request);
-            if (!result.ResourceFound)
+            if (result is { ResourceFound: false })
                 return NotFound();
             return NoContent();
         }
@@ -88,7 +88,7 @@ namespace PetDoctor.API.Controllers
         {
             request.Id = id;
             var result = await _mediator.Send(request);
-            if (!result.ResourceFound)
+            if (result is { ResourceFound: false })
                 return NotFound();
             return NoContent();
         }
@@ -99,7 +99,7 @@ namespace PetDoctor.API.Controllers
         {
             request.Id = id;
             var result = await _mediator.Send(request);
-            if (!result.ResourceFound)
+            if (result is { ResourceFound: false })
                 return NotFound();
             return NoContent();
         }
@@ -110,7 +110,7 @@ namespace PetDoctor.API.Controllers
         {
             request.Id = id;
             var result = await _mediator.Send(request);
-            if (!result.ResourceFound)
+            if (result is { ResourceFound: false })
                 return NotFound();
             return NoContent();
         }

@@ -15,7 +15,11 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentConfirmed(sut.Id, Guid.NewGuid());
+            var @event = new AppointmentConfirmed
+            {
+                AppointmentId = sut.Id,
+                AttendingVeterinarianId = Guid.NewGuid()
+            };
 
             sut.Apply(@event);
 
@@ -28,7 +32,11 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentConfirmed(sut.Id, Guid.NewGuid());
+            var @event = new AppointmentConfirmed
+            {
+                AppointmentId = sut.Id,
+                AttendingVeterinarianId = Guid.NewGuid()
+            };
 
             sut.Apply(@event);
 

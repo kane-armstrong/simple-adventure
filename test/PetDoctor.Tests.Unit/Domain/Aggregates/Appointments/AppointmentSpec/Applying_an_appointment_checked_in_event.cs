@@ -14,7 +14,10 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentMembersCheckedIn(sut.Id);
+            var @event = new AppointmentMembersCheckedIn
+            {
+                AppointmentId = sut.Id
+            };
 
             sut.Apply(@event);
 

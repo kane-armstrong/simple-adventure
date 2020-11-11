@@ -66,10 +66,12 @@ namespace PetDoctor.Infrastructure.Repositories
                 {
                     throw new InvalidOperationException($"Unrecognized event type: {@event.GetType().FullName}");
                 }
+
+                var json = @event.ToJson();
                 await _eventStream.AppendToStream(
                     appointment.Id.ToString(),
                     ExpectedVersion.Any,
-                    new NewStreamMessage(@event.Id, EventTypeMap[@event.GetType()], @event.ToJson()));
+                    new NewStreamMessage(@event.Id, EventTypeMap[@event.GetType()], json));
             }
 
             await DispatchEvents(appointment);

@@ -40,7 +40,7 @@ namespace PetDoctor.API.Application.Queries
             var page = await query.Paginate(request.PageIndex, request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            return new PaginatedList<AppointmentView>(page, count, request.PageIndex, request.PageSize);
+            return new(page, count, request.PageIndex, request.PageSize);
         }
     }
 }

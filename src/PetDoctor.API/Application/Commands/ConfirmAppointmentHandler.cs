@@ -18,13 +18,21 @@ namespace PetDoctor.API.Application.Commands
         {
             var appointment = await _appointments.Find(request.Id);
             if (appointment == null)
-                return new CommandResult(false, null);
+                return new()
+                {
+                    ResourceFound = false,
+                    ResourceId = null
+                };
 
             appointment.Confirm(request.AttendingVeterinarianId);
 
             await _appointments.Save(appointment);
 
-            return new CommandResult(true, appointment.Id);
+            return new()
+            {
+                ResourceFound = true,
+                ResourceId = appointment.Id
+            };
         }
     }
 }

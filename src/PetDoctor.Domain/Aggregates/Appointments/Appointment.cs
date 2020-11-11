@@ -6,10 +6,10 @@ namespace PetDoctor.Domain.Aggregates.Appointments
 {
     public class Appointment : EventSourcedEntity
     {
-        public Pet Pet { get; }
-        public Owner Owner { get; }
+        public Pet? Pet { get; }
+        public Owner? Owner { get; }
         public Guid? AttendingVeterinarianId { get; private set; }
-        public string ReasonForVisit { get; }
+        public string? ReasonForVisit { get; }
         public string? RejectionReason { get; set; }
         public string? CancellationReason { get; set; }
         public DateTimeOffset ScheduledOn { get; private set; }
@@ -64,40 +64,62 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         {
             State = AppointmentState.Confirmed;
             AttendingVeterinarianId = attendingVeterinarianId;
-            AppendEvent(new AppointmentConfirmed(Id, attendingVeterinarianId));
+            AppendEvent(new AppointmentConfirmed
+            {
+                AppointmentId = Id,
+                AttendingVeterinarianId = attendingVeterinarianId
+            });
         }
 
         public void Reject(string reason)
         {
             State = AppointmentState.Rejected;
             RejectionReason = reason;
-            AppendEvent(new AppointmentRejected(Id, reason));
+            AppendEvent(new AppointmentRejected
+            {
+                AppointmentId = Id,
+                RejectionReason = reason
+            });
         }
 
         public void Reschedule(DateTimeOffset date)
         {
             State = AppointmentState.Requested;
             ScheduledOn = date;
-            AppendEvent(new AppointmentRescheduled(Id, date));
+            AppendEvent(new AppointmentRescheduled
+            {
+                AppointmentId = Id,
+                Date = date
+            });
         }
 
         public void Cancel(string reason)
         {
             State = AppointmentState.Canceled;
             CancellationReason = reason;
-            AppendEvent(new AppointmentCanceled(Id, reason));
+            AppendEvent(new AppointmentCanceled
+            {
+                AppointmentId = Id,
+                CancellationReason = reason
+            });
         }
 
         public void CheckIn()
         {
             State = AppointmentState.CheckedIn;
-            AppendEvent(new AppointmentMembersCheckedIn(Id));
+            AppendEvent(new AppointmentMembersCheckedIn
+            {
+                AppointmentId = Id
+            });
         }
 
         public void Complete()
         {
             State = AppointmentState.Completed;
-            AppendEvent(new AppointmentCompleted(Id));
+            AppendEvent(new AppointmentCompleted
+            {
+                AppointmentId = Id
+            });
         }
 
         public void Apply(AppointmentConfirmed @event)

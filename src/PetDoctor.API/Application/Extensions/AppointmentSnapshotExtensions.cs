@@ -7,7 +7,7 @@ namespace PetDoctor.API.Application.Extensions
     {
         public static AppointmentView ToAppointmentView(this AppointmentSnapshot appointment)
         {
-            return new AppointmentView
+            return new()
             {
                 Id = appointment.Id,
                 ScheduledOn = appointment.ScheduledOn,

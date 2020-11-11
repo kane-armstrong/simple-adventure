@@ -16,11 +16,22 @@ namespace PetDoctor.API.Application.Commands
 
         public async Task<CommandResult> Handle(CreateAppointment request, CancellationToken cancellationToken)
         {
-            var pet = new Pet(request.PetName, request.PetDateOfBirth, request.PetBreed);
+            var pet = new Pet
+            {
+                Name = request.PetName,
+                DateOfBirth = request.PetDateOfBirth,
+                Breed = request.PetBreed
+            };
+
             var owner = new Owner(request.OwnerFirstName, request.OwnerLastName, request.OwnerPhone, request.OwnerEmail);
             var appointment = new Appointment(pet, owner, request.DesiredVerterinarianId, request.ReasonForVisit, request.DesiredDate);
             await _appointments.Save(appointment);
-            return new CommandResult(true, appointment.Id);
+
+            return new()
+            {
+                ResourceFound = true,
+                ResourceId = appointment.Id
+            };
         }
     }
 }

@@ -12,7 +12,7 @@ namespace PetDoctor.API.Application.Extensions
             {
                 throw new ArgumentNullException(nameof(@this));
             }
-            return new Page<T>
+            return new()
             {
                 PageSize = @this.PageSize,
                 PageIndex = @this.PageIndex,

@@ -22,7 +22,7 @@ namespace PetDoctor.API.Tests.Functional.Helpers
 
         public Task<Guid> CreateAppointment(HttpClient client)
         {
-            var fixture = new Fixture();
+            Fixture fixture = new();
             fixture.Customize(new CreateAppointmentCustomization());
             var appointment = fixture.Create<CreateAppointment>();
             return CreateAppointment(client, appointment);

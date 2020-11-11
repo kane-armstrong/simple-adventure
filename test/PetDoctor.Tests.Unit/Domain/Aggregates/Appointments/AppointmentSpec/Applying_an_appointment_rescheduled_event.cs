@@ -14,7 +14,11 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentRescheduled(sut.Id, sut.ScheduledOn.AddDays(2));
+            var @event = new AppointmentRescheduled
+            {
+                AppointmentId = sut.Id,
+                Date = sut.ScheduledOn.AddDays(2)
+            };
 
             sut.Apply(@event);
 
@@ -27,7 +31,11 @@ namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
             var fixture = new Fixture();
             var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentRescheduled(sut.Id, sut.ScheduledOn.AddDays(2));
+            var @event = new AppointmentRescheduled
+            {
+                AppointmentId = sut.Id,
+                Date = sut.ScheduledOn.AddDays(2)
+            };
 
             sut.Apply(@event);
 

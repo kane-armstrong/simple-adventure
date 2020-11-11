@@ -4,6 +4,6 @@ namespace PetDoctor.API.Application.Commands
 {
     public class CompleteAppointment : Command
     {
-        internal Guid Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

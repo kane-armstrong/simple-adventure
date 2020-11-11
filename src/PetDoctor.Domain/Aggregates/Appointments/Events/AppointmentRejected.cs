@@ -2,16 +2,10 @@
 
 namespace PetDoctor.Domain.Aggregates.Appointments.Events
 {
-    public class AppointmentRejected : DomainEvent
+    public record AppointmentRejected : DomainEvent
     {
-        public Guid AppointmentId { get; }
-        public string RejectionReason { get; }
-        public AppointmentState State = AppointmentState.Rejected;
-
-        public AppointmentRejected(Guid appointmentId, string rejectionReason)
-        {
-            AppointmentId = appointmentId;
-            RejectionReason = rejectionReason;
-        }
+        public Guid AppointmentId { get; init; }
+        public string RejectionReason { get; init; } = string.Empty;
+        public readonly AppointmentState State = AppointmentState.Rejected;
     }
 }
