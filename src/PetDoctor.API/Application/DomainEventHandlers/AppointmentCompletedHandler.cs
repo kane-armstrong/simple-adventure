@@ -1,9 +1,8 @@
 ﻿using MediatR;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
-using System;
+using PetDoctor.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
-using PetDoctor.Infrastructure;
 
 namespace PetDoctor.API.Application.DomainEventHandlers
 {
