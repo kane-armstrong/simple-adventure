@@ -11,7 +11,6 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.CheckinToAppointmentSpec
 {
-    [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_checkin_to_appointment_request
     {
         private const string EndpointRoute = "v1/appointments";

@@ -8,7 +8,6 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.ListAppointmentsSpec
 {
-    [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_list_appointments_request : IClassFixture<TestFixture>
     {
         private const string EndpointRoute = "v1/appointments";

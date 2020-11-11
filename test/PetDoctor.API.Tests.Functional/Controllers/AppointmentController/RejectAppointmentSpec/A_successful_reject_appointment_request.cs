@@ -11,7 +11,6 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.RejectAppointmentSpec
 {
-    [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_reject_appointment_request
     {
         private const string EndpointRoute = "v1/appointments";

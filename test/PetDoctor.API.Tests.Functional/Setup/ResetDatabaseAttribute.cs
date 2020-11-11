@@ -10,7 +10,7 @@ namespace PetDoctor.API.Tests.Functional.Setup
     {
         public override void Before(MethodInfo methodUnderTest)
         {
-            ResetDatabases().GetAwaiter().GetResult();
+            //ResetDatabases().GetAwaiter().GetResult();
         }
 
         private static async Task ResetDatabases()

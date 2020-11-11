@@ -12,7 +12,6 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.CreateAppointmentSpec
 {
-    [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_create_appointment_request
     {
         private const string EndpointRoute = "v1/appointments";

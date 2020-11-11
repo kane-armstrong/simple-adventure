@@ -11,7 +11,6 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.RescheduleAppointmentSpec
 {
-    [Collection(TestCollections.RealDatabaseTests)]
     public class Reschedule_appointment_fails_with
     {
         private const string EndpointRoute = "v1/appointments";

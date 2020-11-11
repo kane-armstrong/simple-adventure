@@ -10,7 +10,6 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.GetAppointmentByIdSpec
 {
-    [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_get_appointment_by_id_request : IClassFixture<TestFixture>
     {
         private const string EndpointRoute = "v1/appointments";

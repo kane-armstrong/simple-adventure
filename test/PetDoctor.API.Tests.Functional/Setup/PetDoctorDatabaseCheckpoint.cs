@@ -26,7 +26,7 @@ namespace PetDoctor.API.Tests.Functional.Setup
         {
             using var scope = TestResources.ScopeFactory.CreateScope();
             var dbContext = scope.ServiceProvider.GetService<PetDoctorContext>();
-            if (!_initialized)
+            if (_initialized is false)
             {
                 dbContext.Database.Migrate();
                 _initialized = true;

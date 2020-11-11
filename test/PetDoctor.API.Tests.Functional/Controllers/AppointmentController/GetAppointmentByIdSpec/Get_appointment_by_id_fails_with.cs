@@ -7,7 +7,6 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.GetAppointmentByIdSpec
 {
-    [Collection(TestCollections.RealDatabaseTests)]
     public class Get_appointment_by_id_fails_with
     {
         private const string EndpointRoute = "v1/appointments";

@@ -11,7 +11,6 @@ using Xunit;
 
 namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Complete_appointment_spec
 {
-    [Collection(TestCollections.RealDatabaseTests)]
     public class Complete_appointment_fails_with
     {
         private const string EndpointRoute = "v1/appointments";
