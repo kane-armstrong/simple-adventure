@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoFixture;
 using FluentAssertions;
 using PetDoctor.Domain;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
-using System.Collections.Generic;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.AppointmentSpec
+namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 {
     public class Replaying_events
     {

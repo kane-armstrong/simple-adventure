@@ -3,7 +3,7 @@ using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.PetSpec
+namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.PetSpec
 {
     public class Creating_a_pet
     {

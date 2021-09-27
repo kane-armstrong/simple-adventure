@@ -1,12 +1,12 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Models;
-using PetDoctor.API.Tests.Functional.Helpers;
-using PetDoctor.API.Tests.Functional.Setup;
-using System.Threading.Tasks;
+using PetDoctor.API.IntegrationTests.Helpers;
+using PetDoctor.API.IntegrationTests.Setup;
 using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.ListAppointmentsSpec
+namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.ListAppointmentsSpec
 {
     [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_list_appointments_request : IClassFixture<TestFixture>

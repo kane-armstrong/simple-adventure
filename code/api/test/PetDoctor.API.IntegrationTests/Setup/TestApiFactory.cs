@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.IO;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.PlatformAbstractions;
-using System.IO;
 
-namespace PetDoctor.API.Tests.Functional.Setup
+namespace PetDoctor.API.IntegrationTests.Setup
 {
     public sealed class TestApiFactory : WebApplicationFactory<Startup>
     {

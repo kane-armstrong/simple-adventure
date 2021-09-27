@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using PetDoctor.Domain.Aggregates.Appointments;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using PetDoctor.Domain.Aggregates.Appointments;
 
-namespace PetDoctor.API.Tests.Functional.Setup
+namespace PetDoctor.API.IntegrationTests.Setup
 {
     public class TestFixture
     {

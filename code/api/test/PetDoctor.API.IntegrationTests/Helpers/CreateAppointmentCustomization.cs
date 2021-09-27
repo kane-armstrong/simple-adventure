@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 
-namespace PetDoctor.API.Tests.Functional.Helpers
+namespace PetDoctor.API.IntegrationTests.Helpers
 {
     public class CreateAppointmentCustomization : ICustomization
     {

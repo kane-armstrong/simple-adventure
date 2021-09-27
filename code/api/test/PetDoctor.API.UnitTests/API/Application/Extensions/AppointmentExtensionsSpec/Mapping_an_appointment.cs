@@ -4,7 +4,7 @@ using PetDoctor.API.Application.Extensions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.API.Application.Extensions.AppointmentExtensionsSpec
+namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensionsSpec
 {
     public class Mapping_an_appointment
     {

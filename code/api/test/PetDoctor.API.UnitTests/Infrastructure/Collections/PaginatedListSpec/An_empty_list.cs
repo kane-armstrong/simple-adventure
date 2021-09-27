@@ -3,7 +3,7 @@ using FluentAssertions;
 using PetDoctor.Infrastructure.Collections;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Infrastructure.Collections.PaginatedListSpec
+namespace PetDoctor.API.UnitTests.Infrastructure.Collections.PaginatedListSpec
 {
     public class An_empty_list
     {

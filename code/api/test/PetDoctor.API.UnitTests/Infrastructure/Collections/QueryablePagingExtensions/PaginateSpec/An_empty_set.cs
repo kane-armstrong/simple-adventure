@@ -4,7 +4,7 @@ using FluentAssertions;
 using PetDoctor.Infrastructure.Collections;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Infrastructure.Collections.QueryablePagingExtensions.PaginateSpec
+namespace PetDoctor.API.UnitTests.Infrastructure.Collections.QueryablePagingExtensions.PaginateSpec
 {
     public class An_empty_set
     {

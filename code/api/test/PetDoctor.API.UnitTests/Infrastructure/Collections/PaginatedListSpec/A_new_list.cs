@@ -4,7 +4,7 @@ using FluentAssertions;
 using PetDoctor.Infrastructure.Collections;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Infrastructure.Collections.PaginatedListSpec
+namespace PetDoctor.API.UnitTests.Infrastructure.Collections.PaginatedListSpec
 {
     public class A_new_list
     {

@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
-using Microsoft.AspNetCore.Http;
-using PetDoctor.API.Tests.Functional.Setup;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using PetDoctor.API.IntegrationTests.Setup;
 using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.GetAppointmentByIdSpec
+namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.GetAppointmentByIdSpec
 {
     [Collection(TestCollections.RealDatabaseTests)]
     public class Get_appointment_by_id_fails_with

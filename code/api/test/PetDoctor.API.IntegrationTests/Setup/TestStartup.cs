@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PetDoctor.Infrastructure;
 using SqlStreamStore;
-using System.Reflection;
 
-namespace PetDoctor.API.Tests.Functional.Setup
+namespace PetDoctor.API.IntegrationTests.Setup
 {
     public class TestStartup : Startup
     {

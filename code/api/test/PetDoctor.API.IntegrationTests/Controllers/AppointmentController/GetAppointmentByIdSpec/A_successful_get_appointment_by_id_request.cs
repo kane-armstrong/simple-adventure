@@ -1,14 +1,14 @@
-﻿using AutoFixture;
+﻿using System.Threading.Tasks;
+using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Models;
-using PetDoctor.API.Tests.Functional.Helpers;
-using PetDoctor.API.Tests.Functional.Setup;
-using System.Threading.Tasks;
+using PetDoctor.API.IntegrationTests.Helpers;
+using PetDoctor.API.IntegrationTests.Setup;
 using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.GetAppointmentByIdSpec
+namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.GetAppointmentByIdSpec
 {
     [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_get_appointment_by_id_request : IClassFixture<TestFixture>

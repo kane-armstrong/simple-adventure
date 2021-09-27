@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Xunit.Sdk;
 
-namespace PetDoctor.API.Tests.Functional.Setup
+namespace PetDoctor.API.IntegrationTests.Setup
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ResetDatabaseAttribute : BeforeAfterTestAttribute

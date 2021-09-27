@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Setup
+namespace PetDoctor.API.IntegrationTests.Setup
 {
     [CollectionDefinition(TestCollections.RealDatabaseTests, DisableParallelization = true)]
     public class RealDatabaseBackedTestCollection : ICollectionFixture<TestFixture>

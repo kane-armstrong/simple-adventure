@@ -5,12 +5,12 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Commands;
-using PetDoctor.API.Tests.Functional.Helpers;
-using PetDoctor.API.Tests.Functional.Setup;
+using PetDoctor.API.IntegrationTests.Helpers;
+using PetDoctor.API.IntegrationTests.Setup;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.RescheduleAppointmentSpec
+namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.RescheduleAppointmentSpec
 {
     [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_reschedule_appointment_request

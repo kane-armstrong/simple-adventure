@@ -1,4 +1,4 @@
-﻿namespace PetDoctor.API.Tests.Functional
+﻿namespace PetDoctor.API.IntegrationTests
 {
     internal class TestCollections
     {

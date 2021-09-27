@@ -1,10 +1,9 @@
 ﻿using FluentValidation.TestHelper;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
-using System.Linq;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.API.Application.Validators.CancelAppointmentValidatorSpec
+namespace PetDoctor.API.UnitTests.API.Application.Validators.CancelAppointmentValidatorSpec
 {
     public class Validation_should_fail_when
     {

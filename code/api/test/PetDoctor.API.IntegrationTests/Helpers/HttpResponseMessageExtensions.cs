@@ -1,9 +1,9 @@
-﻿using PetDoctor.Infrastructure;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using PetDoctor.Infrastructure;
 
-namespace PetDoctor.API.Tests.Functional.Helpers
+namespace PetDoctor.API.IntegrationTests.Helpers
 {
     public static class HttpResponseMessageExtensions
     {

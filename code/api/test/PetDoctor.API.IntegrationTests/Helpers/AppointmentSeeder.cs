@@ -1,12 +1,12 @@
-﻿using AutoFixture;
-using FluentAssertions;
-using PetDoctor.API.Application.Commands;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AutoFixture;
+using FluentAssertions;
+using PetDoctor.API.Application.Commands;
 
-namespace PetDoctor.API.Tests.Functional.Helpers
+namespace PetDoctor.API.IntegrationTests.Helpers
 {
     public class AppointmentSeeder
     {

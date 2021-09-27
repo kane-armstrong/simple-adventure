@@ -1,15 +1,15 @@
-﻿using AutoFixture;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
+using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Commands;
-using PetDoctor.API.Tests.Functional.Helpers;
-using PetDoctor.API.Tests.Functional.Setup;
+using PetDoctor.API.IntegrationTests.Helpers;
+using PetDoctor.API.IntegrationTests.Setup;
 using PetDoctor.Domain.Aggregates.Appointments;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.CheckinToAppointmentSpec
+namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.CheckinToAppointmentSpec
 {
     [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_checkin_to_appointment_request

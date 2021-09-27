@@ -1,16 +1,16 @@
-﻿using AutoFixture;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
-using PetDoctor.API.Application.Commands;
-using PetDoctor.API.Tests.Functional.Helpers;
-using PetDoctor.API.Tests.Functional.Setup;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AutoFixture;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using PetDoctor.API.Application.Commands;
+using PetDoctor.API.IntegrationTests.Helpers;
+using PetDoctor.API.IntegrationTests.Setup;
 using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.CreateAppointmentSpec
+namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.CreateAppointmentSpec
 {
     [Collection(TestCollections.RealDatabaseTests)]
     public class A_successful_create_appointment_request

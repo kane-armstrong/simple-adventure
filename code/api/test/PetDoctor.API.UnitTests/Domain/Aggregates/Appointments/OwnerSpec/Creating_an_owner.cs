@@ -2,7 +2,7 @@
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.Domain.Aggregates.Appointments.OwnerSpec
+namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.OwnerSpec
 {
     public class Creating_an_owner
     {

@@ -1,15 +1,15 @@
-﻿using AutoFixture;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Commands;
-using PetDoctor.API.Tests.Functional.Helpers;
-using PetDoctor.API.Tests.Functional.Setup;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+using PetDoctor.API.IntegrationTests.Helpers;
+using PetDoctor.API.IntegrationTests.Setup;
 using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.Complete_appointment_spec
+namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.Complete_appointment_spec
 {
     [Collection(TestCollections.RealDatabaseTests)]
     public class Complete_appointment_fails_with

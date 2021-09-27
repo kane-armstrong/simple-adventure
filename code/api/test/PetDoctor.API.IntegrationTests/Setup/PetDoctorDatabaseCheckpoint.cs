@@ -6,7 +6,7 @@ using PetDoctor.Infrastructure;
 using Respawn;
 using SqlStreamStore;
 
-namespace PetDoctor.API.Tests.Functional.Setup
+namespace PetDoctor.API.IntegrationTests.Setup
 {
     class PetDoctorDatabaseCheckpoint
     {

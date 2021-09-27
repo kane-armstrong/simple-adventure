@@ -3,7 +3,7 @@ using PetDoctor.API.Application.Extensions;
 using PetDoctor.Infrastructure.Collections;
 using Xunit;
 
-namespace PetDoctor.Tests.Unit.API.Application.Extensions.PaginatedListExtensionsSpec
+namespace PetDoctor.API.UnitTests.API.Application.Extensions.PaginatedListExtensionsSpec
 {
     public class Mapping_a_list_to_a_page_throws_when
     {

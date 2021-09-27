@@ -5,11 +5,11 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Commands;
-using PetDoctor.API.Tests.Functional.Helpers;
-using PetDoctor.API.Tests.Functional.Setup;
+using PetDoctor.API.IntegrationTests.Helpers;
+using PetDoctor.API.IntegrationTests.Setup;
 using Xunit;
 
-namespace PetDoctor.API.Tests.Functional.Controllers.AppointmentController.CancelAppointmentSpec
+namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.CancelAppointmentSpec
 {
     [Collection(TestCollections.RealDatabaseTests)]
     public class Cancel_appointment_fails_with
