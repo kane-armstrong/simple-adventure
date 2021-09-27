@@ -2,4 +2,4 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0.100-alpine3.12 AS build
 ARG Configuration=Release
 WORKDIR /app
 COPY . ./
-CMD dotnet test ./test/PetDoctor.API.Tests.Functional/PetDoctor.API.Tests.Functional.csproj
+CMD dotnet test code/api/test/PetDoctor.Tests.Unit/PetDoctor.Tests.Unit.csproj
