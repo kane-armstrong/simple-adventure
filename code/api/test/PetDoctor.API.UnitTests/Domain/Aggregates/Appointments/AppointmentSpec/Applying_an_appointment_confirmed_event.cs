@@ -17,7 +17,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentConfirmed(sut.Id, Guid.NewGuid());
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.State.Should().Be(AppointmentState.Confirmed);
         }
@@ -30,7 +30,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentConfirmed(sut.Id, Guid.NewGuid());
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.State.Should().Be(AppointmentState.Confirmed);
 

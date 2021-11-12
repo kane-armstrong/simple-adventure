@@ -16,7 +16,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentRejected(sut.Id, "nobody available");
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.State.Should().Be(AppointmentState.Rejected);
         }
@@ -29,7 +29,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentRejected(sut.Id, "nobody available");
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.RejectionReason.Should().Be(@event.RejectionReason);
         }

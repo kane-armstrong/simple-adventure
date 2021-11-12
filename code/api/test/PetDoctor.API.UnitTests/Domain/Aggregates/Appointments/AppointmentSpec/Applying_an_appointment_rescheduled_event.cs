@@ -16,7 +16,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentRescheduled(sut.Id, sut.ScheduledOn.AddDays(2));
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.State.Should().Be(AppointmentState.Requested);
         }
@@ -29,7 +29,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentRescheduled(sut.Id, sut.ScheduledOn.AddDays(2));
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.ScheduledOn.Should().Be(@event.Date);
         }

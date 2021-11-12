@@ -16,7 +16,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentMembersCheckedIn(sut.Id);
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.State.Should().Be(AppointmentState.CheckedIn);
         }

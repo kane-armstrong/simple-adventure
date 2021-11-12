@@ -100,40 +100,6 @@ namespace PetDoctor.Domain.Aggregates.Appointments
             AppendEvent(new AppointmentCompleted(Id));
         }
 
-        public void Apply(AppointmentConfirmed @event)
-        {
-            AttendingVeterinarianId = @event.AttendingVeterinarianId;
-            State = @event.State;
-        }
-
-        public void Apply(AppointmentRejected @event)
-        {
-            RejectionReason = @event.RejectionReason;
-            State = @event.State;
-        }
-
-        public void Apply(AppointmentRescheduled @event)
-        {
-            ScheduledOn = @event.Date;
-            State = @event.State;
-        }
-
-        public void Apply(AppointmentCanceled @event)
-        {
-            CancellationReason = @event.CancellationReason;
-            State = @event.State;
-        }
-
-        public void Apply(AppointmentMembersCheckedIn @event)
-        {
-            State = @event.State;
-        }
-
-        public void Apply(AppointmentCompleted @event)
-        {
-            State = @event.State;
-        }
-
         public void ReplayEvents(IReadOnlyCollection<DomainEvent> events)
         {
             foreach (var domainEvent in events)
@@ -141,22 +107,22 @@ namespace PetDoctor.Domain.Aggregates.Appointments
                 switch (domainEvent)
                 {
                     case AppointmentConfirmed ac:
-                        Apply(ac);
+                        When(ac);
                         break;
                     case AppointmentRejected ar:
-                        Apply(ar);
+                        When(ar);
                         break;
                     case AppointmentRescheduled ars:
-                        Apply(ars);
+                        When(ars);
                         break;
                     case AppointmentCanceled acl:
-                        Apply(acl);
+                        When(acl);
                         break;
                     case AppointmentMembersCheckedIn amc:
-                        Apply(amc);
+                        When(amc);
                         break;
                     case AppointmentCompleted acm:
-                        Apply(acm);
+                        When(acm);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(
@@ -168,7 +134,7 @@ namespace PetDoctor.Domain.Aggregates.Appointments
         }
 
         public AppointmentMemento CreateMemento()
-        {
+        { 
             return new AppointmentMemento
             {
                 State = State,
@@ -180,6 +146,40 @@ namespace PetDoctor.Domain.Aggregates.Appointments
                 RejectionReason = RejectionReason,
                 CancellationReason = CancellationReason
             };
+        }
+
+        private void When(AppointmentConfirmed @event)
+        {
+            AttendingVeterinarianId = @event.AttendingVeterinarianId;
+            State = @event.State;
+        }
+
+        private void When(AppointmentRejected @event)
+        {
+            RejectionReason = @event.RejectionReason;
+            State = @event.State;
+        }
+
+        private void When(AppointmentRescheduled @event)
+        {
+            ScheduledOn = @event.Date;
+            State = @event.State;
+        }
+
+        private void When(AppointmentCanceled @event)
+        {
+            CancellationReason = @event.CancellationReason;
+            State = @event.State;
+        }
+
+        private void When(AppointmentMembersCheckedIn @event)
+        {
+            State = @event.State;
+        }
+
+        private void When(AppointmentCompleted @event)
+        {
+            State = @event.State;
         }
     }
 }

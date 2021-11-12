@@ -16,7 +16,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentCanceled(sut.Id, "i went somewhere else");
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.State.Should().Be(AppointmentState.Canceled);
         }
@@ -29,7 +29,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentCanceled(sut.Id, "i went somewhere else");
 
-            sut.Apply(@event);
+            sut.When(@event);
 
             sut.CancellationReason.Should().Be(@event.CancellationReason);
         }

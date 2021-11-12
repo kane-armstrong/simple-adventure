@@ -9,7 +9,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
     public class Mapping_an_appointment
     {
         [Fact]
-        public void set_id_correctly()
+        public void sets_id_correctly()
         {
             var fixture = new Fixture();
 
@@ -21,7 +21,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
         }
 
         [Fact]
-        public void set_pet_correctly()
+        public void sets_pet_correctly()
         {
             var fixture = new Fixture();
 
@@ -33,7 +33,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
         }
 
         [Fact]
-        public void set_owner_correctly()
+        public void sets_owner_correctly()
         {
             var fixture = new Fixture();
 
@@ -45,7 +45,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
         }
 
         [Fact]
-        public void set_vet_id_correctly()
+        public void sets_vet_id_correctly()
         {
             var fixture = new Fixture();
 
@@ -57,7 +57,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
         }
 
         [Fact]
-        public void set_reason_for_visit_correctly()
+        public void sets_reason_for_visit_correctly()
         {
             var fixture = new Fixture();
 
@@ -69,7 +69,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
         }
 
         [Fact]
-        public void set_rejection_reason_correctly()
+        public void sets_rejection_reason_correctly()
         {
             var fixture = new Fixture();
 
@@ -81,7 +81,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
         }
 
         [Fact]
-        public void set_cancellation_reason_correctly()
+        public void sets_cancellation_reason_correctly()
         {
             var fixture = new Fixture();
 
@@ -93,7 +93,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
         }
 
         [Fact]
-        public void set_scheduled_on_correctly()
+        public void sets_scheduled_on_correctly()
         {
             var fixture = new Fixture();
 
@@ -105,7 +105,7 @@ namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentExtensio
         }
 
         [Fact]
-        public void set_state_correctly()
+        public void sets_state_correctly()
         {
             var fixture = new Fixture();
 
