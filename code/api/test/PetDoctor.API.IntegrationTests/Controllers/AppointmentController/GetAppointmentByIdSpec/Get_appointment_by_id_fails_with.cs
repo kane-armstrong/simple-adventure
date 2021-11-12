@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
+﻿using FluentAssertions;
 using PetDoctor.API.IntegrationTests.Setup;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.GetAppointmentByIdSpec
@@ -28,7 +28,7 @@ namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.GetAp
 
             var result = await client.GetAsync(uri);
 
-            result.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

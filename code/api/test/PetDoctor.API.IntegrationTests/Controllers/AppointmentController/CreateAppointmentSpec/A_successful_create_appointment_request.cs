@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
+using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.CreateAppointmentSpec
@@ -37,7 +37,7 @@ namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.Creat
             var response = await client.PostAsJsonAsync(EndpointRoute, request);
             await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
-            response.StatusCode.Should().Be(StatusCodes.Status201Created);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
 
         [Fact]

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
 using PetDoctor.Domain.Aggregates.Appointments;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.RescheduleAppointmentSpec
@@ -41,7 +41,7 @@ namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.Resch
             var response = await client.PutAsJsonAsync(uri, request);
             await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
-            response.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         [Fact]

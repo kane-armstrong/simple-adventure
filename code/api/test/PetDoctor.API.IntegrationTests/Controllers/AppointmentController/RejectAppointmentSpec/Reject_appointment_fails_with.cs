@@ -1,12 +1,12 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.RejectAppointmentSpec
@@ -37,7 +37,7 @@ namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController.Rejec
 
             var response = await client.PutAsJsonAsync(uri, request);
 
-            response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }
