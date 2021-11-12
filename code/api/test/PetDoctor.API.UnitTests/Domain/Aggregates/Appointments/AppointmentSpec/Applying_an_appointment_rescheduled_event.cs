@@ -1,5 +1,7 @@
-﻿using AutoFixture;
+﻿using System.Collections.Generic;
+using AutoFixture;
 using FluentAssertions;
+using PetDoctor.Domain;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
 using Xunit;
@@ -16,7 +18,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentRescheduled(sut.Id, sut.ScheduledOn.AddDays(2));
 
-            sut.When(@event);
+            sut.ReplayEvents(new List<DomainEvent> { @event });
 
             sut.State.Should().Be(AppointmentState.Requested);
         }
@@ -29,7 +31,7 @@ namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
 
             var @event = new AppointmentRescheduled(sut.Id, sut.ScheduledOn.AddDays(2));
 
-            sut.When(@event);
+            sut.ReplayEvents(new List<DomainEvent> { @event });
 
             sut.ScheduledOn.Should().Be(@event.Date);
         }
