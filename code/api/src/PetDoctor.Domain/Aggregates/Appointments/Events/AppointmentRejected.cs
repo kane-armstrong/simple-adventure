@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace PetDoctor.Domain.Aggregates.Appointments.Events
+namespace PetDoctor.Domain.Aggregates.Appointments.Events;
+
+public record AppointmentRejected(Guid AppointmentId, string RejectionReason) : DomainEvent
 {
-    public record AppointmentRejected(Guid AppointmentId, string RejectionReason) : DomainEvent
-    {
-        public readonly AppointmentState State = AppointmentState.Rejected;
-    }
+    public readonly AppointmentState State = AppointmentState.Rejected;
 }

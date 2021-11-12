@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace PetDoctor.API.Application.Commands
+namespace PetDoctor.API.Application.Commands;
+
+public record CheckinToAppointment : Command
 {
-    public record CheckinToAppointment : Command
-    {
-        internal Guid Id { get; set; }
-    }
+    internal Guid Id { get; set; }
 }

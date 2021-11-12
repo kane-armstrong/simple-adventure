@@ -1,6 +1,5 @@
-﻿namespace PetDoctor.Domain.Aggregates.Appointments
+﻿namespace PetDoctor.Domain.Aggregates.Appointments;
+
+public record Owner(string FirstName, string LastName, string Phone, string Email)
 {
-    public record Owner(string FirstName, string LastName, string Phone, string Email)
-    {
-    }
 }

@@ -15,112 +15,111 @@ using SqlStreamStore;
 using System;
 using System.Reflection;
 
-namespace PetDoctor.API
+namespace PetDoctor.API;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllers()
+            .AddNewtonsoftJson()
+            .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
+            // Fixes 404s in TestServer
+            .AddApplicationPart(typeof(Startup).Assembly);
+
+        services.AddApiVersioning(options =>
         {
-            Configuration = configuration;
+            options.ReportApiVersions = true;
+            options.RegisterMiddleware = true;
+        }).AddVersionedApiExplorer(options => { options.SubstituteApiVersionInUrl = true; });
+
+        services.AddOpenApiDocument(document =>
+        {
+            document.DocumentName = "v1";
+            document.ApiGroupNames = new[] { "1" };
+            document.Title = "Pet Doctor API";
+            document.Description = "This API enables managing veterinary appointments for your canine companions";
+            document.Version = "v1";
+            document.SerializerSettings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() };
+        });
+
+        services.AddOpenApiDocument(document =>
+        {
+            document.DocumentName = "allVersions";
+            document.Version = "allVersions";
+            document.Title = "Pet Doctor API";
+            document.Description = "This API enables managing veterinary appointments for your canine companions";
+            document.SerializerSettings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() };
+        });
+
+        services.AddHealthChecks();
+
+        services.AddMediatR(Assembly.GetExecutingAssembly());
+
+        services.AddTransient<IAppointmentRepository, AppointmentRepository>();
+
+        ConfigureDatabaseServices(services);
+    }
+
+    public void ConfigureProductionServices(IServiceCollection services)
+    {
+        ConfigureServices(services);
+
+        services.AddApplicationInsightsTelemetry(Configuration);
+
+        var hostingEnvironment = Configuration.GetValue<string>("hostenv");
+        if (!string.IsNullOrEmpty(hostingEnvironment) && hostingEnvironment.Equals("K8S", StringComparison.InvariantCultureIgnoreCase))
+        {
+            services.AddApplicationInsightsKubernetesEnricher();
         }
+    }
 
-        public IConfiguration Configuration { get; }
+    protected virtual void ConfigureDatabaseServices(IServiceCollection services)
+    {
+        var cs = Configuration.GetConnectionString("PetDoctorContext");
 
-        public void ConfigureServices(IServiceCollection services)
+        services.AddDbContext<PetDoctorContext>(options =>
         {
-            services.AddControllers()
-                .AddNewtonsoftJson()
-                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
-                // Fixes 404s in TestServer
-                .AddApplicationPart(typeof(Startup).Assembly);
-
-            services.AddApiVersioning(options =>
+            options.UseSqlServer(cs, sql =>
             {
-                options.ReportApiVersions = true;
-                options.RegisterMiddleware = true;
-            }).AddVersionedApiExplorer(options => { options.SubstituteApiVersionInUrl = true; });
-
-            services.AddOpenApiDocument(document =>
-            {
-                document.DocumentName = "v1";
-                document.ApiGroupNames = new[] { "1" };
-                document.Title = "Pet Doctor API";
-                document.Description = "This API enables managing veterinary appointments for your canine companions";
-                document.Version = "v1";
-                document.SerializerSettings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() };
+                sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
             });
+        });
 
-            services.AddOpenApiDocument(document =>
-            {
-                document.DocumentName = "allVersions";
-                document.Version = "allVersions";
-                document.Title = "Pet Doctor API";
-                document.Description = "This API enables managing veterinary appointments for your canine companions";
-                document.SerializerSettings = new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() };
-            });
+        services.AddSingleton(new MsSqlStreamStoreSettings(cs));
+        services.AddSingleton<IStreamStore, MsSqlStreamStore>();
+        services.AddSingleton<MsSqlStreamStore>(); // for migrations
+    }
 
-            services.AddHealthChecks();
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        var pathBase = Configuration.GetValue<string>("PATH_BASE");
+        if (!string.IsNullOrEmpty(pathBase))
+            app.UsePathBase($"/{pathBase.TrimStart('/')}");
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-
-            services.AddTransient<IAppointmentRepository, AppointmentRepository>();
-
-            ConfigureDatabaseServices(services);
-        }
-
-        public void ConfigureProductionServices(IServiceCollection services)
+        if (env.IsDevelopment())
         {
-            ConfigureServices(services);
-
-            services.AddApplicationInsightsTelemetry(Configuration);
-
-            var hostingEnvironment = Configuration.GetValue<string>("hostenv");
-            if (!string.IsNullOrEmpty(hostingEnvironment) && hostingEnvironment.Equals("K8S", StringComparison.InvariantCultureIgnoreCase))
-            {
-                services.AddApplicationInsightsKubernetesEnricher();
-            }
+            app.UseDeveloperExceptionPage();
         }
 
-        protected virtual void ConfigureDatabaseServices(IServiceCollection services)
+        app.UseRouting();
+
+        app.UseEndpoints(endpoints =>
         {
-            var cs = Configuration.GetConnectionString("PetDoctorContext");
+            endpoints.MapControllers();
+            endpoints.MapHealthChecks("");
+            endpoints.MapHealthChecks("live");
+            endpoints.MapHealthChecks("ready");
+        });
 
-            services.AddDbContext<PetDoctorContext>(options =>
-            {
-                options.UseSqlServer(cs, sql =>
-                {
-                    sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                });
-            });
-
-            services.AddSingleton(new MsSqlStreamStoreSettings(cs));
-            services.AddSingleton<IStreamStore, MsSqlStreamStore>();
-            services.AddSingleton<MsSqlStreamStore>(); // for migrations
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            var pathBase = Configuration.GetValue<string>("PATH_BASE");
-            if (!string.IsNullOrEmpty(pathBase))
-                app.UsePathBase($"/{pathBase.TrimStart('/')}");
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapHealthChecks("");
-                endpoints.MapHealthChecks("live");
-                endpoints.MapHealthChecks("ready");
-            });
-
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
-        }
+        app.UseOpenApi();
+        app.UseSwaggerUi3();
     }
 }

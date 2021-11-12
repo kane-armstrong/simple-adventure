@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace PetDoctor.API.Application.Commands
+namespace PetDoctor.API.Application.Commands;
+
+public record ConfirmAppointment : Command
 {
-    public record ConfirmAppointment : Command
-    {
-        internal Guid Id { get; set; }
-        public Guid AttendingVeterinarianId { get; init; }
-    }
+    internal Guid Id { get; set; }
+    public Guid AttendingVeterinarianId { get; init; }
 }

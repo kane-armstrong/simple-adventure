@@ -5,32 +5,31 @@ using PetDoctor.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetDoctor.API.Application.DomainEventHandlers
+namespace PetDoctor.API.Application.DomainEventHandlers;
+
+public class AppointmentCreatedHandler : INotificationHandler<AppointmentCreated>
 {
-    public class AppointmentCreatedHandler : INotificationHandler<AppointmentCreated>
+    private readonly PetDoctorContext _db;
+
+    public AppointmentCreatedHandler(PetDoctorContext db)
     {
-        private readonly PetDoctorContext _db;
+        _db = db;
+    }
 
-        public AppointmentCreatedHandler(PetDoctorContext db)
+    public Task Handle(AppointmentCreated notification, CancellationToken cancellationToken)
+    {
+        _db.AppointmentSnapshots.Add(new AppointmentSnapshot
         {
-            _db = db;
-        }
-
-        public Task Handle(AppointmentCreated notification, CancellationToken cancellationToken)
-        {
-            _db.AppointmentSnapshots.Add(new AppointmentSnapshot
-            {
-                Id = notification.AppointmentId,
-                State = notification.Data.State,
-                ScheduledOn = notification.Data.ScheduledOn,
-                AttendingVeterinarianId = notification.Data.AttendingVeterinarianId,
-                Owner = notification.Data.Owner,
-                Pet = notification.Data.Pet,
-                CancellationReason = notification.Data.CancellationReason,
-                RejectionReason = notification.Data.RejectionReason,
-                ReasonForVisit = notification.Data.ReasonForVisit
-            });
-            return _db.SaveChangesAsync(cancellationToken);
-        }
+            Id = notification.AppointmentId,
+            State = notification.Data.State,
+            ScheduledOn = notification.Data.ScheduledOn,
+            AttendingVeterinarianId = notification.Data.AttendingVeterinarianId,
+            Owner = notification.Data.Owner,
+            Pet = notification.Data.Pet,
+            CancellationReason = notification.Data.CancellationReason,
+            RejectionReason = notification.Data.RejectionReason,
+            ReasonForVisit = notification.Data.ReasonForVisit
+        });
+        return _db.SaveChangesAsync(cancellationToken);
     }
 }

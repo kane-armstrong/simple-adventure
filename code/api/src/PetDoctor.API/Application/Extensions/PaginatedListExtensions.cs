@@ -2,26 +2,25 @@
 using PetDoctor.Infrastructure.Collections;
 using System;
 
-namespace PetDoctor.API.Application.Extensions
+namespace PetDoctor.API.Application.Extensions;
+
+public static class PaginatedListExtensions
 {
-    public static class PaginatedListExtensions
+    public static Page<T> ToPage<T>(this PaginatedList<T> @this) where T : class
     {
-        public static Page<T> ToPage<T>(this PaginatedList<T> @this) where T : class
+        if (@this is null)
         {
-            if (@this is null)
-            {
-                throw new ArgumentNullException(nameof(@this));
-            }
-            return new Page<T>
-            {
-                PageSize = @this.PageSize,
-                PageIndex = @this.PageIndex,
-                Data = @this.ToList(),
-                HasNextPage = @this.HasNextPage,
-                HasPreviousPage = @this.HasPreviousPage,
-                TotalCount = @this.TotalCount,
-                TotalPages = @this.TotalPages
-            };
+            throw new ArgumentNullException(nameof(@this));
         }
+        return new Page<T>
+        {
+            PageSize = @this.PageSize,
+            PageIndex = @this.PageIndex,
+            Data = @this.ToList(),
+            HasNextPage = @this.HasNextPage,
+            HasPreviousPage = @this.HasPreviousPage,
+            TotalCount = @this.TotalCount,
+            TotalPages = @this.TotalPages
+        };
     }
 }

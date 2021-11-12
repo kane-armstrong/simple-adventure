@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace PetDoctor.API.Application
+namespace PetDoctor.API.Application;
+
+public abstract record Command : IRequest<CommandResult>
 {
-    public abstract record Command : IRequest<CommandResult>
-    {
-    }
 }

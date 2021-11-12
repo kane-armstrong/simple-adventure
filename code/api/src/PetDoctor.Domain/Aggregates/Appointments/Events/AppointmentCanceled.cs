@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace PetDoctor.Domain.Aggregates.Appointments.Events
+namespace PetDoctor.Domain.Aggregates.Appointments.Events;
+
+public record AppointmentCanceled(Guid AppointmentId, string CancellationReason) : DomainEvent
 {
-    public record AppointmentCanceled(Guid AppointmentId, string CancellationReason) : DomainEvent
-    {
-        public readonly AppointmentState State = AppointmentState.Canceled;
-    }
+    public readonly AppointmentState State = AppointmentState.Canceled;
 }

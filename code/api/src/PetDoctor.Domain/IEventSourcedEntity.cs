@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace PetDoctor.Domain
+namespace PetDoctor.Domain;
+
+public interface IEventSourcedEntity
 {
-    public interface IEventSourcedEntity
-    {
-        IReadOnlyList<DomainEvent> PendingEvents { get; }
-    }
+    IReadOnlyList<DomainEvent> PendingEvents { get; }
 }

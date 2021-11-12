@@ -2,15 +2,14 @@
 using Humanizer;
 using PetDoctor.API.Application.Commands;
 
-namespace PetDoctor.API.Application.Validators
+namespace PetDoctor.API.Application.Validators;
+
+public class ConfirmAppointmentValidator : AbstractValidator<ConfirmAppointment>
 {
-    public class ConfirmAppointmentValidator : AbstractValidator<ConfirmAppointment>
+    public ConfirmAppointmentValidator()
     {
-        public ConfirmAppointmentValidator()
-        {
-            RuleFor(p => p.AttendingVeterinarianId)
-                .NotEmpty()
-                .WithMessage($"{nameof(ConfirmAppointment.AttendingVeterinarianId).Humanize()} is required");
-        }
+        RuleFor(p => p.AttendingVeterinarianId)
+            .NotEmpty()
+            .WithMessage($"{nameof(ConfirmAppointment.AttendingVeterinarianId).Humanize()} is required");
     }
 }

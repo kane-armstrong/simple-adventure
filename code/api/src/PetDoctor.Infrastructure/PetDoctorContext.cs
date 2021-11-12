@@ -2,21 +2,20 @@
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Infrastructure.EntityTypeConfigurations;
 
-namespace PetDoctor.Infrastructure
+namespace PetDoctor.Infrastructure;
+
+public class PetDoctorContext : DbContext
 {
-    public class PetDoctorContext : DbContext
+    public DbSet<AppointmentSnapshot> AppointmentSnapshots { get; set; }
+
+    public PetDoctorContext(DbContextOptions<PetDoctorContext> options) : base(options)
     {
-        public DbSet<AppointmentSnapshot> AppointmentSnapshots { get; set; }
+    }
 
-        public PetDoctorContext(DbContextOptions<PetDoctorContext> options) : base(options)
-        {
-        }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.ApplyConfiguration(new AppointmentSnapshotEntityTypeConfiguration());
-        }
+        modelBuilder.ApplyConfiguration(new AppointmentSnapshotEntityTypeConfiguration());
     }
 }
