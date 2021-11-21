@@ -3,19 +3,18 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Xunit.Sdk;
 
-namespace PetDoctor.API.IntegrationTests.Setup
-{
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class ResetDatabaseAttribute : BeforeAfterTestAttribute
-    {
-        public override void Before(MethodInfo methodUnderTest)
-        {
-            ResetDatabases().GetAwaiter().GetResult();
-        }
+namespace PetDoctor.API.IntegrationTests.Setup;
 
-        private static async Task ResetDatabases()
-        {
-            await PetDoctorDatabaseCheckpoint.Reset();
-        }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public class ResetDatabaseAttribute : BeforeAfterTestAttribute
+{
+    public override void Before(MethodInfo methodUnderTest)
+    {
+        ResetDatabases().GetAwaiter().GetResult();
+    }
+
+    private static async Task ResetDatabases()
+    {
+        await PetDoctorDatabaseCheckpoint.Reset();
     }
 }

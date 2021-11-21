@@ -1,7 +1,6 @@
-﻿namespace PetDoctor.API.IntegrationTests
+﻿namespace PetDoctor.API.IntegrationTests;
+
+internal class TestCollections
 {
-    internal class TestCollections
-    {
-        public const string RealDatabaseTests = "RealDatabaseTests";
-    }
+    public const string RealDatabaseTests = "RealDatabaseTests";
 }

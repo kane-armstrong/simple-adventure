@@ -5,29 +5,28 @@ using Microsoft.Extensions.DependencyInjection;
 using PetDoctor.Infrastructure;
 using SqlStreamStore;
 
-namespace PetDoctor.API.IntegrationTests.Setup
+namespace PetDoctor.API.IntegrationTests.Setup;
+
+public class TestStartup : Startup
 {
-    public class TestStartup : Startup
+    public TestStartup(IConfiguration configuration) : base(configuration)
     {
-        public TestStartup(IConfiguration configuration) : base(configuration)
-        {
-        }
+    }
 
-        protected override void ConfigureDatabaseServices(IServiceCollection services)
-        {
-            var cs = TestResources.Configuration.GetConnectionString("PetDoctorContext");
+    protected override void ConfigureDatabaseServices(IServiceCollection services)
+    {
+        var cs = TestResources.Configuration.GetConnectionString("PetDoctorContext");
 
-            services.AddDbContext<PetDoctorContext>(options =>
+        services.AddDbContext<PetDoctorContext>(options =>
+        {
+            options.UseSqlServer(cs, sql =>
             {
-                options.UseSqlServer(cs, sql =>
-                {
-                    sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                });
+                sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
             });
+        });
 
-            services.AddSingleton(new MsSqlStreamStoreSettings(cs));
-            services.AddSingleton<IStreamStore, MsSqlStreamStore>();
-            services.AddSingleton<MsSqlStreamStore>(); // for migrations
-        }
+        services.AddSingleton(new MsSqlStreamStoreSettings(cs));
+        services.AddSingleton<IStreamStore, MsSqlStreamStore>();
+        services.AddSingleton<MsSqlStreamStore>(); // for migrations
     }
 }
