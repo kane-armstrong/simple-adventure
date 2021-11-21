@@ -4,12 +4,12 @@ using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.API.Application.Validators.RescheduleAppointmentValidatorSpec;
+namespace PetDoctor.API.UnitTests.API.Application.Validators;
 
-public class Validation_should_fail_when
+public class RescheduleAppointmentValidatorTests
 {
     [Fact]
-    public void new_date_is_in_the_past()
+    public void Validation_should_fail_when_new_date_is_in_the_past()
     {
         var request = new RescheduleAppointment
         {

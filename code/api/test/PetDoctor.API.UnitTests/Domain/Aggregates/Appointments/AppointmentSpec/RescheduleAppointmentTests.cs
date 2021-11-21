@@ -6,10 +6,10 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
 
-public class Rescheduling_an_appointment
+public class RescheduleTests
 {
     [Fact]
-    public void should_update_state_to_requested()
+    public void Rescheduling_an_appointment_should_update_state_to_requested()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();
@@ -20,7 +20,7 @@ public class Rescheduling_an_appointment
     }
 
     [Fact]
-    public void should_set_scheduled_on_correctly()
+    public void Rescheduling_an_appointment_should_set_scheduled_on_correctly()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();

@@ -4,10 +4,10 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.OwnerSpec;
 
-public class Creating_an_owner
+public class CreateOwnerTests
 {
     [Fact]
-    public void should_set_first_name_correctly()
+    public void Creating_an_owner_should_set_first_name_correctly()
     {
         const string firstName = "Kane";
 
@@ -17,7 +17,7 @@ public class Creating_an_owner
     }
 
     [Fact]
-    public void should_set_last_name_correctly()
+    public void Creating_an_owner_should_set_last_name_correctly()
     {
         const string lastName = "Armstrong";
 
@@ -27,7 +27,7 @@ public class Creating_an_owner
     }
 
     [Fact]
-    public void should_set_phone_correctly()
+    public void Creating_an_owner_should_set_phone_correctly()
     {
         const string phone = "212-000-0000";
 
@@ -37,7 +37,7 @@ public class Creating_an_owner
     }
 
     [Fact]
-    public void should_set_email_correctly()
+    public void Creating_an_owner_should_set_email_correctly()
     {
         const string email = "kane@somewhere.com";
 

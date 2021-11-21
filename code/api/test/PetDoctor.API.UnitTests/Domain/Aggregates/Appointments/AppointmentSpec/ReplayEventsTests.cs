@@ -1,18 +1,150 @@
 ﻿using System;
-using System.Collections.Generic;
 using AutoFixture;
 using FluentAssertions;
 using PetDoctor.Domain;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
 
-public class Replaying_events
+public class ReplayEventsTests
 {
     [Fact]
-    public void does_not_affect_the_appointment_when_events_are_empty()
+    public void Applying_an_appointment_canceled_event_should_update_state_to_canceled()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentCanceled(sut.Id, "i went somewhere else");
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.State.Should().Be(AppointmentState.Canceled);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_canceled_event_should_set_cancellation_reason_correctly()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentCanceled(sut.Id, "i went somewhere else");
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.CancellationReason.Should().Be(@event.CancellationReason);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_completed_event_should_update_state_to_completed()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentCompleted(sut.Id);
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.State.Should().Be(AppointmentState.Completed);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_checked_in_event_should_update_state_to_checkedin()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentMembersCheckedIn(sut.Id);
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.State.Should().Be(AppointmentState.CheckedIn);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_confirmed_event_should_update_state_to_confirmed()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentConfirmed(sut.Id, Guid.NewGuid());
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.State.Should().Be(AppointmentState.Confirmed);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_confirmed_event_should_set_vet_id_correctly()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentConfirmed(sut.Id, Guid.NewGuid());
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.State.Should().Be(AppointmentState.Confirmed);
+
+        sut.AttendingVeterinarianId.Should().Be(@event.AttendingVeterinarianId);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_rejected_event_should_update_state_to_rejected()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentRejected(sut.Id, "nobody available");
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.State.Should().Be(AppointmentState.Rejected);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_rejected_event_should_set_rejection_reason_correctly()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentRejected(sut.Id, "nobody available");
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.RejectionReason.Should().Be(@event.RejectionReason);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_rescheduled_event_should_update_state_to_requested()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentRescheduled(sut.Id, sut.ScheduledOn.AddDays(2));
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.State.Should().Be(AppointmentState.Requested);
+    }
+
+    [Fact]
+    public void Applying_an_appointment_rescheduled_event_should_set_scheduled_on_correctly()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
+
+        var @event = new AppointmentRescheduled(sut.Id, sut.ScheduledOn.AddDays(2));
+
+        sut.ReplayEvents(new List<DomainEvent> { @event });
+
+        sut.ScheduledOn.Should().Be(@event.Date);
+    }
+
+    [Fact]
+    public void Replaying_events_does_not_affect_the_appointment_when_events_are_empty()
     {
         var fixture = new Fixture();
         var createdEvent = fixture.Create<AppointmentCreated>();
@@ -27,9 +159,9 @@ public class Replaying_events
 
     [Theory]
     [MemberData(nameof(TestEvents))]
-    public void produces_the_correct_results_given_a_non_empty_set(
-        AppointmentCreated createdEvent, 
-        List<DomainEvent> events, 
+    public void Replaying_events_produces_the_correct_results_given_a_non_empty_set(
+        AppointmentCreated createdEvent,
+        List<DomainEvent> events,
         Appointment expectedState)
     {
         var sut = new Appointment(createdEvent);

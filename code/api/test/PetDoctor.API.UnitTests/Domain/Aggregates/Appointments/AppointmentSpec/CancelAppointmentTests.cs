@@ -5,10 +5,10 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
 
-public class Canceling_an_appointment
+public class CancelAppointmentTests
 {
     [Fact]
-    public void should_update_state_to_canceled()
+    public void Canceling_an_appointment_should_update_state_to_canceled()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();
@@ -19,7 +19,7 @@ public class Canceling_an_appointment
     }
 
     [Fact]
-    public void should_set_cancellation_reason_correctly()
+    public void Canceling_an_appointment_should_set_cancellation_reason_correctly()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();

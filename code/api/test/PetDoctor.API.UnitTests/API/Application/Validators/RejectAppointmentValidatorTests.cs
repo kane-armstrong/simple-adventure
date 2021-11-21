@@ -3,12 +3,12 @@ using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.API.Application.Validators.RejectAppointmentValidatorSpec;
+namespace PetDoctor.API.UnitTests.API.Application.Validators;
 
-public class Validation_should_fail_when
+public class RejectAppointmentValidatorTests
 {
     [Fact]
-    public void rejection_reason_is_null()
+    public void Validation_should_fail_when_rejection_reason_is_null()
     {
         var request = new RejectAppointment
         {
@@ -21,7 +21,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void rejection_reason_is_empty()
+    public void Validation_should_fail_when_rejection_reason_is_empty()
     {
         var request = new RejectAppointment
         {
@@ -34,7 +34,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void rejection_reason_is_longer_than_1000_characters()
+    public void Validation_should_fail_when_rejection_reason_is_longer_than_1000_characters()
     {
         var request = new RejectAppointment
         {

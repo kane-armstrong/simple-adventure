@@ -4,16 +4,16 @@ using PetDoctor.API.Application.Extensions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.API.Application.Extensions.AppointmentSnapshotExtensionsSpec;
+namespace PetDoctor.API.UnitTests.API.Application.Extensions;
 
-public class Mapping_an_appointment_snapshot
+public class AppointmentExtensionsTests
 {
     [Fact]
-    public void sets_id_correctly()
+    public void Mapping_an_appointment_sets_id_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 
@@ -21,11 +21,11 @@ public class Mapping_an_appointment_snapshot
     }
 
     [Fact]
-    public void sets_pet_correctly()
+    public void Mapping_an_appointment_sets_pet_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 
@@ -33,11 +33,11 @@ public class Mapping_an_appointment_snapshot
     }
 
     [Fact]
-    public void sets_owner_correctly()
+    public void Mapping_an_appointment_sets_owner_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 
@@ -45,11 +45,11 @@ public class Mapping_an_appointment_snapshot
     }
 
     [Fact]
-    public void sets_vet_id_correctly()
+    public void Mapping_an_appointment_sets_vet_id_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 
@@ -57,11 +57,11 @@ public class Mapping_an_appointment_snapshot
     }
 
     [Fact]
-    public void sets_reason_for_visit_correctly()
+    public void Mapping_an_appointment_sets_reason_for_visit_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 
@@ -69,11 +69,11 @@ public class Mapping_an_appointment_snapshot
     }
 
     [Fact]
-    public void sets_rejection_reason_correctly()
+    public void Mapping_an_appointment_sets_rejection_reason_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 
@@ -81,11 +81,11 @@ public class Mapping_an_appointment_snapshot
     }
 
     [Fact]
-    public void sets_cancellation_reason_correctly()
+    public void Mapping_an_appointment_sets_cancellation_reason_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 
@@ -93,11 +93,11 @@ public class Mapping_an_appointment_snapshot
     }
 
     [Fact]
-    public void sets_scheduled_on_correctly()
+    public void Mapping_an_appointment_sets_scheduled_on_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 
@@ -105,11 +105,11 @@ public class Mapping_an_appointment_snapshot
     }
 
     [Fact]
-    public void sets_state_correctly()
+    public void Mapping_an_appointment_sets_state_correctly()
     {
         var fixture = new Fixture();
 
-        var snapshot = fixture.Create<AppointmentSnapshot>();
+        var snapshot = fixture.Create<Appointment>();
 
         var sut = snapshot.ToAppointmentView();
 

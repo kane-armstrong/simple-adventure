@@ -6,10 +6,10 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
 
-public class Creating_an_appointment
+public class CreateTests
 {
     [Fact]
-    public void should_set_pet_correctly()
+    public void Creating_an_appointment_should_set_pet_correctly()
     {
         var fixture = new Fixture();
         var pet = fixture.Create<Pet>();
@@ -21,7 +21,7 @@ public class Creating_an_appointment
     }
 
     [Fact]
-    public void should_set_owner_correctly()
+    public void Creating_an_appointment_should_set_owner_correctly()
     {
         var fixture = new Fixture();
         var pet = fixture.Create<Pet>();
@@ -33,7 +33,7 @@ public class Creating_an_appointment
     }
 
     [Fact]
-    public void should_set_reason_correctly()
+    public void Creating_an_appointment_should_set_reason_correctly()
     {
         var fixture = new Fixture();
         var pet = fixture.Create<Pet>();
@@ -47,7 +47,7 @@ public class Creating_an_appointment
     }
 
     [Fact]
-    public void should_set_scheduled_on_correctly()
+    public void Creating_an_appointment_should_set_scheduled_on_correctly()
     {
         var fixture = new Fixture();
         var pet = fixture.Create<Pet>();
@@ -61,7 +61,7 @@ public class Creating_an_appointment
     }
 
     [Fact]
-    public void should_set_vet_id_correctly()
+    public void Creating_an_appointment_should_set_vet_id_correctly()
     {
         var fixture = new Fixture();
         var pet = fixture.Create<Pet>();
@@ -75,7 +75,7 @@ public class Creating_an_appointment
     }
 
     [Fact]
-    public void should_set_state_to_requested()
+    public void Creating_an_appointment_should_set_state_to_requested()
     {
         var fixture = new Fixture();
         var pet = fixture.Create<Pet>();

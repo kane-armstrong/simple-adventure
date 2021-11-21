@@ -5,10 +5,10 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
 
-public class Rejecting_an_appointment
+public class RejectTests
 {
     [Fact]
-    public void should_update_state_to_rejected()
+    public void Rejecting_an_appointment_should_update_state_to_rejected()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();
@@ -19,7 +19,7 @@ public class Rejecting_an_appointment
     }
 
     [Fact]
-    public void should_set_rejection_reason_correctly()
+    public void Rejecting_an_appointment_should_set_rejection_reason_correctly()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();

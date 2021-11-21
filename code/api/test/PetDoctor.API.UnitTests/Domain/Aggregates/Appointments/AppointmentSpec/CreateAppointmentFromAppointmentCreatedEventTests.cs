@@ -8,10 +8,10 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
 
-public class Creating_appointment_from_appointmentcreated_event
+public class CreateFromAppointmentCreatedEventTests
 {
     [Fact]
-    public void should_set_id_correctly()
+    public void Creating_appointment_from_appointmentcreated_event_should_set_id_correctly()
     {
         var fixture = new Fixture();
 
@@ -23,7 +23,7 @@ public class Creating_appointment_from_appointmentcreated_event
     }
 
     [Fact]
-    public void should_set_pet_correctly()
+    public void Creating_appointment_from_appointmentcreated_event_should_set_pet_correctly()
     {
         var fixture = new Fixture();
 
@@ -35,7 +35,7 @@ public class Creating_appointment_from_appointmentcreated_event
     }
 
     [Fact]
-    public void should_set_owner_correctly()
+    public void Creating_appointment_from_appointmentcreated_event_should_set_owner_correctly()
     {
         var fixture = new Fixture();
 
@@ -47,7 +47,7 @@ public class Creating_appointment_from_appointmentcreated_event
     }
 
     [Fact]
-    public void should_set_reason_correctly()
+    public void Creating_appointment_from_appointmentcreated_event_should_set_reason_correctly()
     {
         var fixture = new Fixture();
 
@@ -59,7 +59,7 @@ public class Creating_appointment_from_appointmentcreated_event
     }
 
     [Fact]
-    public void should_set_scheduled_on_correctly()
+    public void Creating_appointment_from_appointmentcreated_event_should_set_scheduled_on_correctly()
     {
         var fixture = new Fixture();
 
@@ -71,7 +71,7 @@ public class Creating_appointment_from_appointmentcreated_event
     }
 
     [Fact]
-    public void should_set_vet_id_correctly()
+    public void Creating_appointment_from_appointmentcreated_event_should_set_vet_id_correctly()
     {
         var fixture = new Fixture();
 
@@ -83,7 +83,7 @@ public class Creating_appointment_from_appointmentcreated_event
     }
 
     [Fact]
-    public void should_set_state_to_requested()
+    public void Creating_appointment_from_appointmentcreated_event_should_set_state_to_requested()
     {
         var fixture = new Fixture();
         var pet = fixture.Create<Pet>();

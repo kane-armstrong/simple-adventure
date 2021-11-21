@@ -6,10 +6,10 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
 
-public class Confirming_an_appointment
+public class ConfirmTests
 {
     [Fact]
-    public void should_update_state_to_confirmed()
+    public void Confirming_an_appointment_should_update_state_to_confirmed()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();
@@ -20,7 +20,7 @@ public class Confirming_an_appointment
     }
 
     [Fact]
-    public void should_set_vet_id_correctly()
+    public void Confirming_an_appointment_should_set_vet_id_correctly()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();
@@ -32,7 +32,7 @@ public class Confirming_an_appointment
     }
 
     [Fact]
-    public void should_set_vet_id_correctly_when_reconfirming()
+    public void Confirming_an_appointment_should_set_vet_id_correctly_when_reconfirming()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();

@@ -5,16 +5,16 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
 
-public class Checking_in_to_an_appointment
+public class CompleteTests
 {
     [Fact]
-    public void should_update_state_to_checkedin()
+    public void should_update_state_to_completed()
     {
         var fixture = new Fixture();
         var sut = fixture.Create<Appointment>();
 
-        sut.CheckIn();
+        sut.Complete();
 
-        sut.State.Should().Be(AppointmentState.CheckedIn);
+        sut.State.Should().Be(AppointmentState.Completed);
     }
 }

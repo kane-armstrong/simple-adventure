@@ -4,12 +4,12 @@ using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.API.Application.Validators.CreateAppointmentValidatorSpec;
+namespace PetDoctor.API.UnitTests.API.Application.Validators;
 
-public class Validation_should_fail_when
+public class CreateAppointmentValidatorTests
 {
     [Fact]
-    public void reason_for_visit_is_null()
+    public void Validation_should_fail_when_reason_for_visit_is_null()
     {
         var request = new CreateAppointment
         {
@@ -22,7 +22,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void reason_for_visit_is_empty()
+    public void Validation_should_fail_when_reason_for_visit_is_empty()
     {
         var request = new CreateAppointment
         {
@@ -35,7 +35,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void reason_for_visit_is_longer_than_1000_characters()
+    public void Validation_should_fail_when_reason_for_visit_is_longer_than_1000_characters()
     {
         var request = new CreateAppointment
         {
@@ -48,7 +48,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void desired_date_is_in_the_past()
+    public void Validation_should_fail_when_desired_date_is_in_the_past()
     {
         var request = new CreateAppointment
         {
@@ -61,7 +61,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_first_name_is_null()
+    public void Validation_should_fail_when_owner_first_name_is_null()
     {
         var request = new CreateAppointment
         {
@@ -74,7 +74,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_first_name_is_empty()
+    public void Validation_should_fail_when_owner_first_name_is_empty()
     {
         var request = new CreateAppointment
         {
@@ -87,7 +87,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_first_name_is_longer_than_100_characters()
+    public void Validation_should_fail_when_owner_first_name_is_longer_than_100_characters()
     {
         var request = new CreateAppointment
         {
@@ -100,7 +100,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_last_name_is_null()
+    public void Validation_should_fail_when_owner_last_name_is_null()
     {
         var request = new CreateAppointment
         {
@@ -113,7 +113,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_last_name_is_empty()
+    public void Validation_should_fail_when_owner_last_name_is_empty()
     {
         var request = new CreateAppointment
         {
@@ -126,7 +126,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_last_name_is_longer_than_100_characters()
+    public void Validation_should_fail_when_owner_last_name_is_longer_than_100_characters()
     {
         var request = new CreateAppointment
         {
@@ -139,7 +139,7 @@ public class Validation_should_fail_when
     }
         
     [Fact]
-    public void owner_email_is_null()
+    public void Validation_should_fail_when_owner_email_is_null()
     {
         var request = new CreateAppointment
         {
@@ -152,7 +152,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_email_is_empty()
+    public void Validation_should_fail_when_owner_email_is_empty()
     {
         var request = new CreateAppointment
         {
@@ -165,7 +165,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_email_is_longer_than_100_characters()
+    public void Validation_should_fail_when_owner_email_is_longer_than_100_characters()
     {
         var request = new CreateAppointment
         {
@@ -178,7 +178,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_phone_is_null()
+    public void Validation_should_fail_when_owner_phone_is_null()
     {
         var request = new CreateAppointment
         {
@@ -191,7 +191,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_phone_is_empty()
+    public void Validation_should_fail_when_owner_phone_is_empty()
     {
         var request = new CreateAppointment
         {
@@ -204,7 +204,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void owner_phone_is_longer_than_25_characters()
+    public void Validation_should_fail_when_owner_phone_is_longer_than_25_characters()
     {
         var request = new CreateAppointment
         {
@@ -217,7 +217,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void pet_name_is_null()
+    public void Validation_should_fail_when_pet_name_is_null()
     {
         var request = new CreateAppointment
         {
@@ -230,7 +230,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void pet_name_is_empty()
+    public void Validation_should_fail_when_pet_name_is_empty()
     {
         var request = new CreateAppointment
         {
@@ -243,7 +243,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void pet_name_is_longer_than_100_characters()
+    public void Validation_should_fail_when_pet_name_is_longer_than_100_characters()
     {
         var request = new CreateAppointment
         {
@@ -256,7 +256,7 @@ public class Validation_should_fail_when
     }
         
     [Fact]
-    public void pet_breed_is_null()
+    public void Validation_should_fail_when_pet_breed_is_null()
     {
         var request = new CreateAppointment
         {
@@ -269,7 +269,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void pet_breed_is_empty()
+    public void Validation_should_fail_when_pet_breed_is_empty()
     {
         var request = new CreateAppointment
         {
@@ -282,7 +282,7 @@ public class Validation_should_fail_when
     }
 
     [Fact]
-    public void pet_breed_is_longer_than_100_characters()
+    public void Validation_should_fail_when_pet_breed_is_longer_than_100_characters()
     {
         var request = new CreateAppointment
         {

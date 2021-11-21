@@ -4,12 +4,12 @@ using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.API.Application.Validators.ConfirmAppointmentValidatorSpec;
+namespace PetDoctor.API.UnitTests.API.Application.Validators;
 
-public class Validation_should_fail_when
+public class ConfirmAppointmentValidatorTests
 {
     [Fact]
-    public void no_veterinaran_id_is_provided()
+    public void Validation_should_fail_when_no_veterinaran_id_is_provided()
     {
         var request = new ConfirmAppointment
         {

@@ -1,16 +1,17 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using AutoFixture;
 using FluentAssertions;
 using PetDoctor.API.Application.Extensions;
 using PetDoctor.Infrastructure.Collections;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.API.Application.Extensions.PaginatedListExtensionsSpec;
+namespace PetDoctor.API.UnitTests.API.Application.Extensions;
 
-public class Mapping_a_list_to_a_page
+public class PaginatedListExtensionsTests
 {
     [Fact]
-    public void sets_page_index_correctly()
+    public void Mapping_a_list_to_a_page_sets_page_index_correctly()
     {
         var fixture = new Fixture();
         var items = fixture.CreateMany<string>(5).ToImmutableList();
@@ -22,7 +23,7 @@ public class Mapping_a_list_to_a_page
     }
 
     [Fact]
-    public void sets_page_size_correctly()
+    public void Mapping_a_list_to_a_page_sets_page_size_correctly()
     {
         var fixture = new Fixture();
         var items = fixture.CreateMany<string>(5).ToImmutableList();
@@ -34,7 +35,7 @@ public class Mapping_a_list_to_a_page
     }
 
     [Fact]
-    public void sets_total_count_correctly()
+    public void Mapping_a_list_to_a_page_sets_total_count_correctly()
     {
         var fixture = new Fixture();
         var items = fixture.CreateMany<string>(5).ToImmutableList();
@@ -46,7 +47,7 @@ public class Mapping_a_list_to_a_page
     }
 
     [Fact]
-    public void sets_total_pages_correctly()
+    public void Mapping_a_list_to_a_page_sets_total_pages_correctly()
     {
         var fixture = new Fixture();
         var items = fixture.CreateMany<string>(5).ToImmutableList();
@@ -58,7 +59,7 @@ public class Mapping_a_list_to_a_page
     }
 
     [Fact]
-    public void sets_has_previous_page_correctly()
+    public void Mapping_a_list_to_a_page_sets_has_previous_page_correctly()
     {
         var fixture = new Fixture();
         var items = fixture.CreateMany<string>(5).ToImmutableList();
@@ -70,7 +71,7 @@ public class Mapping_a_list_to_a_page
     }
 
     [Fact]
-    public void sets_has_next_page_correctly()
+    public void Mapping_a_list_to_a_page_sets_has_next_page_correctly()
     {
         var fixture = new Fixture();
         var items = fixture.CreateMany<string>(5).ToImmutableList();
@@ -82,7 +83,7 @@ public class Mapping_a_list_to_a_page
     }
 
     [Fact]
-    public void sets_data_correctly()
+    public void Mapping_a_list_to_a_page_sets_data_correctly()
     {
         var fixture = new Fixture();
         var items = fixture.CreateMany<string>(5).ToImmutableList();
@@ -91,5 +92,13 @@ public class Mapping_a_list_to_a_page
         var page = sut.ToPage();
 
         page.Data.Should().BeEquivalentTo(sut.ToList());
+    }
+
+    [Fact]
+    public void Mapping_a_list_to_a_page_throws_when_the_input_list_is_null()
+    {
+        PaginatedList<string> sut = null;
+
+        Assert.Throws<ArgumentNullException>(() => sut.ToPage());
     }
 }
