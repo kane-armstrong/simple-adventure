@@ -29,7 +29,7 @@ public class RescheduleAppointmentTests
 
     [Fact]
     [ResetDatabase]
-    public async Task Rescheduling_an_appointment_returns_204_no_content()
+    public async Task Successful_requests_return_204_no_content()
     {
         var client = _testFixture.Client;
         var seeder = new AppointmentSeeder();
