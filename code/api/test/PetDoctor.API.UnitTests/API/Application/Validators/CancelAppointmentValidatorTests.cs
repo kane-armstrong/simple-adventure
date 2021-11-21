@@ -16,8 +16,8 @@ public class CancelAppointmentValidatorTests
         };
 
         var sut = new CancelAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.Reason, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.Reason);
     }
 
     [Fact]
@@ -29,8 +29,8 @@ public class CancelAppointmentValidatorTests
         };
 
         var sut = new CancelAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.Reason, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.Reason);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class CancelAppointmentValidatorTests
         };
 
         var sut = new CancelAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.Reason, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.Reason);
     }
 }

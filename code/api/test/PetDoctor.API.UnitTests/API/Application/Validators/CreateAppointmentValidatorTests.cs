@@ -1,7 +1,7 @@
-﻿using System;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
+using System;
 using Xunit;
 
 namespace PetDoctor.API.UnitTests.API.Application.Validators;
@@ -17,8 +17,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.ReasonForVisit, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.ReasonForVisit);
     }
 
     [Fact]
@@ -30,8 +30,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.ReasonForVisit, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.ReasonForVisit);
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.ReasonForVisit, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.ReasonForVisit);
     }
 
     [Fact]
@@ -56,8 +56,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.DesiredDate, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.DesiredDate);
     }
 
     [Fact]
@@ -69,8 +69,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerFirstName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerFirstName);
     }
 
     [Fact]
@@ -82,8 +82,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerFirstName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerFirstName);
     }
 
     [Fact]
@@ -95,8 +95,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerFirstName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerFirstName);
     }
 
     [Fact]
@@ -108,8 +108,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerLastName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerLastName);
     }
 
     [Fact]
@@ -121,8 +121,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerLastName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerLastName);
     }
 
     [Fact]
@@ -134,10 +134,10 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerLastName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerLastName);
     }
-        
+
     [Fact]
     public void Validation_should_fail_when_owner_email_is_null()
     {
@@ -147,8 +147,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerEmail, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerEmail);
     }
 
     [Fact]
@@ -160,8 +160,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerEmail, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerEmail);
     }
 
     [Fact]
@@ -173,8 +173,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerEmail, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerEmail);
     }
 
     [Fact]
@@ -186,8 +186,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerPhone, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerPhone);
     }
 
     [Fact]
@@ -199,8 +199,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerPhone, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerPhone);
     }
 
     [Fact]
@@ -212,8 +212,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.OwnerPhone, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.OwnerPhone);
     }
 
     [Fact]
@@ -225,8 +225,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.PetName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.PetName);
     }
 
     [Fact]
@@ -238,8 +238,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.PetName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.PetName);
     }
 
     [Fact]
@@ -251,10 +251,10 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.PetName, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.PetName);
     }
-        
+
     [Fact]
     public void Validation_should_fail_when_pet_breed_is_null()
     {
@@ -264,8 +264,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.PetBreed, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.PetBreed);
     }
 
     [Fact]
@@ -277,8 +277,8 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.PetBreed, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.PetBreed);
     }
 
     [Fact]
@@ -290,7 +290,7 @@ public class CreateAppointmentValidatorTests
         };
 
         var sut = new CreateAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.PetBreed, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.PetBreed);
     }
 }

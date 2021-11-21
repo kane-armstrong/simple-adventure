@@ -1,7 +1,7 @@
-﻿using System;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
+using System;
 using Xunit;
 
 namespace PetDoctor.API.UnitTests.API.Application.Validators;
@@ -17,7 +17,7 @@ public class RescheduleAppointmentValidatorTests
         };
 
         var sut = new RescheduleAppointmentValidator();
-
-        sut.ShouldHaveValidationErrorFor(p => p.NewDate, request);
+        var result = sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(p => p.NewDate);
     }
 }
