@@ -92,8 +92,8 @@ static void MigrateDatabases(IHost host)
     // Ideally this would be done in a separate console app in prod (with version assertions here)
     appDbContext.Database.Migrate();
 
-    var streamStore = scope.ServiceProvider.GetRequiredService<MsSqlStreamStore>();
+    var streamStore = scope.ServiceProvider.GetRequiredService<MsSqlStreamStoreV3>();
     var schemaCheck = streamStore.CheckSchema().GetAwaiter().GetResult();
     if (!schemaCheck.IsMatch())
-        streamStore.CreateSchema().GetAwaiter().GetResult();
+        streamStore.CreateSchemaIfNotExists().GetAwaiter().GetResult();
 }

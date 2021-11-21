@@ -32,10 +32,10 @@ class PetDoctorDatabaseCheckpoint
             _initialized = true;
         }
 
-        var streamStore = scope.ServiceProvider.GetService<MsSqlStreamStore>();
+        var streamStore = scope.ServiceProvider.GetService<MsSqlStreamStoreV3>();
         var schemaCheck = streamStore.CheckSchema().GetAwaiter().GetResult();
         if (!schemaCheck.IsMatch())
-            streamStore.CreateSchema().GetAwaiter().GetResult();
+            streamStore.CreateSchemaIfNotExists().GetAwaiter().GetResult();
 
         await Checkpoint.Reset(ConnectionString);
     }

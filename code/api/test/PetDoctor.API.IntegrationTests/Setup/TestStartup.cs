@@ -25,8 +25,8 @@ public class TestStartup : Startup
             });
         });
 
-        services.AddSingleton(new MsSqlStreamStoreSettings(cs));
-        services.AddSingleton<IStreamStore, MsSqlStreamStore>();
-        services.AddSingleton<MsSqlStreamStore>(); // for migrations
+        services.AddSingleton(new MsSqlStreamStoreV3Settings(cs));
+        services.AddSingleton<IStreamStore, MsSqlStreamStoreV3>();
+        services.AddSingleton<MsSqlStreamStoreV3>(); // for migrations
     }
 }
