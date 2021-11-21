@@ -4,21 +4,20 @@ using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.API.Application.Validators.RescheduleAppointmentValidatorSpec
+namespace PetDoctor.API.UnitTests.API.Application.Validators.RescheduleAppointmentValidatorSpec;
+
+public class Validation_should_fail_when
 {
-    public class Validation_should_fail_when
+    [Fact]
+    public void new_date_is_in_the_past()
     {
-        [Fact]
-        public void new_date_is_in_the_past()
+        var request = new RescheduleAppointment
         {
-            var request = new RescheduleAppointment
-            {
-                NewDate = DateTimeOffset.UtcNow.AddDays(-1)
-            };
+            NewDate = DateTimeOffset.UtcNow.AddDays(-1)
+        };
 
-            var sut = new RescheduleAppointmentValidator();
+        var sut = new RescheduleAppointmentValidator();
 
-            sut.ShouldHaveValidationErrorFor(p => p.NewDate, request);
-        }
+        sut.ShouldHaveValidationErrorFor(p => p.NewDate, request);
     }
 }

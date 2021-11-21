@@ -6,34 +6,33 @@ using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
+namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
+
+public class Applying_an_appointment_rejected_event
 {
-    public class Applying_an_appointment_rejected_event
+    [Fact]
+    public void should_update_state_to_rejected()
     {
-        [Fact]
-        public void should_update_state_to_rejected()
-        {
-            var fixture = new Fixture();
-            var sut = fixture.Create<Appointment>();
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentRejected(sut.Id, "nobody available");
+        var @event = new AppointmentRejected(sut.Id, "nobody available");
 
-            sut.ReplayEvents(new List<DomainEvent> { @event });
+        sut.ReplayEvents(new List<DomainEvent> { @event });
 
-            sut.State.Should().Be(AppointmentState.Rejected);
-        }
+        sut.State.Should().Be(AppointmentState.Rejected);
+    }
 
-        [Fact]
-        public void should_set_rejection_reason_correctly()
-        {
-            var fixture = new Fixture();
-            var sut = fixture.Create<Appointment>();
+    [Fact]
+    public void should_set_rejection_reason_correctly()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
 
-            var @event = new AppointmentRejected(sut.Id, "nobody available");
+        var @event = new AppointmentRejected(sut.Id, "nobody available");
 
-            sut.ReplayEvents(new List<DomainEvent> { @event });
+        sut.ReplayEvents(new List<DomainEvent> { @event });
 
-            sut.RejectionReason.Should().Be(@event.RejectionReason);
-        }
+        sut.RejectionReason.Should().Be(@event.RejectionReason);
     }
 }

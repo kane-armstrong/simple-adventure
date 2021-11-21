@@ -4,46 +4,45 @@ using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
+namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
+
+public class Confirming_an_appointment
 {
-    public class Confirming_an_appointment
+    [Fact]
+    public void should_update_state_to_confirmed()
     {
-        [Fact]
-        public void should_update_state_to_confirmed()
-        {
-            var fixture = new Fixture();
-            var sut = fixture.Create<Appointment>();
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
 
-            sut.Confirm(Guid.NewGuid());
+        sut.Confirm(Guid.NewGuid());
 
-            sut.State.Should().Be(AppointmentState.Confirmed);
-        }
+        sut.State.Should().Be(AppointmentState.Confirmed);
+    }
 
-        [Fact]
-        public void should_set_vet_id_correctly()
-        {
-            var fixture = new Fixture();
-            var sut = fixture.Create<Appointment>();
+    [Fact]
+    public void should_set_vet_id_correctly()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
 
-            var id = Guid.NewGuid();
-            sut.Confirm(id);
+        var id = Guid.NewGuid();
+        sut.Confirm(id);
 
-            sut.AttendingVeterinarianId.Should().Be(id);
-        }
+        sut.AttendingVeterinarianId.Should().Be(id);
+    }
 
-        [Fact]
-        public void should_set_vet_id_correctly_when_reconfirming()
-        {
-            var fixture = new Fixture();
-            var sut = fixture.Create<Appointment>();
+    [Fact]
+    public void should_set_vet_id_correctly_when_reconfirming()
+    {
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
 
-            var firstVet = Guid.NewGuid();
-            sut.Confirm(firstVet);
+        var firstVet = Guid.NewGuid();
+        sut.Confirm(firstVet);
 
-            var secondVet = Guid.NewGuid();
-            sut.Confirm(secondVet);
+        var secondVet = Guid.NewGuid();
+        sut.Confirm(secondVet);
 
-            sut.AttendingVeterinarianId.Should().Be(secondVet);
-        }
+        sut.AttendingVeterinarianId.Should().Be(secondVet);
     }
 }

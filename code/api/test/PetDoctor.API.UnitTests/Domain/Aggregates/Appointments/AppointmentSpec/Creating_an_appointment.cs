@@ -4,88 +4,87 @@ using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
+namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
+
+public class Creating_an_appointment
 {
-    public class Creating_an_appointment
+    [Fact]
+    public void should_set_pet_correctly()
     {
-        [Fact]
-        public void should_set_pet_correctly()
-        {
-            var fixture = new Fixture();
-            var pet = fixture.Create<Pet>();
-            var owner = fixture.Create<Owner>();
+        var fixture = new Fixture();
+        var pet = fixture.Create<Pet>();
+        var owner = fixture.Create<Owner>();
 
-            var sut = new Appointment(pet, owner, "reason", DateTimeOffset.UtcNow);
+        var sut = new Appointment(pet, owner, "reason", DateTimeOffset.UtcNow);
 
-            sut.Pet.Should().BeEquivalentTo(pet);
-        }
+        sut.Pet.Should().BeEquivalentTo(pet);
+    }
 
-        [Fact]
-        public void should_set_owner_correctly()
-        {
-            var fixture = new Fixture();
-            var pet = fixture.Create<Pet>();
-            var owner = fixture.Create<Owner>();
+    [Fact]
+    public void should_set_owner_correctly()
+    {
+        var fixture = new Fixture();
+        var pet = fixture.Create<Pet>();
+        var owner = fixture.Create<Owner>();
 
-            var sut = new Appointment(pet, owner, "reason", DateTimeOffset.UtcNow);
+        var sut = new Appointment(pet, owner, "reason", DateTimeOffset.UtcNow);
 
-            sut.Owner.Should().BeEquivalentTo(owner);
-        }
+        sut.Owner.Should().BeEquivalentTo(owner);
+    }
 
-        [Fact]
-        public void should_set_reason_correctly()
-        {
-            var fixture = new Fixture();
-            var pet = fixture.Create<Pet>();
-            var owner = fixture.Create<Owner>();
+    [Fact]
+    public void should_set_reason_correctly()
+    {
+        var fixture = new Fixture();
+        var pet = fixture.Create<Pet>();
+        var owner = fixture.Create<Owner>();
 
-            const string reason = "time to get vaccinated";
+        const string reason = "time to get vaccinated";
 
-            var sut = new Appointment(pet, owner, reason, DateTimeOffset.UtcNow);
+        var sut = new Appointment(pet, owner, reason, DateTimeOffset.UtcNow);
 
-            sut.ReasonForVisit.Should().Be(reason);
-        }
+        sut.ReasonForVisit.Should().Be(reason);
+    }
 
-        [Fact]
-        public void should_set_scheduled_on_correctly()
-        {
-            var fixture = new Fixture();
-            var pet = fixture.Create<Pet>();
-            var owner = fixture.Create<Owner>();
+    [Fact]
+    public void should_set_scheduled_on_correctly()
+    {
+        var fixture = new Fixture();
+        var pet = fixture.Create<Pet>();
+        var owner = fixture.Create<Owner>();
 
-            var scheduledOn = DateTimeOffset.Now.AddDays(5);
+        var scheduledOn = DateTimeOffset.Now.AddDays(5);
 
-            var sut = new Appointment(pet, owner, "reason", scheduledOn);
+        var sut = new Appointment(pet, owner, "reason", scheduledOn);
 
-            sut.ScheduledOn.Should().Be(scheduledOn);
-        }
+        sut.ScheduledOn.Should().Be(scheduledOn);
+    }
 
-        [Fact]
-        public void should_set_vet_id_correctly()
-        {
-            var fixture = new Fixture();
-            var pet = fixture.Create<Pet>();
-            var owner = fixture.Create<Owner>();
+    [Fact]
+    public void should_set_vet_id_correctly()
+    {
+        var fixture = new Fixture();
+        var pet = fixture.Create<Pet>();
+        var owner = fixture.Create<Owner>();
 
-            var vetId = Guid.NewGuid();
+        var vetId = Guid.NewGuid();
 
-            var sut = new Appointment(pet, owner, vetId, "reason", DateTimeOffset.Now);
+        var sut = new Appointment(pet, owner, vetId, "reason", DateTimeOffset.Now);
 
-            sut.AttendingVeterinarianId.Should().Be(vetId);
-        }
+        sut.AttendingVeterinarianId.Should().Be(vetId);
+    }
 
-        [Fact]
-        public void should_set_state_to_requested()
-        {
-            var fixture = new Fixture();
-            var pet = fixture.Create<Pet>();
-            var owner = fixture.Create<Owner>();
+    [Fact]
+    public void should_set_state_to_requested()
+    {
+        var fixture = new Fixture();
+        var pet = fixture.Create<Pet>();
+        var owner = fixture.Create<Owner>();
 
-            var vetId = Guid.NewGuid();
+        var vetId = Guid.NewGuid();
 
-            var sut = new Appointment(pet, owner, vetId, "reason", DateTimeOffset.Now);
+        var sut = new Appointment(pet, owner, vetId, "reason", DateTimeOffset.Now);
 
-            sut.State.Should().Be(AppointmentState.Requested);
-        }
+        sut.State.Should().Be(AppointmentState.Requested);
     }
 }

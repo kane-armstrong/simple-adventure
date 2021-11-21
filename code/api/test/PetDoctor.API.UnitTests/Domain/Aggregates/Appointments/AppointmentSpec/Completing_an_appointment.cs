@@ -3,19 +3,18 @@ using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 
-namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec
+namespace PetDoctor.API.UnitTests.Domain.Aggregates.Appointments.AppointmentSpec;
+
+public class Completing_an_appointment
 {
-    public class Completing_an_appointment
+    [Fact]
+    public void should_update_state_to_completed()
     {
-        [Fact]
-        public void should_update_state_to_completed()
-        {
-            var fixture = new Fixture();
-            var sut = fixture.Create<Appointment>();
+        var fixture = new Fixture();
+        var sut = fixture.Create<Appointment>();
 
-            sut.Complete();
+        sut.Complete();
 
-            sut.State.Should().Be(AppointmentState.Completed);
-        }
+        sut.State.Should().Be(AppointmentState.Completed);
     }
 }
