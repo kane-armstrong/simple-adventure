@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Queries;
 
-public class GetAppointmentByIdHandler : IRequestHandler<GetAppointmentById, AppointmentView?>
+public class GetAppointmentByIdHandler : IRequestHandler<GetAppointmentById, AppointmentView>
 {
     private readonly PetDoctorContext _db;
 
@@ -16,7 +16,7 @@ public class GetAppointmentByIdHandler : IRequestHandler<GetAppointmentById, App
         _db = db;
     }
 
-    public async Task<AppointmentView?> Handle(GetAppointmentById request, CancellationToken cancellationToken)
+    public async Task<AppointmentView> Handle(GetAppointmentById request, CancellationToken cancellationToken)
     {
         var snapshot = await _db.AppointmentSnapshots.FindAsync(request.Id);
         return snapshot?.ToAppointmentView();

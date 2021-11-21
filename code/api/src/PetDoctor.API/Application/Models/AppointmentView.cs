@@ -10,8 +10,8 @@ public record AppointmentView
     public Owner Owner { get; init; }
     public Guid? AttendingVeterinarianId { get; init; }
     public string ReasonForVisit { get; init; } = string.Empty;
-    public string? RejectionReason { get; init; }
-    public string? CancellationReason { get; init; }
+    public string RejectionReason { get; init; }
+    public string CancellationReason { get; init; }
     public DateTimeOffset ScheduledOn { get; init; }
     public string State { get; init; }
 }

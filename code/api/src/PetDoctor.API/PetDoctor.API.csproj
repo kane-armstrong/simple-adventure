@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-	<Nullable>enable</Nullable>
+	<Nullable>disable</Nullable>
 	<LangVersion>10.0</LangVersion>
 	<UserSecretsId>d727579a-bf3c-4d58-a790-bb3650691873</UserSecretsId>
   </PropertyGroup>

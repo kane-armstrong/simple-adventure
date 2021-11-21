@@ -10,8 +10,8 @@ public class Appointment : EventSourcedEntity
     public Owner Owner { get; }
     public Guid? AttendingVeterinarianId { get; private set; }
     public string ReasonForVisit { get; }
-    public string? RejectionReason { get; set; }
-    public string? CancellationReason { get; set; }
+    public string RejectionReason { get; set; }
+    public string CancellationReason { get; set; }
     public DateTimeOffset ScheduledOn { get; private set; }
     public AppointmentState State { get; private set; }
 
