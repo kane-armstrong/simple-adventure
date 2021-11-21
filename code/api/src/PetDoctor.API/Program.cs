@@ -6,12 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PetDoctor.API;
 using PetDoctor.Infrastructure;
 using Serilog;
 using SqlStreamStore;
 using System;
 using System.IO;
-using PetDoctor.API;
+using System.Threading.Tasks;
 
 var currentEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
 
@@ -32,7 +33,7 @@ try
     var host = CreateHostBuilder(args, configBuilder.Build()).Build();
 
     Log.Information("Migrating databases");
-    MigrateDatabases(host);
+    await MigrateDatabases(host);
 
     Log.Information("Starting host");
     host.Run();
@@ -85,15 +86,15 @@ static void AddKeyVaultConfigurationProvider(IConfigurationBuilder builder)
     }
 }
 
-static void MigrateDatabases(IHost host)
+static async Task MigrateDatabases(IHost host)
 {
     using var scope = host.Services.CreateScope();
     var appDbContext = scope.ServiceProvider.GetRequiredService<PetDoctorContext>();
     // Ideally this would be done in a separate console app in prod (with version assertions here)
-    appDbContext.Database.Migrate();
+    await appDbContext.Database.MigrateAsync();
 
     var streamStore = scope.ServiceProvider.GetRequiredService<MsSqlStreamStoreV3>();
-    var schemaCheck = streamStore.CheckSchema().GetAwaiter().GetResult();
+    var schemaCheck = await streamStore.CheckSchema();
     if (!schemaCheck.IsMatch())
-        streamStore.CreateSchemaIfNotExists().GetAwaiter().GetResult();
+        await streamStore.CreateSchemaIfNotExists();
 }
