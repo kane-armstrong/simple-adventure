@@ -2,76 +2,26 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/kane-armstrong/simple-adventure/badge)](https://www.codefactor.io/repository/github/kane-armstrong/simple-adventure)
 
-This repository contains the source code for a simple toy project using CQRS and event sourcing. I've built it to stretch muscles I haven't used for a while, to try
-out new stuff, and possibly generate some content for my own future reference. 
+This repository contains the source code for a simple toy project using CQRS and event sourcing.
 
-Some of the stuff demonstrated in this codebase:
+Features:
 
-* Event sourcing and CQRS (separate read/write stores)
-* Entity Framework Core
-* Rich(er than usual) domain models
-* Integration (aka functional or component) testing
-* Unit testing
-* Running the API in docker and docker compose
-* Running tests in docker and docker compose
-* Using Pulumi to generate both Azure resources and to manage/deploy to a Kubernetes cluster
-
-Some of the stuff I'd like to add to this codebase:
-
-* Authentication (probably using Identity Server)
-* Automated build/deploy of both infrastructure and code using Azure DevOps and/or GitHub actions
-* Model more of what happens at a practice than just scheduling appointments (i.e. implement a microservices architecture)
-* Create a couple of different user interfaces (a public facing one and an internal one, in different stacks e.g. React, Blazor)
-
-## Local Development
-
-This project targets .NET 5.0. At the time of writing, you'll need the [latest SDK](https://dotnet.microsoft.com/download/dotnet/5.0) 
-installed (I'm using preview7) and you'll need to use [Visual Studio Preview](https://visualstudio.microsoft.com/vs/preview/).
-
-### Using Docker
-
-Build using `docker build -t petdoctor-api .`
-
-Run using `docker run -d -p 5640:80 petdoctor-api`
-
-Omit `-d` if you don't want the container to run past the scope of your terminal session
-
-You'll want to point `ConnectionStrings__PetDoctorContext` at a local SQL instance (host.docker.internal)
-
-### Using Compose
-
-Docker compose is configured to run a SQL image alongside the api image as a dependency, on port 1400.
-
-To build: in a terminal with the working directory set to the repository root, `docker-compose build`
-
-To run: same deal, but `docker-compose run`
-
-To connect to the database from SSMS, use `.,1400` as the server name and SQL Server Authentication as `sa` (the 
-password is in docker-compose.yml)
-
-### Database Migrations
-
-This project uses code-first migrations. You'll need to install dotnet-ef:
-
-```
-dotnet tool update --global dotnet-ef
-```
-
-Example command to generate a migration:
-
-```
-dotnet ef migrations add InitialPetDoctorMigration -c PetDoctorContext -o Infrastructure/Migrations/PetDoctor/PetDoctorDb --startup-project src/PetDoctor.API
-```
-
-### Tests
-
-Tests can be run as usual using Visual Studio//ReSharper. They can also be run in Docker using compose:
-
-To build the integration tests, use `docker-compose build integrationtests` and then `docker-compose up integrationtests` to run them
-
-To build the unit tests, use `docker-compose build unittests` and then `docker-compose up unittests` to run them
+* [x] Event sourcing and CQRS (separate read/write stores) using `MsSqlStreamStore` and Entity Framework Core
+* [x] DDD
+* [x] Code-first migrations
+* [x] Integration tests
+* [x] Unit tests
+* [x] Running tests and tests in docker and docker compose
+* [x] Using Pulumi for infrastructure as code, deploying to an Azure Kubernetes Service cluster
+* [] Authentication (probably using Identity Server)
+* [] Automated build/deploy of both infrastructure and code using Azure DevOps and/or GitHub actions
+* [] Model more of what happens at a practice than just scheduling appointments (i.e. implement a microservices architecture)
+* [] Better/more complete event sourcing implementation (projections)
+* [] Create user interfaces
 
 ## Infrastructure & Deployment
+
+**This is currently broken**
 
 This application can be deployed to a Kubernetes cluster hosted in Azure by running `pulumi up` after cd'ing to `deploy/PetDoctor.InfrastructureStack`. This takes care of:
 
