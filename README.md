@@ -13,11 +13,11 @@ Features:
 * [x] Unit tests
 * [x] Running tests and tests in docker and docker compose
 * [x] Using Pulumi for infrastructure as code, deploying to an Azure Kubernetes Service cluster
-* [] Authentication (probably using Identity Server)
-* [] Automated build/deploy of both infrastructure and code using GitHub actions
-* [] Model more of what happens at a practice than just scheduling appointments (i.e. implement a microservices architecture)
-* [] Better/more complete event sourcing implementation (e.g. projections)
-* [] Make a UI
+* [ ] Authentication (probably using Identity Server)
+* [ ] Automated build/deploy of both infrastructure and code using GitHub actions
+* [ ] Model more of what happens at a practice than just scheduling appointments (i.e. implement a microservices architecture)
+* [ ] Better/more complete event sourcing implementation (e.g. projections)
+* [ ] Make a UI
 
 ## Infrastructure & Deployment
 
