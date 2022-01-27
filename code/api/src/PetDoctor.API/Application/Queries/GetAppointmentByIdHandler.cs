@@ -1,5 +1,4 @@
-﻿using MediatR;
-using PetDoctor.API.Application.Extensions;
+﻿using PetDoctor.API.Application.Extensions;
 using PetDoctor.API.Application.Models;
 using PetDoctor.Infrastructure;
 using System.Threading;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Queries;
 
-public class GetAppointmentByIdHandler : IRequestHandler<GetAppointmentById, AppointmentView>
+public class GetAppointmentByIdHandler
 {
     private readonly PetDoctorContext _db;
 

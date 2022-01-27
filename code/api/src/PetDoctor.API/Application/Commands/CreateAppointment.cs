@@ -2,7 +2,7 @@
 
 namespace PetDoctor.API.Application.Commands;
 
-public record CreateAppointment : Command
+public record CreateAppointment
 {
     public string PetName { get; init; } = string.Empty;
     public DateTimeOffset PetDateOfBirth { get; init; }

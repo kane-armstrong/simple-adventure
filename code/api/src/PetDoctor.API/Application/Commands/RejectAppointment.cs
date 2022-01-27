@@ -2,7 +2,7 @@
 
 namespace PetDoctor.API.Application.Commands;
 
-public record RejectAppointment : Command
+public record RejectAppointment
 {
     internal Guid Id { get; set; }
     public string Reason { get; init; } = string.Empty;

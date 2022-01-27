@@ -2,7 +2,7 @@
 
 namespace PetDoctor.API.Application.Commands;
 
-public record CheckinToAppointment : Command
+public record CheckinToAppointment
 {
     internal Guid Id { get; set; }
 }

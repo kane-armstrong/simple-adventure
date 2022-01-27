@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using PetDoctor.API.Application.Commands;
+using PetDoctor.API.Application.Queries;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Infrastructure;
 using PetDoctor.Infrastructure.Repositories;
@@ -62,6 +64,17 @@ public class Startup
         services.AddHealthChecks();
 
         services.AddMediatR(Assembly.GetExecutingAssembly());
+
+        services.AddScoped<ListAppointmentsHandler>();
+        services.AddScoped<GetAppointmentByIdHandler>();
+
+        services.AddScoped<CancelAppointmentHandler>();
+        services.AddScoped<CheckinToAppointmentHandler>();
+        services.AddScoped<CompleteAppointmentHandler>();
+        services.AddScoped<ConfirmAppointmentHandler>();
+        services.AddScoped<CreateAppointmentHandler>();
+        services.AddScoped<RejectAppointmentHandler>();
+        services.AddScoped<RescheduleAppointmentHandler>();
 
         services.AddTransient<IAppointmentRepository, AppointmentRepository>();
 

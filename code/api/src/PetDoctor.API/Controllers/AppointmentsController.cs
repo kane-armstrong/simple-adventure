@@ -1,11 +1,11 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Extensions;
 using PetDoctor.API.Application.Models;
 using PetDoctor.API.Application.Queries;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PetDoctor.API.Controllers;
@@ -15,26 +15,23 @@ namespace PetDoctor.API.Controllers;
 [Route("v{version:apiVersion}/appointments")]
 public class AppointmentsController : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public AppointmentsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet("")]
     [ProducesResponseType(typeof(Page<AppointmentView>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<Page<AppointmentView>>> ListAppointments([FromQuery] ListAppointments query)
+    public async Task<ActionResult<Page<AppointmentView>>> ListAppointments(
+        [FromQuery] ListAppointments query,
+        [FromServices] ListAppointmentsHandler handler)
     {
-        var result = await _mediator.Send(query);
+        var result = await handler.Handle(query, CancellationToken.None);
         return result.ToPage();
     }
 
     [HttpGet("{id}", Name = nameof(GetAppointmentById))]
     [ProducesResponseType(typeof(Page<AppointmentView>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<AppointmentView>> GetAppointmentById([FromRoute] Guid id)
+    public async Task<ActionResult<AppointmentView>> GetAppointmentById(
+        [FromRoute] Guid id,
+        [FromServices] GetAppointmentByIdHandler handler)
     {
-        var result = await _mediator.Send(new GetAppointmentById { Id = id });
+        var result = await handler.Handle(new GetAppointmentById { Id = id }, CancellationToken.None);
         if (result is null)
             return NotFound();
         return Ok(result);
@@ -42,19 +39,24 @@ public class AppointmentsController : ControllerBase
 
     [HttpPost("")]
     [ProducesResponseType(typeof(void), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointment request)
+    public async Task<IActionResult> CreateAppointment(
+        [FromBody] CreateAppointment request,
+        [FromServices] CreateAppointmentHandler handler)
     {
-        var result = await _mediator.Send(request);
+        var result = await handler.Handle(request, CancellationToken.None);
         const string route = nameof(GetAppointmentById);
         return CreatedAtRoute(route, new { id = result.ResourceId, version = "1" }, null);
     }
 
     [HttpPut("{id}/confirm")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> ConfirmAppointment([FromRoute] Guid id, [FromBody] ConfirmAppointment request)
+    public async Task<IActionResult> ConfirmAppointment(
+        [FromRoute] Guid id,
+        [FromBody] ConfirmAppointment request,
+        [FromServices] ConfirmAppointmentHandler handler)
     {
         request.Id = id;
-        var result = await _mediator.Send(request);
+        var result = await handler.Handle(request, CancellationToken.None);
         if (result is { ResourceFound: false })
             return NotFound();
         return NoContent();
@@ -62,10 +64,13 @@ public class AppointmentsController : ControllerBase
 
     [HttpPut("{id}/reject")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> RejectAppointment([FromRoute] Guid id, [FromBody] RejectAppointment request)
+    public async Task<IActionResult> RejectAppointment(
+        [FromRoute] Guid id,
+        [FromBody] RejectAppointment request,
+        [FromServices] RejectAppointmentHandler handler)
     {
         request.Id = id;
-        var result = await _mediator.Send(request);
+        var result = await handler.Handle(request, CancellationToken.None);
         if (result is { ResourceFound: false })
             return NotFound();
         return NoContent();
@@ -73,10 +78,13 @@ public class AppointmentsController : ControllerBase
 
     [HttpPut("{id}/reschedule")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> RescheduleAppointment([FromRoute] Guid id, [FromBody] RescheduleAppointment request)
+    public async Task<IActionResult> RescheduleAppointment(
+        [FromRoute] Guid id,
+        [FromBody] RescheduleAppointment request,
+        [FromServices] RescheduleAppointmentHandler handler)
     {
         request.Id = id;
-        var result = await _mediator.Send(request);
+        var result = await handler.Handle(request, CancellationToken.None);
         if (result is { ResourceFound: false })
             return NotFound();
         return NoContent();
@@ -84,10 +92,13 @@ public class AppointmentsController : ControllerBase
 
     [HttpPut("{id}/cancel")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> CancelAppointment([FromRoute] Guid id, [FromBody] CancelAppointment request)
+    public async Task<IActionResult> CancelAppointment(
+        [FromRoute] Guid id,
+        [FromBody] CancelAppointment request,
+        [FromServices] CancelAppointmentHandler handler)
     {
         request.Id = id;
-        var result = await _mediator.Send(request);
+        var result = await handler.Handle(request, CancellationToken.None);
         if (result is { ResourceFound: false })
             return NotFound();
         return NoContent();
@@ -95,10 +106,13 @@ public class AppointmentsController : ControllerBase
 
     [HttpPut("{id}/checkin")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> CheckinToAppointment([FromRoute] Guid id, [FromBody] CheckinToAppointment request)
+    public async Task<IActionResult> CheckinToAppointment(
+        [FromRoute] Guid id,
+        [FromBody] CheckinToAppointment request,
+        [FromServices] CheckinToAppointmentHandler handler)
     {
         request.Id = id;
-        var result = await _mediator.Send(request);
+        var result = await handler.Handle(request, CancellationToken.None);
         if (result is { ResourceFound: false })
             return NotFound();
         return NoContent();
@@ -106,10 +120,13 @@ public class AppointmentsController : ControllerBase
 
     [HttpPut("{id}/complete")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> CompleteAppointment([FromRoute] Guid id, [FromBody] CompleteAppointment request)
+    public async Task<IActionResult> CompleteAppointment(
+        [FromRoute] Guid id,
+        [FromBody] CompleteAppointment request,
+        [FromServices] CompleteAppointmentHandler handler)
     {
         request.Id = id;
-        var result = await _mediator.Send(request);
+        var result = await handler.Handle(request, CancellationToken.None);
         if (result is { ResourceFound: false })
             return NotFound();
         return NoContent();

@@ -1,11 +1,8 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using PetDoctor.API.Application.Models;
-using PetDoctor.Infrastructure.Collections;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace PetDoctor.API.Application.Queries;
 
-public record ListAppointments : IRequest<PaginatedList<AppointmentView>>
+public record ListAppointments
 {
     public const string PageIndexQueryArg = "index";
     public const string PageSizeQueryArg = "size";

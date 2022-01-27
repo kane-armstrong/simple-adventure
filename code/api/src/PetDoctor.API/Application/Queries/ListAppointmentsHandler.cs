@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PetDoctor.API.Application.Models;
 using PetDoctor.Infrastructure;
 using PetDoctor.Infrastructure.Collections;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Queries;
 
-public class ListAppointmentsHandler : IRequestHandler<ListAppointments, PaginatedList<AppointmentView>>
+public class ListAppointmentsHandler
 {
     private readonly PetDoctorContext _db;
 

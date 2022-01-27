@@ -2,7 +2,7 @@
 
 namespace PetDoctor.API.Application.Commands;
 
-public record RescheduleAppointment : Command
+public record RescheduleAppointment
 {
     internal Guid Id { get; set; }
     public DateTimeOffset NewDate { get; init; }

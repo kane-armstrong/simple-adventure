@@ -2,7 +2,7 @@
 
 namespace PetDoctor.API.Application.Commands;
 
-public record ConfirmAppointment : Command
+public record ConfirmAppointment
 {
     internal Guid Id { get; set; }
     public Guid AttendingVeterinarianId { get; init; }

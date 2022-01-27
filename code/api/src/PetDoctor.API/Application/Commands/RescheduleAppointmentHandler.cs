@@ -1,11 +1,10 @@
-﻿using MediatR;
-using PetDoctor.Domain.Aggregates.Appointments;
+﻿using PetDoctor.Domain.Aggregates.Appointments;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Commands;
 
-public class RescheduleAppointmentHandler : IRequestHandler<RescheduleAppointment, CommandResult>
+public class RescheduleAppointmentHandler
 {
     private readonly IAppointmentRepository _appointments;
 
