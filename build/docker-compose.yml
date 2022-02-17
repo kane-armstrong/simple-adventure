@@ -18,7 +18,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       CONNECTIONSTRINGS__READSTORE: "Data Source=database;Initial Catalog=petdoctor_read;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
       CONNECTIONSTRINGS__WRITESTORE: "Data Source=database;Initial Catalog=petdoctor_write;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
-      AUTHENTICATION__AUTHORITY: "idp"
+      AUTHENTICATION__AUTHORITY: "http://host.docker.internal:5123"
       AUTHENTICATION__AUDIENCE: "api"
       AUTHENTICATION__REQUIREHTTPS: "false"
     depends_on: [ "database", "read-migrations", "write-migrations", "idp" ]
@@ -48,6 +48,7 @@ services:
       ASPNETCORE_URLS: http://+:5123
       ASPNETCORE_ENVIRONMENT: Development
       CONNECTIONSTRINGS__DATABASE: "Data Source=database;Initial Catalog=idp;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+      ISSUERURI: "http://host.docker.internal:5123"
     depends_on: [ "database" ]
   integrationtests:
     build:
