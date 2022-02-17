@@ -43,7 +43,7 @@ IConfigurationBuilder CreateConfigurationBuilder() => new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{currentEnvironment}.json", true)
-    .AddUserSecrets<Startup>()
+    .AddUserSecrets<Startup>(optional: true)
     .AddEnvironmentVariables();
 
 static IHostBuilder CreateHostBuilder(string[] args, IConfigurationRoot configuration) =>
