@@ -10,12 +10,16 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Queries;
+using PetDoctor.Domain;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Infrastructure;
+using PetDoctor.Infrastructure.Cqrs;
 using PetDoctor.Infrastructure.Repositories;
 using SqlStreamStore;
 using System;
 using System.Reflection;
+using PetDoctor.API.Application.DomainEventHandlers;
+using PetDoctor.Domain.Aggregates.Appointments.Events;
 
 namespace PetDoctor.API;
 
@@ -75,6 +79,16 @@ public class Startup
         services.AddScoped<CreateAppointmentHandler>();
         services.AddScoped<RejectAppointmentHandler>();
         services.AddScoped<RescheduleAppointmentHandler>();
+
+        services.AddScoped<IEventHandler<AppointmentCanceled>, AppointmentCanceledHandler>();
+        services.AddScoped<IEventHandler<AppointmentMembersCheckedIn>, AppointmentMembersCheckedInHandler>();
+        services.AddScoped<IEventHandler<AppointmentCompleted>, AppointmentCompletedHandler>();
+        services.AddScoped<IEventHandler<AppointmentConfirmed>, AppointmentConfirmedHandler>();
+        services.AddScoped<IEventHandler<AppointmentCreated>, AppointmentCreatedHandler>();
+        services.AddScoped<IEventHandler<AppointmentRejected>, AppointmentRejectedHandler>();
+        services.AddScoped<IEventHandler<AppointmentRescheduled>, AppointmentRescheduledHandler>();
+
+        services.AddSingleton<IEventDispatcher, EventDispatcher>();
 
         services.AddTransient<IAppointmentRepository, AppointmentRepository>();
 

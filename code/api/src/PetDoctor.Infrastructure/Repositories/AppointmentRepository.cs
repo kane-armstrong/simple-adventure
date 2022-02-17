@@ -1,7 +1,7 @@
-﻿using MediatR;
-using PetDoctor.Domain;
+﻿using PetDoctor.Domain;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
+using PetDoctor.Infrastructure.Cqrs;
 using SqlStreamStore;
 using SqlStreamStore.Streams;
 using System;
@@ -21,12 +21,12 @@ public class AppointmentRepository : IAppointmentRepository
     private const string AppointmentRescheduled = "appointment_rescheduled";
 
     private readonly IStreamStore _eventStream;
-    private readonly IMediator _mediator;
+    private readonly IEventDispatcher _eventDispatcher;
 
-    public AppointmentRepository(IStreamStore eventStream, IMediator mediator)
+    public AppointmentRepository(IStreamStore eventStream, IEventDispatcher eventDispatcher)
     {
         _eventStream = eventStream;
-        _mediator = mediator;
+        _eventDispatcher = eventDispatcher;
     }
 
     private static readonly Dictionary<Type, string> EventTypeMap = new Dictionary<Type, string>
@@ -116,7 +116,7 @@ public class AppointmentRepository : IAppointmentRepository
     {
         foreach (var @event in entity.PendingEvents)
         {
-            await _mediator.Publish(@event);
+            await _eventDispatcher.Dispatch(@event);
         }
     }
 }

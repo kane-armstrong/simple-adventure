@@ -1,9 +1,8 @@
-﻿namespace PetDoctor.Domain;
+﻿using System;
 
-using MediatR;
-using System;
+namespace PetDoctor.Domain;
 
-public abstract record DomainEvent : INotification
+public abstract record DomainEvent
 {
     public Guid Id { get; } = Guid.NewGuid();
 }

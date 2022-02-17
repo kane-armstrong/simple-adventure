@@ -3,10 +3,11 @@ using PetDoctor.Domain.Aggregates.Appointments.Events;
 using PetDoctor.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
+using PetDoctor.Infrastructure.Cqrs;
 
 namespace PetDoctor.API.Application.DomainEventHandlers;
 
-public class AppointmentRescheduledHandler : INotificationHandler<AppointmentRescheduled>
+public class AppointmentRescheduledHandler : IEventHandler<AppointmentRescheduled>
 {
     private readonly PetDoctorContext _db;
 

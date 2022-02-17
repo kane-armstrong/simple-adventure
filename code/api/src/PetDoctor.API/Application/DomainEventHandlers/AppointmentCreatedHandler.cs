@@ -1,13 +1,13 @@
-﻿using MediatR;
-using PetDoctor.Domain.Aggregates.Appointments;
+﻿using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
 using PetDoctor.Infrastructure;
+using PetDoctor.Infrastructure.Cqrs;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.DomainEventHandlers;
 
-public class AppointmentCreatedHandler : INotificationHandler<AppointmentCreated>
+public class AppointmentCreatedHandler : IEventHandler<AppointmentCreated>
 {
     private readonly PetDoctorContext _db;
 

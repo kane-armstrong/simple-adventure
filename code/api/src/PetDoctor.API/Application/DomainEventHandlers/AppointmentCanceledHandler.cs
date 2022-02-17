@@ -1,12 +1,12 @@
-﻿using MediatR;
-using PetDoctor.Domain.Aggregates.Appointments.Events;
+﻿using PetDoctor.Domain.Aggregates.Appointments.Events;
 using PetDoctor.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
+using PetDoctor.Infrastructure.Cqrs;
 
 namespace PetDoctor.API.Application.DomainEventHandlers;
 
-public class AppointmentCanceledHandler : INotificationHandler<AppointmentCanceled>
+public class AppointmentCanceledHandler : IEventHandler<AppointmentCanceled>
 {
     private readonly PetDoctorContext _db;
 
