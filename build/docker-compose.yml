@@ -21,7 +21,7 @@ services:
       AUTHENTICATION__AUTHORITY: "idp"
       AUTHENTICATION__AUDIENCE: "api"
       AUTHENTICATION__REQUIREHTTPS: "false"
-    depends_on: [ "database", "read-migrations", "idp" ]
+    depends_on: [ "database", "read-migrations", "write-migrations", "idp" ]
   read-migrations:
     build:
       context: ../
