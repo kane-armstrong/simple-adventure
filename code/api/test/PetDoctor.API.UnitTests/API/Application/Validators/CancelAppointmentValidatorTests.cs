@@ -5,6 +5,7 @@ using Xunit;
 
 namespace PetDoctor.API.UnitTests.API.Application.Validators;
 
+// TODO remove all validation unit tests, move them to integration tests
 public class CancelAppointmentValidatorTests
 {
     [Fact]
