@@ -17,17 +17,20 @@ services:
       ASPNETCORE_URLS: http://+:5650
       ASPNETCORE_ENVIRONMENT: Development
       CONNECTIONSTRINGS__PETDOCTORCONTEXT: "Data Source=database;Initial Catalog=petdoctordb;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+      AUTHENTICATION__AUTHORITY: "idp"
+      AUTHENTICATION__AUDIENCE: "api"
+      AUTHENTICATION__REQUIREHTTPS: "false"
     depends_on: [ "database", "idp" ]
   idp:
     build:
       context: ../
       dockerfile: build/Docker/identity/Dockerfile
     ports:
-      - "5650:5650"
+      - "5123:5123"
     environment:
       ASPNETCORE_URLS: http://+:5123
       ASPNETCORE_ENVIRONMENT: Development
-      CONNECTIONSTRINGS__PETDOCTORCONTEXT: "Data Source=database;Initial Catalog=idp;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+      CONNECTIONSTRINGS__DATABASE: "Data Source=database;Initial Catalog=idp;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
     depends_on: [ "database" ]
   integrationtests:
     build:

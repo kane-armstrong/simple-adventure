@@ -1,4 +1,6 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +10,17 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PetDoctor.API.Application.Commands;
+using PetDoctor.API.Application.DomainEventHandlers;
 using PetDoctor.API.Application.Queries;
-using PetDoctor.Domain;
+using PetDoctor.API.Options;
 using PetDoctor.Domain.Aggregates.Appointments;
+using PetDoctor.Domain.Aggregates.Appointments.Events;
 using PetDoctor.Infrastructure;
 using PetDoctor.Infrastructure.Cqrs;
 using PetDoctor.Infrastructure.Repositories;
 using SqlStreamStore;
 using System;
 using System.Reflection;
-using PetDoctor.API.Application.DomainEventHandlers;
-using PetDoctor.Domain.Aggregates.Appointments.Events;
 
 namespace PetDoctor.API;
 
@@ -90,6 +92,30 @@ public class Startup
         services.AddTransient<IAppointmentRepository, AppointmentRepository>();
 
         ConfigureDatabaseServices(services);
+
+        ConfigureAuthentication(services);
+    }
+
+    protected virtual void ConfigureAuthentication(IServiceCollection services)
+    {
+        const string authenticationScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        var authenticationOptions = Configuration.GetSection("Authentication").Get<AuthenticationOptions>();
+        services.AddAuthentication(authenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = authenticationOptions.Authority;
+                options.Audience = authenticationOptions.Audience;
+                options.RequireHttpsMetadata = authenticationOptions.RequireHttps;
+            });
+
+        services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder(authenticationScheme)
+                .RequireAuthenticatedUser()
+                .RequireClaim("scope", "api")
+                .Build();
+        });
     }
 
     public void ConfigureProductionServices(IServiceCollection services)
