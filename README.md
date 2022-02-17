@@ -6,41 +6,59 @@ This repository contains the source code for a simple toy project using CQRS and
 
 Features:
 
-* [x] Event sourcing and CQRS (separate read/write stores) using `MsSqlStreamStore` and Entity Framework Core
-* [x] DDD
-* [x] Code-first migrations
-* [x] Integration tests
-* [x] Unit tests
-* [x] Running tests and tests in docker and docker compose
-* [x] Using Pulumi for infrastructure as code, deploying to an Azure Kubernetes Service cluster
-* [ ] Authentication (probably using Identity Server)
-* [ ] Automated build/deploy of both infrastructure and code using GitHub actions
-* [ ] Model more of what happens at a practice than just scheduling appointments (i.e. implement a microservices architecture)
-* [ ] Better/more complete event sourcing implementation (e.g. projections)
-* [ ] Make a UI
+* [x] CQRS (separate read and write stores) with event sourcing
+* [x] Code-first migrations, managed in separate console apps (not at application start of the dependent app(s))
+* [x] A pretty rough first cut of DDD
+* [x] Integration and unit tests
+* [x] Everything runs in docker compose
+* [x] Authentication/authorization (using a simple instance of Identity Server 4)
 
-## Infrastructure & Deployment
+Broken, incomplete, or aspirational:
+
+* [ ] Working AKS stack in Azure
+* [ ] Infrastructure as Code using Pulumi
+* [ ] helm charts for app deployments
+* [ ] CI/CD pipeline in GitHub Actions
+* [ ] A richer domain implementation
+* [ ] UI
+
+## Running locally
+
+**In docker compose**:
+
+```
+// change directory to the build folder
+docker-compose build
+docker-compose up api
+```
+
+**In an IDE like Visual Studio**:
+
+1. Add configuration to user secrets for the read migrations project (sample below)
+2. Run the read migrations project
+3. Add configuration to user secrets for the write migrations project (sample below)
+4. Make sure the identity project is running
+5. Run the API project
+
+**Tests**:
+
+Docker compose happily runs using either of these:
+
+```
+docker-compose up integration-tests
+docker-compose up unit-tests
+```
+
+Tests will also run in Visual Studio or similar, and don't require migrations to be run first
+(databases are migrated on an independent connection).
+
+## Deploying infrastructure
 
 **This is currently broken**
 
-This application can be deployed to a Kubernetes cluster hosted in Azure by running `pulumi up` after cd'ing to `deploy/PetDoctor.InfrastructureStack`. This takes care of:
-
-* Provisioning shared Azure infrastructure
-* Provisioning Azure services dedicated to the appointments API
-* Deploying things to Kubernetes (both shared concerns and application-specific, with ingress/service/deployment/secrets/etc)
-
-Steps to get this to work properly:
-
-1. Open a terminal
-2. cd to `PetDoctor.Infrastructure` 
-3. Change config as appropriate (see `Pulumi.yaml` and `Pulumi.dev.yaml`)
-4. Run `pulumi up`
-5. If it falls over, running `pulumi up` again typically works
-6. Run `kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller` and note down the value of `EXTERNAL-IP`
-7. Create an A record pointing the domain specified in your `Pulumi.dev.yaml` file (in the `PetDoctor.Infrastructure` directory) to the IP address obtained in the previous step
-8. Give DNS a some time to propagate
-9. Browse to `<the domain you provided>/api` or `<the domain you provided>/api/swagger` - if the page loads, you're good
-
-To tear the resources down run:
-
-`pulumi destroy`
+```
+// change directory to the pulumi project
+pulumi up
+// when done
+pulumi destroy
+```

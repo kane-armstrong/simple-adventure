@@ -50,14 +50,14 @@ services:
       CONNECTIONSTRINGS__DATABASE: "Data Source=database;Initial Catalog=idp;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
       ISSUERURI: "http://host.docker.internal:5123"
     depends_on: [ "database" ]
-  integrationtests:
+  integration-tests:
     build:
       context: ../
       dockerfile: build/Docker/api/Dockerfile.IntegrationTests
     depends_on: ["database"]
     environment:
       CONNECTIONSTRINGS__PETDOCTORCONTEXT: "Data Source=database;Initial Catalog=petdoctordb_tests;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
-  unittests:
+  unit-tests:
     build:
       context: ../
       dockerfile: build/Docker/api/Dockerfile.UnitTests
