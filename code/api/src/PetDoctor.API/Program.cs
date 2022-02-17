@@ -1,18 +1,13 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PetDoctor.API;
-using PetDoctor.Infrastructure;
 using Serilog;
-using SqlStreamStore;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 
 var currentEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
 
@@ -30,13 +25,8 @@ try
         AddKeyVaultConfigurationProvider(configBuilder);
     }
 
-    var host = CreateHostBuilder(args, configBuilder.Build()).Build();
-
-    Log.Information("Migrating databases");
-    await MigrateDatabases(host);
-
     Log.Information("Starting host");
-    host.Run();
+    CreateHostBuilder(args, configBuilder.Build()).Build().Run();
     Log.Information("Stopped host");
 }
 catch (Exception e)
@@ -84,13 +74,4 @@ static void AddKeyVaultConfigurationProvider(IConfigurationBuilder builder)
         Log.Logger.Error(e, "Failed to add KeyVault as a configuration provider.");
         throw;
     }
-}
-
-static async Task MigrateDatabases(IHost host)
-{
-    using var scope = host.Services.CreateScope();
-
-    var streamStore = scope.ServiceProvider.GetRequiredService<MsSqlStreamStoreV3>();
-
-    await streamStore.CreateSchemaIfNotExists();
 }

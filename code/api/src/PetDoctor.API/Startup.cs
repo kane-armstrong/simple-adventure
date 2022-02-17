@@ -147,7 +147,6 @@ public class Startup
 
         services.AddSingleton(new MsSqlStreamStoreV3Settings(writeStore));
         services.AddSingleton<IStreamStore, MsSqlStreamStoreV3>();
-        services.AddSingleton<MsSqlStreamStoreV3>(); // for migrations
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
