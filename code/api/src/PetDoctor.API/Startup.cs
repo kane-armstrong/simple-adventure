@@ -1,5 +1,4 @@
 using FluentValidation.AspNetCore;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -66,8 +65,6 @@ public class Startup
         });
 
         services.AddHealthChecks();
-
-        services.AddMediatR(Assembly.GetExecutingAssembly());
 
         services.AddScoped<ListAppointmentsHandler>();
         services.AddScoped<GetAppointmentByIdHandler>();

@@ -1,5 +1,4 @@
-﻿using MediatR;
-using PetDoctor.Domain.Aggregates.Appointments.Events;
+﻿using PetDoctor.Domain.Aggregates.Appointments.Events;
 using PetDoctor.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;

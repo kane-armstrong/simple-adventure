@@ -6,8 +6,4 @@
 	<LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="mediatr" Version="9.0.0" />
-  </ItemGroup>
-
 </Project>
