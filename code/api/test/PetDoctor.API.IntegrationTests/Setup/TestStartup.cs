@@ -1,9 +1,10 @@
-﻿using System.Reflection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PetDoctor.API.IntegrationTests.Infrastructure.Auth;
 using PetDoctor.Infrastructure;
 using SqlStreamStore;
+using System.Reflection;
 
 namespace PetDoctor.API.IntegrationTests.Setup;
 
@@ -28,5 +29,11 @@ public class TestStartup : Startup
         services.AddSingleton(new MsSqlStreamStoreV3Settings(cs));
         services.AddSingleton<IStreamStore, MsSqlStreamStoreV3>();
         services.AddSingleton<MsSqlStreamStoreV3>(); // for migrations
+    }
+
+    protected override void ConfigureAuthentication(IServiceCollection services)
+    {
+        services.AddFakeAuthentication();
+        services.AddFakeAuthorization("api");
     }
 }
