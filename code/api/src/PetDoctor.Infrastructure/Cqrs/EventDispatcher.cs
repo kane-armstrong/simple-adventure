@@ -16,6 +16,7 @@ public class EventDispatcher : IEventDispatcher
 
     public async Task Dispatch<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
     {
+        // TODO  gross, do this properly
         using var scope = _serviceProvider.CreateScope();
         var handlerType = typeof(IEventHandler<>).MakeGenericType(@event.GetType());
         dynamic handler = scope.ServiceProvider.GetRequiredService(handlerType);
