@@ -23,7 +23,6 @@ public class AppointmentsController : ControllerBase
         [FromQuery] ListAppointments query,
         [FromServices] ListAppointmentsHandler handler)
     {
-        // todo need validation to prevent 500s
         var result = await handler.Handle(query, CancellationToken.None);
         return result.ToPage();
     }
