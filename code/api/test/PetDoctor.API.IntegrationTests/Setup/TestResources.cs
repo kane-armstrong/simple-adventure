@@ -36,7 +36,7 @@ public static class TestResources
             if (_scopeFactory == null)
             {
                 var services = new ServiceCollection();
-                var startup = new Startup(Configuration);
+                var startup = new TestStartup(Configuration);
                 startup.ConfigureServices(services);
                 var provider = services.BuildServiceProvider();
                 _scopeFactory = provider.GetService<IServiceScopeFactory>();
