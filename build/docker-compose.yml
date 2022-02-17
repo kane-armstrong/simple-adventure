@@ -29,6 +29,15 @@ services:
     environment:
       CONNECTIONSTRINGS__DATABASE: "Data Source=database;Initial Catalog=petdoctor_read;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
     depends_on: [ "database" ]
+  write-migrations:
+    build:
+      context: ../
+      dockerfile: build/Docker/api/Dockerfile.Migrations.Write
+    environment:
+      CONNECTIONSTRINGS__WRITESTORE: "Data Source=database;Initial Catalog=petdoctor_write;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+      CONNECTIONSTRINGS__MASTER: "Data Source=database;Initial Catalog=master;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+      APPDBNAME: "petdoctor_write"
+    depends_on: [ "database" ]
   idp:
     build:
       context: ../
