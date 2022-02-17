@@ -35,7 +35,6 @@ await new HostBuilder()
         });
 
         services.AddSingleton(new MsSqlStreamStoreV3Settings(db));
-        services.AddSingleton<IStreamStore, MsSqlStreamStoreV3>();
         services.AddSingleton<MsSqlStreamStoreV3>();
 
         services.AddLogging(options =>
