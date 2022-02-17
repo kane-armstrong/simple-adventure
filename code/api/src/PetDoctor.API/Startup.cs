@@ -1,6 +1,5 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -98,10 +97,8 @@ public class Startup
 
     protected virtual void ConfigureAuthentication(IServiceCollection services)
     {
-        const string authenticationScheme = JwtBearerDefaults.AuthenticationScheme;
-
         var authenticationOptions = Configuration.GetSection("Authentication").Get<AuthenticationOptions>();
-        services.AddAuthentication(authenticationScheme)
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.Authority = authenticationOptions.Authority;
@@ -111,10 +108,11 @@ public class Startup
 
         services.AddAuthorization(options =>
         {
-            options.DefaultPolicy = new AuthorizationPolicyBuilder(authenticationScheme)
-                .RequireAuthenticatedUser()
-                .RequireClaim("scope", "api")
-                .Build();
+            options.AddPolicy("api", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim("scope", "api");
+            });
         });
     }
 
