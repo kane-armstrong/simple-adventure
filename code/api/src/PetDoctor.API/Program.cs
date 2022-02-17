@@ -89,12 +89,8 @@ static void AddKeyVaultConfigurationProvider(IConfigurationBuilder builder)
 static async Task MigrateDatabases(IHost host)
 {
     using var scope = host.Services.CreateScope();
-    var appDbContext = scope.ServiceProvider.GetRequiredService<PetDoctorContext>();
-    // Ideally this would be done in a separate console app in prod (with version assertions here)
-    await appDbContext.Database.MigrateAsync();
 
     var streamStore = scope.ServiceProvider.GetRequiredService<MsSqlStreamStoreV3>();
-    var schemaCheck = await streamStore.CheckSchema();
-    if (!schemaCheck.IsMatch())
-        await streamStore.CreateSchemaIfNotExists();
+
+    await streamStore.CreateSchemaIfNotExists();
 }

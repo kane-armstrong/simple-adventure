@@ -26,8 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		..\..\build\Docker\api\Dockerfile = ..\..\build\Docker\api\Dockerfile
 		..\..\build\Docker\api\Dockerfile.IntegrationTests = ..\..\build\Docker\api\Dockerfile.IntegrationTests
+		..\..\build\Docker\api\Dockerfile.Migrations.Read = ..\..\build\Docker\api\Dockerfile.Migrations.Read
 		..\..\build\Docker\api\Dockerfile.UnitTests = ..\..\build\Docker\api\Dockerfile.UnitTests
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetDoctor.Migrations.ReadStore", "src\PetDoctor.Migrations.ReadStore\PetDoctor.Migrations.ReadStore.csproj", "{AE310016-711D-4F2F-B496-122828C3DCDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +102,18 @@ Global
 		{472CC9F5-548D-4839-89F7-30116AD46B47}.Release|x64.Build.0 = Release|Any CPU
 		{472CC9F5-548D-4839-89F7-30116AD46B47}.Release|x86.ActiveCfg = Release|Any CPU
 		{472CC9F5-548D-4839-89F7-30116AD46B47}.Release|x86.Build.0 = Release|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Debug|x64.Build.0 = Debug|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Debug|x86.Build.0 = Debug|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Release|x64.ActiveCfg = Release|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Release|x64.Build.0 = Release|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Release|x86.ActiveCfg = Release|Any CPU
+		{AE310016-711D-4F2F-B496-122828C3DCDD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +124,7 @@ Global
 		{E0BB7BEB-C147-4941-9086-FFE5697686C1} = {DD7C9D7F-2941-49EC-9BBC-85AF1CCBCEAA}
 		{7F8D19A1-1F7F-49FC-863A-CFE0CDB634CE} = {F44E8341-FEF6-4380-95B6-6E517181A4CD}
 		{472CC9F5-548D-4839-89F7-30116AD46B47} = {F44E8341-FEF6-4380-95B6-6E517181A4CD}
+		{AE310016-711D-4F2F-B496-122828C3DCDD} = {DD7C9D7F-2941-49EC-9BBC-85AF1CCBCEAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25F46D60-C5F6-4E8D-ABA7-140C6F636B9A}

@@ -16,11 +16,19 @@ services:
     environment:
       ASPNETCORE_URLS: http://+:5650
       ASPNETCORE_ENVIRONMENT: Development
-      CONNECTIONSTRINGS__PETDOCTORCONTEXT: "Data Source=database;Initial Catalog=petdoctordb;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+      CONNECTIONSTRINGS__READSTORE: "Data Source=database;Initial Catalog=petdoctor_read;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+      CONNECTIONSTRINGS__WRITESTORE: "Data Source=database;Initial Catalog=petdoctor_write;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
       AUTHENTICATION__AUTHORITY: "idp"
       AUTHENTICATION__AUDIENCE: "api"
       AUTHENTICATION__REQUIREHTTPS: "false"
-    depends_on: [ "database", "idp" ]
+    depends_on: [ "database", "read-migrations", "idp" ]
+  read-migrations:
+    build:
+      context: ../
+      dockerfile: build/Docker/api/Dockerfile.Migrations.Read
+    environment:
+      CONNECTIONSTRINGS__DATABASE: "Data Source=database;Initial Catalog=petdoctor_read;User ID=sa;Password=Supercalifragilisticexpialidocious1#;"
+    depends_on: [ "database" ]
   idp:
     build:
       context: ../

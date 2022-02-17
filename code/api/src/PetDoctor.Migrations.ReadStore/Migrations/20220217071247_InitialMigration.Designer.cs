@@ -7,19 +7,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetDoctor.Infrastructure;
 
-namespace PetDoctor.API.Infrastructure.Migrations.PetDoctor.PetDoctorDb
+#nullable disable
+
+namespace PetDoctor.ReadStore.Migrations.Migrations
 {
     [DbContext(typeof(PetDoctorContext))]
-    [Migration("20200613085238_InitialPetDoctorMigration")]
-    partial class InitialPetDoctorMigration
+    [Migration("20220217071247_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("PetDoctor.Domain.Aggregates.Appointments.AppointmentSnapshot", b =>
                 {
@@ -31,17 +34,17 @@ namespace PetDoctor.API.Infrastructure.Migrations.PetDoctor.PetDoctorDb
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CancellationReason")
-                        .HasColumnType("nvarchar(1000)")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ReasonForVisit")
                         .IsRequired()
-                        .HasColumnType("nvarchar(1000)")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("RejectionReason")
-                        .HasColumnType("nvarchar(1000)")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<DateTimeOffset>("ScheduledOn")
                         .HasColumnType("datetimeoffset(7)");
@@ -51,7 +54,7 @@ namespace PetDoctor.API.Infrastructure.Migrations.PetDoctor.PetDoctorDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentSnapshots","dbo");
+                    b.ToTable("AppointmentSnapshots", "dbo");
                 });
 
             modelBuilder.Entity("PetDoctor.Domain.Aggregates.Appointments.AppointmentSnapshot", b =>
@@ -63,31 +66,31 @@ namespace PetDoctor.API.Infrastructure.Migrations.PetDoctor.PetDoctorDb
 
                             b1.Property<string>("Email")
                                 .IsRequired()
-                                .HasColumnName("OwnerEmail")
+                                .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasMaxLength(100);
+                                .HasColumnName("OwnerEmail");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
-                                .HasColumnName("OwnerFirstName")
+                                .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasMaxLength(100);
+                                .HasColumnName("OwnerFirstName");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
-                                .HasColumnName("OwnerLastName")
+                                .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasMaxLength(100);
+                                .HasColumnName("OwnerLastName");
 
                             b1.Property<string>("Phone")
                                 .IsRequired()
-                                .HasColumnName("OwnerPhone")
+                                .HasMaxLength(25)
                                 .HasColumnType("nvarchar(25)")
-                                .HasMaxLength(25);
+                                .HasColumnName("OwnerPhone");
 
                             b1.HasKey("AppointmentSnapshotId");
 
-                            b1.ToTable("AppointmentSnapshots");
+                            b1.ToTable("AppointmentSnapshots", "dbo");
 
                             b1.WithOwner()
                                 .HasForeignKey("AppointmentSnapshotId");
@@ -100,27 +103,31 @@ namespace PetDoctor.API.Infrastructure.Migrations.PetDoctor.PetDoctorDb
 
                             b1.Property<string>("Breed")
                                 .IsRequired()
-                                .HasColumnName("PetBreed")
+                                .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasMaxLength(100);
+                                .HasColumnName("PetBreed");
 
                             b1.Property<DateTimeOffset>("DateOfBirth")
-                                .HasColumnName("PetDateOfBirth")
-                                .HasColumnType("datetimeoffset(7)");
+                                .HasColumnType("datetimeoffset(7)")
+                                .HasColumnName("PetDateOfBirth");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnName("PetName")
+                                .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasMaxLength(100);
+                                .HasColumnName("PetName");
 
                             b1.HasKey("AppointmentSnapshotId");
 
-                            b1.ToTable("AppointmentSnapshots");
+                            b1.ToTable("AppointmentSnapshots", "dbo");
 
                             b1.WithOwner()
                                 .HasForeignKey("AppointmentSnapshotId");
                         });
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("Pet");
                 });
 #pragma warning restore 612, 618
         }
