@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Extensions;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace PetDoctor.API.Controllers;
 
+[Authorize("api")]
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/appointments")]
