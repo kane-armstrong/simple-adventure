@@ -133,17 +133,19 @@ public class Startup
 
     protected virtual void ConfigureDatabaseServices(IServiceCollection services)
     {
-        var cs = Configuration.GetConnectionString("PetDoctorContext");
+        var readStore = Configuration.GetConnectionString("readstore");
 
         services.AddDbContext<PetDoctorContext>(options =>
         {
-            options.UseSqlServer(cs, sql =>
+            options.UseSqlServer(readStore, sql =>
             {
                 sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
             });
         });
 
-        services.AddSingleton(new MsSqlStreamStoreV3Settings(cs));
+        var writeStore = Configuration.GetConnectionString("writestore");
+
+        services.AddSingleton(new MsSqlStreamStoreV3Settings(writeStore));
         services.AddSingleton<IStreamStore, MsSqlStreamStoreV3>();
         services.AddSingleton<MsSqlStreamStoreV3>(); // for migrations
     }
