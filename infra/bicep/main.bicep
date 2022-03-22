@@ -53,8 +53,8 @@ var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueSt
 var sqlServerVirtualNetworkRuleName = guid(subscription().id, sqlServerName, vnetName)
 var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(rg.id)}'
 var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
-var aksManagedIdentityName = '${prefixes.project}-${prefixes.azureKubernetesService}-${prefixes.managedIdentity}-${uniqueString(rg.id)}}'
-var aksAppRegistrationName = '${prefixes.project}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}}'
+var aksManagedIdentityName = '${prefixes.project}-${prefixes.azureKubernetesService}-${prefixes.managedIdentity}-${uniqueString(rg.id)}'
+var aksAppRegistrationName = '${prefixes.project}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
 
 module networkModule './modules/network.bicep' = {
   name: 'networkDeploy'
