@@ -25,17 +25,6 @@ param location string
 
 
 // resources
-
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-05-01' = {
-  name: '${vnetName}/${subnetName}'
-  properties: {
-    addressPrefixes: [ 
-      subnetPrefix
-    ]
-    serviceEndpoints: subnetServiceEndpoints
-  }
-}
-
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: vnetName
   location: location
@@ -47,9 +36,21 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
     }
     enableDdosProtection: vnetDdosProtectionEnabled
     subnets: [
-      subnet
+      {
+        name: subnetName
+        properties: {
+          addressPrefixes: [ 
+            subnetPrefix
+          ]
+          serviceEndpoints: subnetServiceEndpoints
+        }
+      }
     ]
+  }
+
+  resource subnet 'subnets' existing = {
+    name: subnetName
   }
 }
 
-output subnetId string = subnet.id
+output subnetId string = virtualNetwork::subnet.id
