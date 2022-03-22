@@ -6,5 +6,6 @@
     "operationalInsightsWorkspace": "opsws",
     "sqlServer": "sql",
     "appInsights": "ais",
-    "azureKubernetesService": "aks"
+    "azureKubernetesService": "aks",
+    "managedIdentity": "identity"
 }

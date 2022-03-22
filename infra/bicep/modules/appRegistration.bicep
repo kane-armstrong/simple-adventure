@@ -1,4 +1,7 @@
-// source: https://reginbald.medium.com/creating-app-registration-with-arm-bicep-b1d48a287abb
+// Adapted from https://reginbald.medium.com/creating-app-registration-with-arm-bicep-b1d48a287abb
+
+@description('The name of the managed identity.')
+param managedIdentityName string
 
 @description('The name of the app registration.')
 param appRegistrationName string
@@ -11,6 +14,25 @@ param currentTime string = utcNow()
 
 
 // resources
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: managedIdentityName
+  location: location
+}
+
+resource applicationAdministratorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
+  name: '9b895d92-2cd3-44c7-9d02-a6ac2d5ea5c3	'
+  scope: subscription()
+}
+
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
+  name: guid(subscription().id, managedIdentityName, applicationAdministratorRoleDefinition.id)
+  properties: {
+    principalId: managedIdentity.id
+    roleDefinitionId: applicationAdministratorRoleDefinition.id
+    principalType: 'ServicePrincipal'
+  }
+}
+
 resource script 'Microsoft.Resources/deploymentScripts@2019-10-01-preview' = {
   name: appRegistrationName
   location: location
@@ -18,7 +40,7 @@ resource script 'Microsoft.Resources/deploymentScripts@2019-10-01-preview' = {
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${resourceId('app-reg-automation', 'Microsoft.ManagedIdentity/userAssignedIdentities', 'AppRegCreator')}': {}
+      '${managedIdentity.id}': {}
     }
   }
   properties: {

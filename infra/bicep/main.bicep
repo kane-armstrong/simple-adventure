@@ -39,7 +39,6 @@ var environmentConfigurationMap = {
 var prefixes = json(loadTextContent('./shared-prefixes.json'))
 var env = environmentConfigurationMap[environmentType].environmentCode
 
-// names
 var acrName = '${prefixes.project}-${env}-${prefixes.azureContainerRegistry}-${uniqueString(resourceGroup().id)}'
 var vnetName = '${prefixes.project}-${env}-${prefixes.virtualNetwork}-${uniqueString(resourceGroup().id)}'
 var subnetName = '${prefixes.project}-${env}-${prefixes.subnet}-${uniqueString(resourceGroup().id)}'
@@ -48,6 +47,7 @@ var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueSt
 var sqlServerVirtualNetworkRuleName = guid(subscription().id, sqlServerName, vnetName)
 var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(resourceGroup().id)}'
 var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(resourceGroup().id)}'
+var aksManagedIdentityName = '${prefixes.project}-${prefixes.azureKubernetesService}-${prefixes.managedIdentity}-${uniqueString(resourceGroup().id)}}'
 var aksAppRegistrationName = '${prefixes.project}-${prefixes.azureKubernetesService}-${uniqueString(resourceGroup().id)}}'
 
 module networkModule './modules/network.bicep' = {
@@ -108,6 +108,7 @@ module aksAppRegistration './modules/appRegistration.bicep' = {
   name: 'aksAppRegistration'
   params: {
     appRegistrationName: aksAppRegistrationName
+    managedIdentityName: aksManagedIdentityName
     location: location
   }
 }
