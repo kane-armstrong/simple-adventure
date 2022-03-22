@@ -1,0 +1,10 @@
+{
+    "project": "pd",
+    "virtualNetwork": "vnet",
+    "subnet": "subnet",
+    "azureContainerRegistry": "acr",
+    "operationalInsightsWorkspace": "opsws",
+    "sqlServer": "sql",
+    "appInsights": "ais",
+    "azureKubernetesService": "aks"
+}
