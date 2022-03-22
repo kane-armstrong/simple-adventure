@@ -60,8 +60,8 @@ var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueSt
 var sqlServerVirtualNetworkRuleName = guid(subscription().id, sqlServerName, vnetName)
 var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(rg.id)}'
 var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
-var aksManagedIdentityName = '${prefixes.project}-${prefixes.azureKubernetesService}-${prefixes.managedIdentity}-${uniqueString(rg.id)}'
 var aksAppRegistrationName = '${prefixes.project}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
+var appRegisteringManagedIdentityName = '${prefixes.project}-appdeploy-${prefixes.managedIdentity}-${uniqueString(rg.id)}'
 
 module networkModule './modules/network.bicep' = {
   name: 'networkDeploy'
@@ -121,12 +121,30 @@ module sqlServerModule './modules/sqlServer.bicep' = {
   }
 }
 
+
+resource applicationDeveloperRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
+  name: 'cf1c38e5-3621-4004-a7cb-879624dced7c'
+  scope: subscription()
+}
+
+module appRegistrationDeploymentIdentity './modules/managedIdentity.bicep' = {
+  name: 'appRegisteringManagedIdentityDeploy'
+  scope: rg
+  params: {
+    managedIdentityName: appRegisteringManagedIdentityName
+    assignedRoleIds: [
+      applicationDeveloperRoleDefinition.id
+    ]
+    location: location
+  }
+}
+
 module aksAppRegistration './modules/appRegistration.bicep' = {
   name: 'aksAppRegistrationDeploy'
   scope: rg
   params: {
     appRegistrationName: aksAppRegistrationName
-    managedIdentityName: aksManagedIdentityName
+    managedIdentityId: appRegistrationDeploymentIdentity.outputs.id
     location: location
   }
 }
