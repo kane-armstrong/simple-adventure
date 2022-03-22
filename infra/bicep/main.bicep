@@ -23,9 +23,7 @@ var environmentConfigurationMap = {
       sku: 'Standard'
     }
     operationalInsights: {
-      sku: {
-        name: 'PerGB2018'
-      }
+      sku: 'PerGB2018'
       retention: 30
     }
     aks: {
