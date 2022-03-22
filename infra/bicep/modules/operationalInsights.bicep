@@ -60,6 +60,7 @@ resource containerInsightsSolution 'Microsoft.OperationsManagement/solutions@201
     name: containerInsightsSolutionName
     product: 'OMSGalery/ContainerInsights'
     publisher: 'Microsoft'
+    promotionCode: ''
   }
   properties: {
     workspaceResourceId: workspace.id
