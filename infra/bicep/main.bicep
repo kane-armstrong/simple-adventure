@@ -45,7 +45,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
 }
 
-var acrName = '${prefixes.project}-${env}-${prefixes.azureContainerRegistry}-${uniqueString(rg.id)}'
+var acrName = '${prefixes.project}${env}${prefixes.azureContainerRegistry}${uniqueString(rg.id)}'
 var vnetName = '${prefixes.project}-${env}-${prefixes.virtualNetwork}-${uniqueString(rg.id)}'
 var subnetName = '${prefixes.project}-${env}-${prefixes.subnet}-${uniqueString(rg.id)}'
 var workspaceName = '${prefixes.project}-${env}-${prefixes.operationalInsightsWorkspace}-${uniqueString(rg.id)}'
