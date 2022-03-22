@@ -39,9 +39,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       {
         name: subnetName
         properties: {
-          addressPrefixes: [ 
-            subnetPrefix
-          ]
+          addressPrefix: subnetPrefix
           serviceEndpoints: subnetServiceEndpoints
         }
       }
