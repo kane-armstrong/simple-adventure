@@ -59,7 +59,7 @@ var aksManagedIdentityName = '${prefixes.project}-${prefixes.azureKubernetesServ
 var aksAppRegistrationName = '${prefixes.project}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}}'
 
 module networkModule './modules/network.bicep' = {
-  name: 'network'
+  name: 'networkDeploy'
   scope: resourceGroup(rg.id)
   params: {
     vnetName: vnetName
@@ -80,7 +80,7 @@ module networkModule './modules/network.bicep' = {
 }
 
 module acrModule './modules/acr.bicep' = {
-  name:'registry'
+  name:'registryDeploy'
   scope: resourceGroup(rg.id)
   params: {
     acrName: acrName
@@ -91,7 +91,7 @@ module acrModule './modules/acr.bicep' = {
 }
 
 module operationsInsightsModule './modules/operationalInsights.bicep' = {
-  name: 'operationsInsights'
+  name: 'operationalInsightsDeploy'
   scope: resourceGroup(rg.id)
   params: {
     workspaceName: workspaceName
@@ -103,7 +103,7 @@ module operationsInsightsModule './modules/operationalInsights.bicep' = {
 }
 
 module sqlServerModule './modules/sqlServer.bicep' = {
-  name: 'sqlServer'
+  name: 'sqlServerDeploy'
   scope: resourceGroup(rg.id)
   params: {
     sqlServerName: sqlServerName
@@ -117,7 +117,7 @@ module sqlServerModule './modules/sqlServer.bicep' = {
 }
 
 module aksAppRegistration './modules/appRegistration.bicep' = {
-  name: 'aksAppRegistration'
+  name: 'aksAppRegistrationDeploy'
   scope: resourceGroup(rg.id)
   params: {
     appRegistrationName: aksAppRegistrationName
@@ -154,8 +154,8 @@ resource acrAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-previ
   }
 }
 
-module aksModle './modules/aks.bicep' = {
-  name: 'aks'
+module aksModule './modules/aks.bicep' = {
+  name: 'aksDeploy'
   scope: resourceGroup(rg.id)
   params: {
     clusterName: aksClusterName    
