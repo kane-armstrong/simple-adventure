@@ -10,6 +10,13 @@ param location string
 ])
 param environmentType string = 'Development'
 
+@description('The username of the admin account of the SQL Server resource')
+param sqlAdminUserName string
+
+@description('The password of the admin account of the SQL Server resource')
+@secure()
+param sqlAdminPassword string
+
 var environmentConfigurationMap = {
   Development: {
     environmentCode: 'dev'
@@ -105,8 +112,8 @@ module sqlServerModule './modules/sqlServer.bicep' = {
   scope: rg
   params: {
     sqlServerName: sqlServerName
-    sqlAdministratorLogin: ''
-    sqlAdministratorLoginPassword: ''
+    sqlAdministratorLogin: sqlAdminUserName
+    sqlAdministratorLoginPassword: sqlAdminPassword
     sqlServerVersion: '12.0'
     virtualNetworkRuleName: sqlServerVirtualNetworkRuleName
     virtualNetworkRuleSubnetId: networkModule.outputs.subnetId
