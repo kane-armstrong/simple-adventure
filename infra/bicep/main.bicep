@@ -109,7 +109,7 @@ module sqlServerModule './modules/sqlServer.bicep' = {
     sqlAdministratorLoginPassword: ''
     sqlServerVersion: '12.0'
     virtualNetworkRuleName: sqlServerVirtualNetworkRuleName
-    virtualNetworkRuleSubnetId: networkModule.outputs['subnetId']
+    virtualNetworkRuleSubnetId: networkModule.outputs.subnetId
     location: location
   }
 }
@@ -137,7 +137,7 @@ resource acrPullRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-
 resource subnetAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
   name: guid(subscription().id, aksAppRegistrationName, networkContributorRoleDefinition.id)
   properties: {
-    principalId: aksAppRegistration.outputs['principalId']
+    principalId: aksAppRegistration.outputs.principalId
     roleDefinitionId: networkContributorRoleDefinition.id
     principalType: 'ServicePrincipal'
   }
@@ -146,7 +146,7 @@ resource subnetAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-pr
 resource acrAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
   name: guid(subscription().id, aksAppRegistrationName, acrPullRoleDefinition.id)
   properties: {
-    principalId: aksAppRegistration.outputs['principalId']
+    principalId: aksAppRegistration.outputs.principalId
     roleDefinitionId: acrPullRoleDefinition.id
     principalType: 'ServicePrincipal'
   }
@@ -164,14 +164,14 @@ module aksModule './modules/aks.bicep' = {
     nodeCount: environmentConfigurationMap[environmentType].aks.nodes.count    
     nodeVMSize: environmentConfigurationMap[environmentType].aks.nodes.vmSize
     osDiskSizeGB: environmentConfigurationMap[environmentType].aks.nodes.diskSizeGb
-    virtualNetworkSubnetId: networkModule.outputs['subnetId']
+    virtualNetworkSubnetId: networkModule.outputs.subnetId
     networkServiceCidr: '10.2.0.0/24'
     networkDnsServiceIP: '10.2.0.10'
     networkDockerBridgeCidr: '172.17.0.1/16'
     rbacEnabled: true
-    clusterServicePrincipalClientId: aksAppRegistration.outputs['clientId']
-    clusterServicePrincipalClientSecret: aksAppRegistration.outputs['clientSecret']
-    operationalInsightsWorkspaceId: operationsInsightsModule.outputs['workspaceId']
+    clusterServicePrincipalClientId: aksAppRegistration.outputs.clientId
+    clusterServicePrincipalClientSecret: aksAppRegistration.outputs.clientSecret
+    operationalInsightsWorkspaceId: operationsInsightsModule.outputs.workspaceId
     location: location
   }
 }
