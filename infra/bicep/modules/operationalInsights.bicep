@@ -58,7 +58,7 @@ resource containerInsightsSolution 'Microsoft.OperationsManagement/solutions@201
   location: location
   plan: {
     name: containerInsightsSolutionName
-    product: 'OMSGalery/ContainerInsights'
+    product: 'OMSGallery/ContainerInsights'
     publisher: 'Microsoft'
     promotionCode: ''
   }
