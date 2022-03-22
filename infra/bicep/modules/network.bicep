@@ -27,7 +27,7 @@ param location string
 // resources
 
 resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-05-01' = {
-  name: subnetName
+  name: '${vnetName}/${subnetName}'
   properties: {
     addressPrefixes: [ 
       subnetPrefix
