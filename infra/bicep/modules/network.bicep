@@ -4,7 +4,7 @@
 param vnetName string
 
 @description('The VNet address prefix')
-param vnetAddressPrefix string = '10.0.0.0/16'
+param vnetAddressPrefix string
 
 @description('Enable VNet DDoS protection.')
 param vnetDdosProtectionEnabled bool = true
@@ -15,7 +15,7 @@ param vnetDdosProtectionEnabled bool = true
 param subnetName string
 
 @description('The subnet prefix')
-param subnetPrefix string = '10.0.1.0/24'
+param subnetPrefix string
 
 @description('Service Endpoints for the subnet.')
 param subnetServiceEndpoints array
