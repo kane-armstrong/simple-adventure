@@ -52,10 +52,12 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
+var containerInsightsSolutionName = 'ContainerInsights(${workspaceName})'
 resource containerInsightsSolution 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
-  name: 'ContainerInsights(${workspaceName})'
+  name: containerInsightsSolutionName
   location: location
   plan: {
+    name: containerInsightsSolutionName
     product: 'OMSGalery/ContainerInsights'
     publisher: 'Microsoft'
   }
