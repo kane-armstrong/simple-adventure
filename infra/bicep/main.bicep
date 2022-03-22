@@ -1,5 +1,7 @@
+targetScope = 'subscription'
+
 @description('Location of all resources')
-param location string = resourceGroup().location
+param location string
 
 @description('The type of environment resources are deployed to.')
 @allowed([
@@ -39,19 +41,26 @@ var environmentConfigurationMap = {
 var prefixes = json(loadTextContent('./shared-prefixes.json'))
 var env = environmentConfigurationMap[environmentType].environmentCode
 
-var acrName = '${prefixes.project}-${env}-${prefixes.azureContainerRegistry}-${uniqueString(resourceGroup().id)}'
-var vnetName = '${prefixes.project}-${env}-${prefixes.virtualNetwork}-${uniqueString(resourceGroup().id)}'
-var subnetName = '${prefixes.project}-${env}-${prefixes.subnet}-${uniqueString(resourceGroup().id)}'
-var workspaceName = '${prefixes.project}-${env}-${prefixes.operationalInsightsWorkspace}-${uniqueString(resourceGroup().id)}'
-var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueString(resourceGroup().id)}'
+var resourceGroupName = '${prefixes.project}-${env}-${prefixes.resourceGroup}'
+resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  location: location
+  name: resourceGroupName
+}
+
+var acrName = '${prefixes.project}-${env}-${prefixes.azureContainerRegistry}-${uniqueString(rg.id)}'
+var vnetName = '${prefixes.project}-${env}-${prefixes.virtualNetwork}-${uniqueString(rg.id)}'
+var subnetName = '${prefixes.project}-${env}-${prefixes.subnet}-${uniqueString(rg.id)}'
+var workspaceName = '${prefixes.project}-${env}-${prefixes.operationalInsightsWorkspace}-${uniqueString(rg.id)}'
+var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueString(rg.id)}'
 var sqlServerVirtualNetworkRuleName = guid(subscription().id, sqlServerName, vnetName)
-var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(resourceGroup().id)}'
-var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(resourceGroup().id)}'
-var aksManagedIdentityName = '${prefixes.project}-${prefixes.azureKubernetesService}-${prefixes.managedIdentity}-${uniqueString(resourceGroup().id)}}'
-var aksAppRegistrationName = '${prefixes.project}-${prefixes.azureKubernetesService}-${uniqueString(resourceGroup().id)}}'
+var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(rg.id)}'
+var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
+var aksManagedIdentityName = '${prefixes.project}-${prefixes.azureKubernetesService}-${prefixes.managedIdentity}-${uniqueString(rg.id)}}'
+var aksAppRegistrationName = '${prefixes.project}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}}'
 
 module networkModule './modules/network.bicep' = {
   name: 'network'
+  scope: resourceGroup(rg.id)
   params: {
     vnetName: vnetName
     vnetAddressPrefix: '10.0.0.0/8'
@@ -72,6 +81,7 @@ module networkModule './modules/network.bicep' = {
 
 module acrModule './modules/acr.bicep' = {
   name:'registry'
+  scope: resourceGroup(rg.id)
   params: {
     acrName: acrName
     acrSku: environmentConfigurationMap[environmentType].containerRegistry.sku
@@ -82,6 +92,7 @@ module acrModule './modules/acr.bicep' = {
 
 module operationsInsightsModule './modules/operationalInsights.bicep' = {
   name: 'operationsInsights'
+  scope: resourceGroup(rg.id)
   params: {
     workspaceName: workspaceName
     workspaceSku: environmentConfigurationMap[environmentType].operationalInsights.sku
@@ -93,6 +104,7 @@ module operationsInsightsModule './modules/operationalInsights.bicep' = {
 
 module sqlServerModule './modules/sqlServer.bicep' = {
   name: 'sqlServer'
+  scope: resourceGroup(rg.id)
   params: {
     sqlServerName: sqlServerName
     sqlAdministratorLogin: ''
@@ -106,6 +118,7 @@ module sqlServerModule './modules/sqlServer.bicep' = {
 
 module aksAppRegistration './modules/appRegistration.bicep' = {
   name: 'aksAppRegistration'
+  scope: resourceGroup(rg.id)
   params: {
     appRegistrationName: aksAppRegistrationName
     managedIdentityName: aksManagedIdentityName
@@ -143,6 +156,7 @@ resource acrAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-previ
 
 module aksModle './modules/aks.bicep' = {
   name: 'aks'
+  scope: resourceGroup(rg.id)
   params: {
     clusterName: aksClusterName    
     dnsPrefix: 'dns'

@@ -7,5 +7,6 @@
     "sqlServer": "sql",
     "appInsights": "ais",
     "azureKubernetesService": "aks",
-    "managedIdentity": "identity"
+    "managedIdentity": "identity",
+    "resourceGroup" : "rg"
 }
