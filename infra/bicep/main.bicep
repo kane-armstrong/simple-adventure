@@ -46,11 +46,7 @@ var environmentConfigurationMap = {
 var prefixes = json(loadTextContent('./shared-prefixes.json'))
 var env = environmentConfigurationMap[environmentType].environmentCode
 
-var resourceGroupName = '${prefixes.project}-${env}-${prefixes.resourceGroup}'
-resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  location: location
-  name: resourceGroupName
-}
+var rg = resourceGroup()
 
 var acrName = '${prefixes.project}${env}${prefixes.azureContainerRegistry}${uniqueString(rg.id)}'
 var vnetName = '${prefixes.project}-${env}-${prefixes.virtualNetwork}-${uniqueString(rg.id)}'
