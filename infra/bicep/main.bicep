@@ -1,5 +1,3 @@
-targetScope = 'subscription'
-
 @description('Location of all resources')
 param location string
 
