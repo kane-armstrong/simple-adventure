@@ -17,6 +17,9 @@ param sqlAdminUserName string
 @secure()
 param sqlAdminPassword string
 
+@description('The ID of a managed identity which has permission to create app registrations in AAD.')
+param appRegistrarManagedIdentityId string
+
 var environmentConfigurationMap = {
   Development: {
     environmentCode: 'dev'
@@ -57,7 +60,6 @@ var sqlServerVirtualNetworkRuleName = guid(subscription().id, sqlServerName, vne
 var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(rg.id)}'
 var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
 var aksAppRegistrationName = '${prefixes.project}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
-var appRegisteringManagedIdentityName = '${prefixes.project}-appdeploy-${prefixes.managedIdentity}-${uniqueString(rg.id)}'
 
 module networkModule './modules/network.bicep' = {
   name: 'networkDeploy'
@@ -117,46 +119,12 @@ module sqlServerModule './modules/sqlServer.bicep' = {
   }
 }
 
-module customRoleModule './modules/customRole.bicep' = {
-  name: 'customRoleDeploy'
-  params: {
-    roleName: 'Application devlopr'
-    roleDescription: 'Create application registrations in AAD'
-    actions: [
-      'microsoft.directory/applications/createAsOwner'
-      'microsoft.directory/oAuth2PermissionGrants/createAsOwner'
-      'microsoft.directory/servicePrincipals/createAsOwner'
-    ]
-    notActions: [
-      
-    ]
-  }
-}
-
-// PROBLEM: can't configure the app registration for AKS within bicep - it doesn't see built-in AAD roles
-// Options so far:
-// - do it elsewhere (e.g. az cli calls in a PowerShell script)
-// - could we create a custom role and use that?
-//   - doesn't seem like it - need 'microsoft.directory*', but that throws The resource provider referenced in the action 'microsoft.directory/applications/createAsOwner' is not returned in the list of providers from Azure Resource Manager.
-//   - can't get around this using tenant scope as that throws a 403 - even for the global admin user
-module appRegistrationDeploymentIdentity './modules/managedIdentity.bicep' = {
-  name: 'appRegisteringManagedIdentityDeploy'
-  scope: rg
-  params: {
-    managedIdentityName: appRegisteringManagedIdentityName
-    assignedRoleIds: [
-      customRoleModule.outputs.roleId
-    ]
-    location: location
-  }
-}
-
 module aksAppRegistration './modules/appRegistration.bicep' = {
   name: 'aksAppRegistrationDeploy'
   scope: rg
   params: {
     appRegistrationName: aksAppRegistrationName
-    managedIdentityId: appRegistrationDeploymentIdentity.outputs.id
+    managedIdentityId: appRegistrarManagedIdentityId
     location: location
   }
 }
