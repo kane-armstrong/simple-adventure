@@ -142,7 +142,7 @@ module customRoleModule './modules/customRole.bicep' = {
 // - do it elsewhere (e.g. az cli calls in a PowerShell script)
 // - could we create a custom role and use that?
 //   - doesn't seem like it - need 'microsoft.directory*', but that throws The resource provider referenced in the action 'microsoft.directory/applications/createAsOwner' is not returned in the list of providers from Azure Resource Manager.
-
+//   - can't get around this using tenant scope as that throws a 403 - even for the global admin user
 module appRegistrationDeploymentIdentity './modules/managedIdentity.bicep' = {
   name: 'appRegisteringManagedIdentityDeploy'
   scope: rg
