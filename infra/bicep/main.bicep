@@ -121,15 +121,27 @@ module sqlServerModule './modules/sqlServer.bicep' = {
   }
 }
 
+module customRoleModule './modules/customRole.bicep' = {
+  name: 'customRoleDeploy'
+  params: {
+    roleName: 'Application devlopr'
+    roleDescription: 'Create application registrations in AAD'
+    actions: [
+      'microsoft.directory/applications/createAsOwner'
+      'microsoft.directory/oAuth2PermissionGrants/createAsOwner'
+      'microsoft.directory/servicePrincipals/createAsOwner'
+    ]
+    notActions: [
+      
+    ]
+  }
+}
+
 // PROBLEM: can't configure the app registration for AKS within bicep - it doesn't see built-in AAD roles
 // Options so far:
 // - do it elsewhere (e.g. az cli calls in a PowerShell script)
 // - could we create a custom role and use that?
-
-resource applicationDeveloperRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: 'cf1c38e5-3621-4004-a7cb-879624dced7c'
-  scope: subscription()
-}
+//   - doesn't seem like it - need 'microsoft.directory*', but that throws The resource provider referenced in the action 'microsoft.directory/applications/createAsOwner' is not returned in the list of providers from Azure Resource Manager.
 
 module appRegistrationDeploymentIdentity './modules/managedIdentity.bicep' = {
   name: 'appRegisteringManagedIdentityDeploy'
@@ -137,7 +149,7 @@ module appRegistrationDeploymentIdentity './modules/managedIdentity.bicep' = {
   params: {
     managedIdentityName: appRegisteringManagedIdentityName
     assignedRoleIds: [
-      applicationDeveloperRoleDefinition.id
+      customRoleModule.outputs.roleId
     ]
     location: location
   }
