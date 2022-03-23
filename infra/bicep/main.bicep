@@ -121,6 +121,10 @@ module sqlServerModule './modules/sqlServer.bicep' = {
   }
 }
 
+// PROBLEM: can't configure the app registration for AKS within bicep - it doesn't see built-in AAD roles
+// Options so far:
+// - do it elsewhere (e.g. az cli calls in a PowerShell script)
+// - could we create a custom role and use that?
 
 resource applicationDeveloperRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   name: 'cf1c38e5-3621-4004-a7cb-879624dced7c'
