@@ -16,6 +16,9 @@ param sqlAdminUserName string
 param sqlAdminPassword string
 
 @description('The ID of a managed identity which has permission to create app registrations in AAD.')
+param appRegistrationManagedIdentityId string
+
+@description('The principal ID of a managed identity which has permission to create app registrations in AAD.')
 param appRegistrarManagedIdentityId string
 
 var environmentConfigurationMap = {
@@ -117,12 +120,44 @@ module sqlServerModule './modules/sqlServer.bicep' = {
   }
 }
 
+var customRoleName = 'Application Creator'
+module customRoleModule './modules/customRole.bicep' = {
+  name: 'customRoleDeploy'
+  scope: subscription()
+  params: { 
+    roleName: customRoleName
+    roleDescription: 'TBC'
+    actions: [
+      'Microsoft.Resources/subscriptions/providers/read'
+      'Microsoft.ContainerInstance/containerGroups/read'
+      'Microsoft.ContainerInstance/containerGroups/write'
+      'Microsoft.ContainerInstance/containerGroups/delete'
+      'Microsoft.Storage/storageAccounts/read'
+      'Microsoft.Storage/storageAccounts/write'
+      'Microsoft.Storage/storageAccounts/listKeys/action'
+      'Microsoft.ManagedIdentity/userAssignedIdentities/assign/action'
+    ]
+    notActions: [
+      
+    ]
+  }
+}
+
+resource customRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
+  name: guid(subscription().id, appRegistrarManagedIdentityId, customRoleName)
+  properties: {
+    principalId: appRegistrarManagedIdentityId
+    roleDefinitionId: customRoleModule.outputs.roleId
+    principalType: 'ServicePrincipal'
+  }
+}
+
 module aksAppRegistration './modules/appRegistration.bicep' = {
   name: 'aksAppRegistrationDeploy'
   scope: rg
   params: {
     appRegistrationName: aksAppRegistrationName
-    managedIdentityId: appRegistrarManagedIdentityId
+    managedIdentityId: appRegistrationManagedIdentityId
     location: location
   }
 }
