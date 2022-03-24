@@ -21,6 +21,12 @@ param appRegistrationManagedIdentityId string
 @description('The principal ID of a managed identity which has permission to create app registrations in AAD.')
 param appRegistrationManagedIdentityPrincipalId string
 
+@description('The user name for the AKS cluster')
+param aksUserName string
+
+@description('The public SSH key for the AKS cluster')
+param aksPubSshKey string
+
 var environmentConfigurationMap = {
   Development: {
     environmentCode: 'dev'
@@ -199,8 +205,8 @@ module aksModule './modules/aks.bicep' = {
     clusterName: aksClusterName    
     dnsPrefix: 'dns'
     kubernetesVersion: '1.22.6'
-    linuxAdminUsername: 'aksuser'
-    sshRSAPublicKey: ''
+    linuxAdminUsername: aksUserName
+    sshRSAPublicKey: aksPubSshKey
     nodeCount: environmentConfigurationMap[environmentType].aks.nodes.count    
     nodeVMSize: environmentConfigurationMap[environmentType].aks.nodes.vmSize
     osDiskSizeGB: environmentConfigurationMap[environmentType].aks.nodes.diskSizeGb
