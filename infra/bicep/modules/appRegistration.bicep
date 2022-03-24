@@ -1,5 +1,8 @@
 // Adapted from https://reginbald.medium.com/creating-app-registration-with-arm-bicep-b1d48a287abb
 
+@description('The name of the deployment script.')
+param deploymentScriptName string
+
 @description('The id of the managed identity to use to deploy the app registration.')
 param managedIdentityId string
 
@@ -15,7 +18,7 @@ param currentTime string = utcNow()
 
 // resources
 resource script 'Microsoft.Resources/deploymentScripts@2019-10-01-preview' = {
-  name: appRegistrationName
+  name: deploymentScriptName
   location: location
   kind: 'AzurePowerShell'
   identity: {
