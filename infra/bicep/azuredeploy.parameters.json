@@ -8,7 +8,6 @@
       "aksClusterSshPublicKey": {
         "value": "GEN-SSH-PUB-KEY"
       },
-
       "sqlServerAdminUsername": {
         "value": "GEN-UNIQUE"
       },

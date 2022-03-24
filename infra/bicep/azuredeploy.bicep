@@ -8,12 +8,6 @@ param location string
 ])
 param environmentType string = 'Development'
 
-@description('The ID of a managed identity which has permission to create app registrations in AAD.')
-param appRegistrationManagedIdentityId string
-
-@description('The principal ID of a managed identity which has permission to create app registrations in AAD.')
-param appRegistrationManagedIdentityPrincipalId string
-
 @description('The admin user name for the AKS cluster')
 param aksClusterAdminUsername string
 
@@ -53,6 +47,9 @@ var environmentConfigurationMap = {
         vmSize: 'Standard_D2_v3'
         diskSizeGb: 30
       }
+      addons: {
+        kubeDashboardEnabled: true
+      }
     }
   }
 }
@@ -70,8 +67,6 @@ var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueSt
 var sqlServerVirtualNetworkRuleName = guid(subscription().id, sqlServerName, vnetName)
 var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(rg.id)}'
 var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
-var appRegistrationDeploymentScriptName = 'app-registration'
-var aksAppRegistrationName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}'
 
 module networkModule './modules/network.bicep' = {
   name: 'networkDeploy'
@@ -131,97 +126,24 @@ module sqlServerModule './modules/sqlServer.bicep' = {
   }
 }
 
-var customRoleName = 'Application Creator'
-module customRoleModule './modules/customRole.bicep' = {
-  name: 'customRoleDeploy'
-  scope: subscription()
-  params: { 
-    roleName: customRoleName
-    roleDescription: 'TBC'
-    actions: [
-      'Microsoft.Resources/subscriptions/providers/read'
-      'Microsoft.ContainerInstance/containerGroups/read'
-      'Microsoft.ContainerInstance/containerGroups/write'
-      'Microsoft.ContainerInstance/containerGroups/delete'
-      'Microsoft.Storage/storageAccounts/read'
-      'Microsoft.Storage/storageAccounts/write'
-      'Microsoft.Storage/storageAccounts/listKeys/action'
-      'Microsoft.ManagedIdentity/userAssignedIdentities/assign/action'
-    ]
-    notActions: [
-      
-    ]
-  }
-}
-
-resource customRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
-  name: guid(subscription().id, appRegistrationManagedIdentityPrincipalId, customRoleName)
-  properties: {
-    principalId: appRegistrationManagedIdentityPrincipalId
-    roleDefinitionId: customRoleModule.outputs.roleId
-    principalType: 'ServicePrincipal'
-  }
-}
-
-module aksAppRegistration './modules/appRegistration.bicep' = {
-  name: 'aksAppRegistrationDeploy'
-  scope: rg
-  params: {
-    appRegistrationName: aksAppRegistrationName
-    deploymentScriptName: appRegistrationDeploymentScriptName
-    managedIdentityId: appRegistrationManagedIdentityId
-    location: location
-  }
-}
-
-resource networkContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: '4d97b98b-1d4f-4787-a291-c67834d212e7'
-  scope: subscription()
-}
-
-resource acrPullRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: '7f951dda-4ed3-4680-a7ca-43fe172d538d'
-  scope: subscription()
-}
-
-resource subnetAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
-  name: guid(subscription().id, aksAppRegistrationName, networkContributorRoleDefinition.id)
-  properties: {
-    principalId: aksAppRegistration.outputs.principalId
-    roleDefinitionId: networkContributorRoleDefinition.id
-    principalType: 'ServicePrincipal'
-  }
-}
-
-resource acrAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
-  name: guid(subscription().id, aksAppRegistrationName, acrPullRoleDefinition.id)
-  properties: {
-    principalId: aksAppRegistration.outputs.principalId
-    roleDefinitionId: acrPullRoleDefinition.id
-    principalType: 'ServicePrincipal'
-  }
-}
-
 module aksModule './modules/aks.bicep' = {
   name: 'aksDeploy'
   scope: rg
   params: {
-    clusterName: aksClusterName    
-    dnsPrefix: 'dns'
-    kubernetesVersion: '1.22.6'
-    linuxAdminUsername: aksClusterAdminUsername
-    sshRSAPublicKey: aksClusterSshPublicKey
-    nodeCount: environmentConfigurationMap[environmentType].aks.nodes.count    
-    nodeVMSize: environmentConfigurationMap[environmentType].aks.nodes.vmSize
-    osDiskSizeGB: environmentConfigurationMap[environmentType].aks.nodes.diskSizeGb
-    virtualNetworkSubnetId: networkModule.outputs.subnetId
-    networkServiceCidr: '10.2.0.0/24'
-    networkDnsServiceIP: '10.2.0.10'
-    networkDockerBridgeCidr: '172.17.0.1/16'
-    rbacEnabled: true
-    clusterServicePrincipalClientId: aksAppRegistration.outputs.clientId
-    clusterServicePrincipalClientSecret: aksAppRegistration.outputs.clientSecret
-    operationalInsightsWorkspaceId: operationsInsightsModule.outputs.workspaceId
+    aksClusterName: aksClusterName
+    aksClusterSku: 'Paid'
+    aksClusterKubernetesVersion: '1.22.6'
+    aksClusterDnsPrefix: aksClusterName
+    aksClusterPodCidr: '10.244.0.0/16'
+    aksClusterServiceCidr: '10.3.0.0/16'
+    aksClusterDnsServiceIP: '10.3.0.10'
+    aksClusterDockerBridgeCidr: '172.17.0.1/16'
+    aksClusterAdminUsername: aksClusterAdminUsername
+    aksClusterSshPublicKey: aksClusterSshPublicKey
+    aksSubnetId: networkModule.outputs.subnetId
+    podSubnetId: networkModule.outputs.subnetId
+    logAnalyticsWorkspaceId: operationsInsightsModule.outputs.workspaceId
+    kubeDashboardEnabled: environmentConfigurationMap[environmentType].aks.addons.kubeDashboardEnabled
     location: location
   }
 }
