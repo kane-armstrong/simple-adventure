@@ -51,7 +51,7 @@ resource script 'Microsoft.Resources/deploymentScripts@2019-10-01-preview' = {
         signInAudience = "AzureADMyOrg"
       }
       
-      // Upsert App registration
+      # Upsert App registration
       $app = (Invoke-RestMethod -Method Get -Headers $headers -Uri "https://graph.microsoft.com/beta/applications?filter=displayName eq '$($resourceName)'").value
       $principal = @{}
       if ($app) {
@@ -62,7 +62,7 @@ resource script 'Microsoft.Resources/deploymentScripts@2019-10-01-preview' = {
         $principal = Invoke-RestMethod -Method POST -Headers $headers -Uri  "https://graph.microsoft.com/beta/servicePrincipals" -Body (@{ "appId" = $app.appId } | ConvertTo-Json)
       }
       
-      // Creating client secret
+      # Creating client secret
       $app = (Invoke-RestMethod -Method Get -Headers $headers -Uri "https://graph.microsoft.com/beta/applications/$($app.id)")
       
       foreach ($password in $app.passwordCredentials) {
