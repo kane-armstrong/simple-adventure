@@ -117,3 +117,14 @@ I found the documentation for this [here](https://github.com/microsoftgraph/micr
 $payload = "{\`"principalId\`": \`"${principalId}\`", \`"roleDefinitionId\`": \`"${roleId}\`", \`"directoryScopeId\`": \`"/\`" }"
 az rest --method POST --uri 'https://graph.microsoft.com/beta/roleManagement/directory/roleAssignments' --body $payload --headers "content-type=application/json"
 ```
+
+## Problems creating custom roles
+
+I noticed the following:
+
+* Creating a custom role works OK
+* Updating a custom role (e.g. adding a permission) doesn't work - the update doesn't seem to apply. Not sure if this is by design, or if I'm missing something
+to get it to run the update
+* Renaming a custom role doesn't work as I expected - a new role is created and the previous one is left there. The deployment doesn't clean it up
+
+My workaround has been to just rename the role between edits until I'm happy with it, then clean things up in portal by hand... not ideal
