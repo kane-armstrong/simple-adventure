@@ -19,7 +19,7 @@ param sqlAdminPassword string
 param appRegistrationManagedIdentityId string
 
 @description('The principal ID of a managed identity which has permission to create app registrations in AAD.')
-param appRegistrarManagedIdentityId string
+param appRegistrationManagedIdentityPrincipalId string
 
 var environmentConfigurationMap = {
   Development: {
@@ -144,9 +144,9 @@ module customRoleModule './modules/customRole.bicep' = {
 }
 
 resource customRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
-  name: guid(subscription().id, appRegistrarManagedIdentityId, customRoleName)
+  name: guid(subscription().id, appRegistrationManagedIdentityPrincipalId, customRoleName)
   properties: {
-    principalId: appRegistrarManagedIdentityId
+    principalId: appRegistrationManagedIdentityPrincipalId
     roleDefinitionId: customRoleModule.outputs.roleId
     principalType: 'ServicePrincipal'
   }
