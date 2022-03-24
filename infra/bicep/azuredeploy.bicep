@@ -53,9 +53,6 @@ var environmentConfigurationMap = {
           diskSize: 30
           vmSize: 'Standard_D2_v3'          
         }
-        addons: {
-          kubeDashboardEnabled: true
-        }
       }
     }
   }
@@ -158,7 +155,6 @@ module aksModule './modules/aks.bicep' = {
     aksSubnetId: networkModule.outputs.subnetId
     podSubnetId: networkModule.outputs.subnetId
     logAnalyticsWorkspaceId: operationsInsightsModule.outputs.workspaceId
-    kubeDashboardEnabled: environmentConfigurationMap[environmentType].aks.addons.kubeDashboardEnabled
     location: location
   }
 }

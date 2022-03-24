@@ -203,9 +203,6 @@ param userNodePoolType string = 'VirtualMachineScaleSets'
 @description('Specifies the ID of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceId string
 
-@description('Specifies whether the kubeDashboard add-on is enabled or not.')
-param kubeDashboardEnabled bool = false
-
 @description('Specifies the ID of the Contributor role.')
 param contributorRoleId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
@@ -307,9 +304,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' = {
       loadBalancerSku: aksClusterLoadBalancerSku
     }
     addonProfiles: {
-      kubeDashboard: {
-        enabled: kubeDashboardEnabled
-      }
       omsagent: {
         config: {
           logAnalyticsWorkspaceResourceID: logAnalyticsWorkspaceId
