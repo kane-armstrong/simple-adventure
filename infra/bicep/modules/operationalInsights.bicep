@@ -36,7 +36,6 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   location: location
   properties: {
     sku: {
-#disable-next-line BCP036
       name: workspaceSku
     }
     retentionInDays: workspaceRetentionDays
