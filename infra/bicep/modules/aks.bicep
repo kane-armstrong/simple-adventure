@@ -75,6 +75,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' = {
         vmSize: nodeVMSize
         osType: 'Linux'
         vnetSubnetID: virtualNetworkSubnetId
+        mode: 'System'
       }
     ]
     linuxProfile: {
