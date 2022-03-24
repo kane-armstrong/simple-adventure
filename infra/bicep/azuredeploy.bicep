@@ -42,13 +42,20 @@ var environmentConfigurationMap = {
       retention: 30
     }
     aks: {
-      nodes: {
-        count: 3
-        vmSize: 'Standard_D2_v3'
-        diskSizeGb: 30
-      }
-      addons: {
-        kubeDashboardEnabled: true
+      nodePools: {
+        system: {
+          agentCount: 3
+          diskSize: 30
+          vmSize: 'Standard_D2_v3'
+        }
+        user: {
+          agentCount: 3
+          diskSize: 30
+          vmSize: 'Standard_D2_v3'          
+        }
+        addons: {
+          kubeDashboardEnabled: true
+        }
       }
     }
   }
@@ -140,10 +147,14 @@ module aksModule './modules/aks.bicep' = {
     aksClusterDockerBridgeCidr: '172.17.0.1/16'
     aksClusterAdminUsername: aksClusterAdminUsername
     aksClusterSshPublicKey: aksClusterSshPublicKey
-    systemNodePoolOsDiskSizeGB: 30
+    systemNodePoolVmSize: environmentConfigurationMap[environmentType].aks.nodePools.system.vmSize
+    systemNodePoolOsDiskSizeGB: environmentConfigurationMap[environmentType].aks.nodePools.system.diskSize
     systemNodePoolOsDiskType: 'Managed'
-    userNodePoolOsDiskSizeGB: 30
+    systemNodePoolAgentCount: environmentConfigurationMap[environmentType].aks.nodePools.system.agentCount
+    userNodePoolVmSize: environmentConfigurationMap[environmentType].aks.nodePools.user.vmSize
+    userNodePoolOsDiskSizeGB: environmentConfigurationMap[environmentType].aks.nodePools.user.diskSize
     userNodePoolOsDiskType: 'Managed'
+    userNodePoolAgentCount: environmentConfigurationMap[environmentType].aks.nodePools.user.agentCount
     aksSubnetId: networkModule.outputs.subnetId
     podSubnetId: networkModule.outputs.subnetId
     logAnalyticsWorkspaceId: operationsInsightsModule.outputs.workspaceId
