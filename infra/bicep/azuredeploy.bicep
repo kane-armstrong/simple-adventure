@@ -140,6 +140,10 @@ module aksModule './modules/aks.bicep' = {
     aksClusterDockerBridgeCidr: '172.17.0.1/16'
     aksClusterAdminUsername: aksClusterAdminUsername
     aksClusterSshPublicKey: aksClusterSshPublicKey
+    systemNodePoolOsDiskSizeGB: 30
+    systemNodePoolOsDiskType: 'Managed'
+    userNodePoolOsDiskSizeGB: 30
+    userNodePoolOsDiskType: 'Managed'
     aksSubnetId: networkModule.outputs.subnetId
     podSubnetId: networkModule.outputs.subnetId
     logAnalyticsWorkspaceId: operationsInsightsModule.outputs.workspaceId
