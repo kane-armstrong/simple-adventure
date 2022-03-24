@@ -8,24 +8,28 @@ param location string
 ])
 param environmentType string = 'Development'
 
-@description('The username of the admin account of the SQL Server resource')
-param sqlAdminUserName string
-
-@description('The password of the admin account of the SQL Server resource')
-@secure()
-param sqlAdminPassword string
-
 @description('The ID of a managed identity which has permission to create app registrations in AAD.')
 param appRegistrationManagedIdentityId string
 
 @description('The principal ID of a managed identity which has permission to create app registrations in AAD.')
 param appRegistrationManagedIdentityPrincipalId string
 
-@description('The user name for the AKS cluster')
-param aksUserName string
+@description('The admin user name for the AKS cluster')
+param aksClusterAdminUsername string
 
 @description('The public SSH key for the AKS cluster')
-param aksPubSshKey string
+param aksClusterSshPublicKey string
+
+@description('The username of the admin account of the SQL Server resource')
+param sqlServerAdminUsername string
+
+@description('The password of the admin account of the SQL Server resource')
+@secure()
+param sqlServerAdminPassword string
+
+@description('The version of the SQL Server resource.')
+@secure()
+param sqlServerVersion string
 
 var environmentConfigurationMap = {
   Development: {
@@ -118,9 +122,9 @@ module sqlServerModule './modules/sqlServer.bicep' = {
   scope: rg
   params: {
     sqlServerName: sqlServerName
-    sqlAdministratorLogin: sqlAdminUserName
-    sqlAdministratorLoginPassword: sqlAdminPassword
-    sqlServerVersion: '12.0'
+    sqlAdministratorLogin: sqlServerAdminUsername
+    sqlAdministratorLoginPassword: sqlServerAdminPassword
+    sqlServerVersion: sqlServerVersion
     virtualNetworkRuleName: sqlServerVirtualNetworkRuleName
     virtualNetworkRuleSubnetId: networkModule.outputs.subnetId
     location: location
@@ -205,8 +209,8 @@ module aksModule './modules/aks.bicep' = {
     clusterName: aksClusterName    
     dnsPrefix: 'dns'
     kubernetesVersion: '1.22.6'
-    linuxAdminUsername: aksUserName
-    sshRSAPublicKey: aksPubSshKey
+    linuxAdminUsername: aksClusterAdminUsername
+    sshRSAPublicKey: aksClusterSshPublicKey
     nodeCount: environmentConfigurationMap[environmentType].aks.nodes.count    
     nodeVMSize: environmentConfigurationMap[environmentType].aks.nodes.vmSize
     osDiskSizeGB: environmentConfigurationMap[environmentType].aks.nodes.diskSizeGb
