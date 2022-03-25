@@ -46,7 +46,7 @@ param aksClusterDnsServiceIP string
 @description('Specifies the CIDR notation IP range assigned to the Docker bridge network. It must not overlap with any Subnet IP ranges or the Kubernetes service address range.')
 param aksClusterDockerBridgeCidr string
 
-@description('Specifies the sku of the load balancer used by the virtual machine scale sets used by nodepools.')
+@description('Specifies the tier of the load balancer SKU used by the virtual machine scale sets used by nodepools.')
 @allowed([
   'Basic'
   'Standard'

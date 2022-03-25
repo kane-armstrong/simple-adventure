@@ -1,9 +1,9 @@
-@description('The name of the workspace.')
+@description('Specifies the name of the log analytics workspace.')
 @minLength(4)
 @maxLength(63)
 param workspaceName string
 
-@description('The tier of the Operational Insights Workspace resource.')
+@description('Specifies the tier of the log analytics workspace SKU.')
 @allowed([
   'PerGB2018'
   'CapacityReservation'
@@ -16,17 +16,17 @@ param workspaceName string
 ])
 param workspaceSku string = 'PerGB2018'
 
-@description('The data retention period in days.')
+@description('Specifies the data retention period (in days) of the log analytics workspace.')
 @minValue(30)
 @maxValue(730)
 param workspaceRetentionDays int
 
-@description('The name of the application insights resource.')
+@description('Specifies the name of the application insights resource.')
 @minLength(1)
 @maxLength(260)
 param appInsightsName string
 
-@description('The location of the Azure Container Registry resource.')
+@description('Specifies the location of the log analytics workspace.')
 param location string
 
 

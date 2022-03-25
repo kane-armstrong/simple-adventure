@@ -1,17 +1,17 @@
-@description('The VNet name')
+@description('Specifies the name of the virtual network.')
 @minLength(2)
 @maxLength(64)
 param vnetName string
 
-@description('The VNet address prefix')
+@description('Specifies the address prefix of the virtual network.')
 param vnetAddressPrefix string
 
-@description('Enable VNet DDoS protection.')
+@description('Specifies whether to enable DDoS protection for the virtual network.')
 param vnetDdosProtectionEnabled bool = true
 
 param vnetSubnets array
 
-@description('The location of the network resources.')
+@description('Specifies the location of the virtual network.')
 param location string
 
 
@@ -34,8 +34,4 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       }
     }]
   }
-
-  resource subnet 'subnets' existing = [for subnet in vnetSubnets: {
-    name: subnet.name
-  }]
 }

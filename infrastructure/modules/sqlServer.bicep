@@ -1,29 +1,25 @@
-@description('The name of the SQL server.')
+@description('Specifies the name of the SQL server.')
 @minLength(1)
 @maxLength(63)
 param sqlServerName string
 
-@description('The administrator username of the SQL server.')
+@description('Specifies the administrator username of the SQL server.')
 param sqlAdministratorLogin string
 
-@description('The administrator password of the SQL server.')
+@description('Specifies the administrator password of the SQL server.')
 @secure()
 param sqlAdministratorLoginPassword string
 
-@description('The version of the SQL server.')
+@description('Specifies the version of the SQL server.')
 param sqlServerVersion string
 
+@description('Specifies the name of the virtual network hosting the SQL server.')
 param virtualNetworkName string
 
-@description('The name of the VNet rule.')
-@minLength(1)
-@maxLength(128)
-param virtualNetworkRuleName string
+@description('Specifies the name of the subnet hosting the SQL server.')
+param subnetName string
 
-@description('The id of the assigned VNet subnet.')
-param virtualNetworkRuleSubnetName string
-
-@description('The location of the SQL Server resource.')
+@description('Specifies the location of the SQL server.')
 param location string
 
 
@@ -39,9 +35,9 @@ resource sqlServer 'Microsoft.Sql/servers@2021-08-01-preview' = {
 }
 
 resource sqlServerNetworkRule 'Microsoft.Sql/servers/virtualNetworkRules@2021-08-01-preview' = {
-  name: virtualNetworkRuleName
+  name: guid(subscription().id, sqlServerName, virtualNetworkName)
   parent: sqlServer
   properties: {
-    virtualNetworkSubnetId: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, virtualNetworkRuleSubnetName)
+    virtualNetworkSubnetId: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
   }
 }

@@ -1,12 +1,12 @@
-@description('The name of the registry (must be globally unique).')
+@description('Specifies the name of the container registry (must be globally unique).')
 @minLength(5)
 @maxLength(50)
 param acrName string
 
-@description('Enable an admin user with push/pull access to the registry.')
-param acrAdminUserEnabled bool = true
+@description('Specifies whether to enable an admin user.')
+param acrAdminUserEnabled bool = false
 
-@description('The tier of the Azure Container Registry resource.')
+@description('Specifies the tier of the container registry SKU.')
 @allowed([
   'Basic'
   'Classic'
@@ -15,7 +15,7 @@ param acrAdminUserEnabled bool = true
 ])
 param acrSku string = 'Basic'
 
-@description('The location of the Azure Container Registry resource.')
+@description('Specifies the location of the container registry.')
 param location string
 
 

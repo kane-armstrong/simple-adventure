@@ -25,6 +25,8 @@ param sqlServerAdminPassword string
 @secure()
 param sqlServerVersion string
 
+
+// variables
 var environmentConfigurationMap = {
   Development: {
     environmentCode: 'dev'
@@ -67,14 +69,12 @@ var acrName = '${prefixes.project}${env}${prefixes.azureContainerRegistry}${uniq
 var vnetName = '${prefixes.project}-${env}-${prefixes.virtualNetwork}-${uniqueString(rg.id)}'
 var workspaceName = '${prefixes.project}-${env}-${prefixes.operationalInsightsWorkspace}-${uniqueString(rg.id)}'
 var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueString(rg.id)}'
-var sqlServerVirtualNetworkRuleName = guid(subscription().id, sqlServerName, vnetName)
 var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(rg.id)}'
 var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
-
-
 var aksSubnetName = 'AksSubnet'
-var podSubnetName = 'PodSubnet'
 
+
+// resources
 module networkModule './modules/network.bicep' = {
   name: 'networkDeploy'
   scope: rg
@@ -132,8 +132,7 @@ module sqlServerModule './modules/sqlServer.bicep' = {
     sqlAdministratorLoginPassword: sqlServerAdminPassword
     sqlServerVersion: sqlServerVersion
     virtualNetworkName: vnetName
-    virtualNetworkRuleName: sqlServerVirtualNetworkRuleName
-    virtualNetworkRuleSubnetName: aksSubnetName
+    subnetName: aksSubnetName
     location: location
   }
 }
