@@ -9,6 +9,7 @@ param vnetAddressPrefix string
 @description('Specifies whether to enable DDoS protection for the virtual network.')
 param vnetDdosProtectionEnabled bool = true
 
+@description('Specifies the subnets to create within the virtual network. Objects should provide a name, address prefix, and a set of service endpoints.')
 param vnetSubnets array
 
 @description('Specifies the location of the virtual network.')
