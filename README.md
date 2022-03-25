@@ -16,7 +16,7 @@ Features:
 Broken, incomplete, or aspirational:
 
 * [ ] Working AKS stack in Azure
-* [ ] Infrastructure as Code using Pulumi
+* [ ] Infrastructure as Code using ~~Pulumi~~ bicep
 * [ ] helm charts for app deployments
 * [ ] CI/CD pipeline in GitHub Actions
 * [ ] A richer domain implementation
@@ -51,14 +51,3 @@ docker-compose up unit-tests
 
 Tests will also run in Visual Studio or similar, and don't require migrations to be run first
 (databases are migrated on an independent connection).
-
-## Deploying infrastructure
-
-**This is currently broken**
-
-```
-// change directory to the pulumi project
-pulumi up
-// when done
-pulumi destroy
-```
