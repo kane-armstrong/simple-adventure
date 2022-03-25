@@ -72,9 +72,6 @@ param virtualNetworkName string
 @description('Specifies the name of the subnet hosting the worker nodes of the AKS cluster.')
 param aksSubnetName string
 
-@description('Specifies the name of the subnet hosting the pods of the AKS cluster.')
-param podSubnetName string
-
 @description('Specifies the unique name of of the system node pool profile. Must be unique in the context of the subscription and resource group.')
 param systemNodePoolName string = 'system'
 
@@ -211,14 +208,12 @@ param contributorRoleId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
 
 // variables
-
 resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' existing = {
   name: virtualNetworkName
   scope: resourceGroup()
 }
 
 var aksSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, aksSubnetName)
-var podSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, podSubnetName)
 
 
 // resources
@@ -267,7 +262,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' = {
         osDiskSizeGB: systemNodePoolOsDiskSizeGB
         osType: systemNodePoolOsType
         vnetSubnetID: aksSubnetId
-        podSubnetID: podSubnetId
         maxPods: systemNodePoolMaxPods
         minCount: systemNodePoolMinCount
         maxCount: systemNodePoolMaxCount
@@ -285,7 +279,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' = {
         osDiskSizeGB: userNodePoolOsDiskSizeGB
         osType: userNodePoolOsType
         vnetSubnetID: aksSubnetId
-        podSubnetID: podSubnetId
         maxPods: userNodePoolMaxPods
         minCount: userNodePoolMinCount
         maxCount: userNodePoolMaxCount

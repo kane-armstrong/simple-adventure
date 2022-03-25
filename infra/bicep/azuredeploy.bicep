@@ -95,18 +95,6 @@ module networkModule './modules/network.bicep' = {
           }
         ]
       }
-      {
-        name: podSubnetName
-        addressPrefix: '10.1.0.0/16'
-        serviceEndpoints: [
-          {
-            service: 'Microsoft.KeyVault'
-          }
-          {
-            service: 'Microsoft.Sql'
-          }
-        ]
-      }
     ]
     location: location
   }
@@ -174,7 +162,6 @@ module aksModule './modules/aks.bicep' = {
     userNodePoolAgentCount: environmentConfigurationMap[environmentType].aks.nodePools.user.agentCount
     virtualNetworkName: vnetName
     aksSubnetName: aksSubnetName
-    podSubnetName: podSubnetName
     logAnalyticsWorkspaceId: operationsInsightsModule.outputs.workspaceId
     location: location
   }
