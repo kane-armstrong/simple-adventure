@@ -74,8 +74,6 @@ var locationMap = {
 var prefixes = json(loadTextContent('./shared-prefixes.json'))
 var env = environmentConfigurationMap[environmentType].environmentCode
 
-var rg = resourceGroup()
-
 var nameSuffix = '${applicationName}-${env}-${locationMap[location]}'
 
 var acrName = replace('${prefixes.azureContainerRegistry}-${nameSuffix}', '-', '')
@@ -91,7 +89,6 @@ var aksSubnetName = 'AksSubnet'
 // resources
 module networkModule './modules/network.bicep' = {
   name: 'networkDeploy'
-  scope: rg
   params: {
     vnetName: vnetName
     vnetAddressPrefix: '10.0.0.0/8'
@@ -116,7 +113,6 @@ module networkModule './modules/network.bicep' = {
 
 module acrModule './modules/acr.bicep' = {
   name:'registryDeploy'
-  scope: rg
   params: {
     acrName: acrName
     acrSku: environmentConfigurationMap[environmentType].containerRegistry.sku
@@ -127,7 +123,6 @@ module acrModule './modules/acr.bicep' = {
 
 module operationsInsightsModule './modules/operationalInsights.bicep' = {
   name: 'operationalInsightsDeploy'
-  scope: rg
   params: {
     workspaceName: workspaceName
     workspaceSku: environmentConfigurationMap[environmentType].operationalInsights.sku
@@ -139,7 +134,6 @@ module operationsInsightsModule './modules/operationalInsights.bicep' = {
 
 module sqlServerModule './modules/sqlServer.bicep' = {
   name: 'sqlServerDeploy'
-  scope: rg
   params: {
     sqlServerName: sqlServerName
     sqlAdministratorLogin: sqlServerAdminUsername
@@ -153,7 +147,6 @@ module sqlServerModule './modules/sqlServer.bicep' = {
 
 module aksModule './modules/aks.bicep' = {
   name: 'aksDeploy'
-  scope: rg
   params: {
     aksClusterName: aksClusterName
     aksClusterSku: 'Paid'
