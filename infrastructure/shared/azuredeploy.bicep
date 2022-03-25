@@ -1,27 +1,27 @@
-@description('Location of all resources')
+@description('Specifies the location of all resources.')
 param location string
 
-@description('The type of environment resources are deployed to.')
+@description('Specifies the type of environment resources are deployed to.')
 @allowed([
   'Production'
   'Development'
 ])
 param environmentType string = 'Development'
 
-@description('The admin user name for the AKS cluster')
+@description('Specifies the admin user name for the AKS cluster.')
 param aksClusterAdminUsername string
 
-@description('The public SSH key for the AKS cluster')
+@description('Specifies the public SSH key for the AKS cluster.')
 param aksClusterSshPublicKey string
 
-@description('The username of the admin account of the SQL Server resource')
+@description('Specifies the username of the admin account of the SQL server.')
 param sqlServerAdminUsername string
 
-@description('The password of the admin account of the SQL Server resource')
+@description('Specifies the password of the admin account of the SQL server.')
 @secure()
 param sqlServerAdminPassword string
 
-@description('The version of the SQL Server resource.')
+@description('Specifies the version of the SQL server.')
 @secure()
 param sqlServerVersion string
 
