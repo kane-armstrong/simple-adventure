@@ -208,16 +208,11 @@ param contributorRoleId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
 
 // variables
-resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' existing = {
-  name: virtualNetworkName
-  scope: resourceGroup()
-}
-
+var aksClusterUserDefinedManagedIdentityName = '${aksClusterName}-identity'
 var aksSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, aksSubnetName)
 
 
 // resources
-var aksClusterUserDefinedManagedIdentityName = '${aksClusterName}-identity'
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: aksClusterUserDefinedManagedIdentityName
   location: location

@@ -30,6 +30,10 @@ param appInsightsName string
 param location string
 
 
+//variables
+var containerInsightsSolutionName = 'ContainerInsights(${workspaceName})'
+
+
 //resources
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
@@ -52,7 +56,6 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-var containerInsightsSolutionName = 'ContainerInsights(${workspaceName})'
 resource containerInsightsSolution 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
   name: containerInsightsSolutionName
   location: location
