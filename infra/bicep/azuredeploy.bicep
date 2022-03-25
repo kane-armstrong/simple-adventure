@@ -143,8 +143,9 @@ module sqlServerModule './modules/sqlServer.bicep' = {
     sqlAdministratorLogin: sqlServerAdminUsername
     sqlAdministratorLoginPassword: sqlServerAdminPassword
     sqlServerVersion: sqlServerVersion
+    virtualNetworkName: vnetName
     virtualNetworkRuleName: sqlServerVirtualNetworkRuleName
-    virtualNetworkRuleSubnetId: networkModule.outputs.subnetId
+    virtualNetworkRuleSubnetName: aksSubnetName
     location: location
   }
 }
@@ -171,8 +172,9 @@ module aksModule './modules/aks.bicep' = {
     userNodePoolOsDiskSizeGB: environmentConfigurationMap[environmentType].aks.nodePools.user.diskSize
     userNodePoolOsDiskType: 'Managed'
     userNodePoolAgentCount: environmentConfigurationMap[environmentType].aks.nodePools.user.agentCount
-    aksSubnetId: networkModule.outputs.subnetId
-    podSubnetId: networkModule.outputs.subnetId
+    virtualNetworkName: vnetName
+    aksSubnetName: aksSubnetName
+    podSubnetName: podSubnetName
     logAnalyticsWorkspaceId: operationsInsightsModule.outputs.workspaceId
     location: location
   }

@@ -13,13 +13,15 @@ param sqlAdministratorLoginPassword string
 @description('The version of the SQL server.')
 param sqlServerVersion string
 
+param virtualNetworkName string
+
 @description('The name of the VNet rule.')
 @minLength(1)
 @maxLength(128)
 param virtualNetworkRuleName string
 
 @description('The id of the assigned VNet subnet.')
-param virtualNetworkRuleSubnetId string
+param virtualNetworkRuleSubnetName string
 
 @description('The location of the SQL Server resource.')
 param location string
@@ -40,6 +42,6 @@ resource sqlServerNetworkRule 'Microsoft.Sql/servers/virtualNetworkRules@2021-08
   name: virtualNetworkRuleName
   parent: sqlServer
   properties: {
-    virtualNetworkSubnetId: virtualNetworkRuleSubnetId
+    virtualNetworkSubnetId: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, virtualNetworkRuleSubnetName)
   }
 }
