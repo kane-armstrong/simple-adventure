@@ -78,7 +78,7 @@ var rg = resourceGroup()
 
 var nameSuffix = '${applicationName}-${env}-${locationMap[location]}'
 
-var acrName = '${prefixes.azureContainerRegistry}-${nameSuffix}'
+var acrName = replace('${prefixes.azureContainerRegistry}-${nameSuffix}', '-', '')
 var vnetName = '${prefixes.virtualNetwork}-${nameSuffix}'
 var workspaceName = '${prefixes.operationalInsightsWorkspace}-${nameSuffix}'
 var sqlServerName = '${prefixes.sqlServer}-${nameSuffix}'
