@@ -1,3 +1,6 @@
+@description('Specifies the name of the application the deployed resources are associated with.')
+param applicationName string
+
 @description('Specifies the location of all resources.')
 param location string
 
@@ -60,17 +63,28 @@ var environmentConfigurationMap = {
   }
 }
 
+var locationMap = {
+  'australiasoutheast': 'ause'
+  'australiaeast': 'aue'
+  'westus': 'usw'
+  'eastus': 'use'
+  'centralus': 'usc'
+}
+
 var prefixes = json(loadTextContent('./shared-prefixes.json'))
 var env = environmentConfigurationMap[environmentType].environmentCode
 
 var rg = resourceGroup()
 
-var acrName = '${prefixes.project}${env}${prefixes.azureContainerRegistry}${uniqueString(rg.id)}'
-var vnetName = '${prefixes.project}-${env}-${prefixes.virtualNetwork}-${uniqueString(rg.id)}'
-var workspaceName = '${prefixes.project}-${env}-${prefixes.operationalInsightsWorkspace}-${uniqueString(rg.id)}'
-var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueString(rg.id)}'
-var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(rg.id)}'
-var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
+var nameSuffix = '${applicationName}-${env}-${locationMap[location]}'
+
+var acrName = '${prefixes.azureContainerRegistry}-${nameSuffix}'
+var vnetName = '${prefixes.virtualNetwork}-${nameSuffix}'
+var workspaceName = '${prefixes.operationalInsightsWorkspace}-${nameSuffix}'
+var sqlServerName = '${prefixes.sqlServer}-${nameSuffix}'
+var appInsightsName = '${prefixes.appInsights}-${nameSuffix}'
+var aksClusterName = '${prefixes.azureKubernetesService}-${nameSuffix}'
+
 var aksSubnetName = 'AksSubnet'
 
 

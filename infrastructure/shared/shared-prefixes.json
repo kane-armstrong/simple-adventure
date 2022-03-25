@@ -1,11 +1,8 @@
 {
-    "project": "pd",
     "virtualNetwork": "vnet",
-    "subnet": "subnet",
     "azureContainerRegistry": "acr",
-    "operationalInsightsWorkspace": "opsws",
+    "operationalInsightsWorkspace": "osws",
     "sqlServer": "sql",
     "appInsights": "ais",
-    "azureKubernetesService": "aks",
-    "managedIdentity": "identity"
+    "azureKubernetesService": "aks"
 }

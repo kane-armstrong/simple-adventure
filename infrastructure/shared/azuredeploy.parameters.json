@@ -19,6 +19,9 @@
       },
       "location": {
         "value": "australiasoutheast"
+      },
+      "applicationName": {
+        "value": "petdoc"
       }
     }
   }
