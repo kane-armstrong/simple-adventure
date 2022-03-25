@@ -16,6 +16,9 @@
       },
       "sqlServerVersion": {
         "value": "12.0"
+      },
+      "location": {
+        "value": "australiasoutheast"
       }
     }
   }
