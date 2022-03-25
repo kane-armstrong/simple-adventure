@@ -26,7 +26,7 @@ Broken, incomplete, or aspirational:
 
 **In docker compose**:
 
-```
+```bash
 // change directory to the build folder
 docker-compose build
 docker-compose up api
@@ -44,7 +44,7 @@ docker-compose up api
 
 Docker compose happily runs using either of these:
 
-```
+```bash
 docker-compose up integration-tests
 docker-compose up unit-tests
 ```
