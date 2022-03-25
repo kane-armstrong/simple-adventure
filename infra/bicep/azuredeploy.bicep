@@ -65,12 +65,15 @@ var rg = resourceGroup()
 
 var acrName = '${prefixes.project}${env}${prefixes.azureContainerRegistry}${uniqueString(rg.id)}'
 var vnetName = '${prefixes.project}-${env}-${prefixes.virtualNetwork}-${uniqueString(rg.id)}'
-var subnetName = '${prefixes.project}-${env}-${prefixes.subnet}-${uniqueString(rg.id)}'
 var workspaceName = '${prefixes.project}-${env}-${prefixes.operationalInsightsWorkspace}-${uniqueString(rg.id)}'
 var sqlServerName = '${prefixes.project}-${env}-${prefixes.sqlServer}-${uniqueString(rg.id)}'
 var sqlServerVirtualNetworkRuleName = guid(subscription().id, sqlServerName, vnetName)
 var appInsightsName = '${prefixes.project}-${env}-${prefixes.appInsights}-${uniqueString(rg.id)}'
 var aksClusterName = '${prefixes.project}-${env}-${prefixes.azureKubernetesService}-${uniqueString(rg.id)}'
+
+
+var aksSubnetName = 'AksSubnet'
+var podSubnetName = 'PodSubnet'
 
 module networkModule './modules/network.bicep' = {
   name: 'networkDeploy'
@@ -79,14 +82,30 @@ module networkModule './modules/network.bicep' = {
     vnetName: vnetName
     vnetAddressPrefix: '10.0.0.0/8'
     vnetDdosProtectionEnabled: environmentConfigurationMap[environmentType].networks.vnet.ddosProtectionEnabled
-    subnetName: subnetName
-    subnetPrefix: '10.240.0.0/16'
-    subnetServiceEndpoints: [
+    vnetSubnets: [
       {
-        service: 'Microsoft.KeyVault'
+        name: aksSubnetName
+        addressPrefix: '10.0.0.0/16'
+        serviceEndpoints: [
+          {
+            service: 'Microsoft.KeyVault'
+          }
+          {
+            service: 'Microsoft.Sql'
+          }
+        ]
       }
       {
-        service: 'Microsoft.Sql'
+        name: podSubnetName
+        addressPrefix: '10.1.0.0/16'
+        serviceEndpoints: [
+          {
+            service: 'Microsoft.KeyVault'
+          }
+          {
+            service: 'Microsoft.Sql'
+          }
+        ]
       }
     ]
     location: location

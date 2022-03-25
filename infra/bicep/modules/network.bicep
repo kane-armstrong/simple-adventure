@@ -9,16 +9,7 @@ param vnetAddressPrefix string
 @description('Enable VNet DDoS protection.')
 param vnetDdosProtectionEnabled bool = true
 
-@description('The subnet name')
-@minLength(1)
-@maxLength(80)
-param subnetName string
-
-@description('The subnet prefix')
-param subnetPrefix string
-
-@description('Service Endpoints for the subnet.')
-param subnetServiceEndpoints array
+param vnetSubnets array
 
 @description('The location of the network resources.')
 param location string
@@ -35,20 +26,16 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       ]
     }
     enableDdosProtection: vnetDdosProtectionEnabled
-    subnets: [
-      {
-        name: subnetName
-        properties: {
-          addressPrefix: subnetPrefix
-          serviceEndpoints: subnetServiceEndpoints
-        }
+    subnets: [for subnet in vnetSubnets: {
+      name: subnet.name
+      properties: {
+        addressPrefix: subnet.addressPrefix
+        serviceEndpoints: subnet.serviceEndpoints
       }
-    ]
+    }]
   }
 
-  resource subnet 'subnets' existing = {
-    name: subnetName
-  }
+  resource subnet 'subnets' existing = [for subnet in vnetSubnets: {
+    name: subnet.name
+  }]
 }
-
-output subnetId string = virtualNetwork::subnet.id
