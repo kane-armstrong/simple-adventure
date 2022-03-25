@@ -223,7 +223,7 @@ resource contributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2020
   name: guid(resourceGroup().id, aksClusterUserDefinedManagedIdentityName, aksClusterName)
   properties: {
     roleDefinitionId: contributorRole.id
-    principalId: managedIdentity.id
+    principalId: managedIdentity.properties.principalId
     principalType: 'ServicePrincipal'
   }
 }
@@ -238,7 +238,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' = {
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      aksClusterUserDefinedManagedIdentityId: {}
+      '${managedIdentity.id}': {}
     }
   }
   properties: {
