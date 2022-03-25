@@ -100,7 +100,7 @@ param systemNodePoolOsDiskSizeGB int = 100
   'Ephemeral'
   'Managed'
 ])
-param systemNodePoolOsDiskType string = 'Ephemeral'
+param systemNodePoolOsDiskType string = 'Managed'
 
 @description('Specifies the maximum number of pods that can run on a node in the system node pool.')
 @maxValue(250)
