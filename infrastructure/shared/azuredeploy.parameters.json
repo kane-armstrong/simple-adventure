@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "aksClusterAdminUsername": {
+        "value": "GEN-UNIQUE"
+      },
+      "aksClusterSshPublicKey": {
+        "value": "GEN-SSH-PUB-KEY"
+      },
+      "sqlServerAdminUsername": {
+        "value": "GEN-UNIQUE"
+      },
+      "sqlServerAdminPassword": {
+        "value": "GEN-PASWORD"
+      },
+      "sqlServerVersion": {
+        "value": "12.0"
+      },
+      "location": {
+        "value": "australiasoutheast"
+      },
+      "applicationName": {
+        "value": "petdoc"
+      }
+    }
+  }

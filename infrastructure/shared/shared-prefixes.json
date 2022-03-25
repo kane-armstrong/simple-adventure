@@ -1,0 +1,8 @@
+{
+    "virtualNetwork": "vnet",
+    "azureContainerRegistry": "acr",
+    "operationalInsightsWorkspace": "oisws",
+    "sqlServer": "sql",
+    "appInsights": "ais",
+    "azureKubernetesService": "aks"
+}
