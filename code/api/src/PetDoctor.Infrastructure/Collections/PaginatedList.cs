@@ -24,7 +24,7 @@ public class PaginatedList<T>
     public bool HasPreviousPage => PageIndex > 1;
     public bool HasNextPage => PageIndex < TotalPages;
 
-    private int CalculateTotalPages(int count, int pageSize)
+    private static int CalculateTotalPages(int count, int pageSize)
     {
         var result = (int)Math.Ceiling(count / (double)pageSize);
         return result < 0

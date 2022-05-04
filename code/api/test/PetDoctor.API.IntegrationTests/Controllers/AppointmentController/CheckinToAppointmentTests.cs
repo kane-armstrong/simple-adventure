@@ -29,8 +29,7 @@ public class CheckinToAppointmentTests
     public async Task Successful_requests_return_204_no_content()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<CheckinToAppointment>();
         var uri = $"{EndpointRoute}/{id}/checkin";
 
@@ -45,8 +44,7 @@ public class CheckinToAppointmentTests
     public async Task Appointment_check_ins_are_persisted_correctly()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<CheckinToAppointment>();
         var uri = $"{EndpointRoute}/{id}/checkin";
 

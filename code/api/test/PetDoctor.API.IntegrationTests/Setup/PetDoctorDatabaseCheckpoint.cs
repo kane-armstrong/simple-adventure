@@ -7,9 +7,9 @@ using SqlStreamStore;
 
 namespace PetDoctor.API.IntegrationTests.Setup;
 
-class PetDoctorDatabaseCheckpoint
+internal class PetDoctorDatabaseCheckpoint
 {
-    private static readonly Checkpoint Checkpoint = new Checkpoint
+    private static readonly Checkpoint Checkpoint = new()
     {
         TablesToIgnore = new[]
         {

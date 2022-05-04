@@ -58,10 +58,9 @@ public class ListAppointmentsTests : IClassFixture<TestFixture>
 
         var uri = $"{EndpointRoute}?index=1&size={pageCount}";
 
-        var seeder = new AppointmentSeeder();
         for (var i = 0; i < count; i++)
         {
-            await seeder.CreateAppointment(client);
+            await AppointmentSeeder.CreateAppointment(client);
         }
 
         var result = await client.GetAsync(uri);
@@ -85,10 +84,9 @@ public class ListAppointmentsTests : IClassFixture<TestFixture>
 
         var uri = $"{EndpointRoute}?index=1&size={pageCount}";
 
-        var seeder = new AppointmentSeeder();
         for (var i = 0; i < count; i++)
         {
-            await seeder.CreateAppointment(client);
+            await AppointmentSeeder.CreateAppointment(client);
         }
 
         var result = await client.GetAsync(uri);

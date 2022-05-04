@@ -27,8 +27,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
     {
         var client = _testFixture.Client;
 
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
 
         var uri = $"{EndpointRoute}/{id}";
 
@@ -45,8 +44,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -65,8 +63,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -85,8 +82,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -105,8 +101,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -125,8 +120,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -145,8 +139,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -165,8 +158,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -185,8 +177,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -205,8 +196,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);
@@ -225,8 +215,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
         var result = await client.GetAsync(uri);

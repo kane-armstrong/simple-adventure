@@ -29,8 +29,7 @@ public class CancelAppointmentTests
     public async Task Successful_requests_return_204_no_content()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<CancelAppointment>();
         var uri = $"{EndpointRoute}/{id}/cancel";
 
@@ -45,8 +44,7 @@ public class CancelAppointmentTests
     public async Task Appointment_cancellations_are_persisted_correctly()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<CancelAppointment>();
         var uri = $"{EndpointRoute}/{id}/cancel";
 
@@ -62,8 +60,7 @@ public class CancelAppointmentTests
     public async Task The_reason_for_cancellation_is_captured_correctly()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<CancelAppointment>();
         var uri = $"{EndpointRoute}/{id}/cancel";
 

@@ -29,8 +29,7 @@ public class RescheduleAppointmentTests
     public async Task Successful_requests_return_204_no_content()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Build<RescheduleAppointment>()
             .With(p => p.NewDate, () => DateTimeOffset.UtcNow.AddDays(3)).Create();
         var uri = $"{EndpointRoute}/{id}/reschedule";
@@ -46,8 +45,7 @@ public class RescheduleAppointmentTests
     public async Task Rescheduled_appointments_are_persisted_correctly()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Build<RescheduleAppointment>()
             .With(p => p.NewDate, () => DateTimeOffset.UtcNow.AddDays(3)).Create();
         var uri = $"{EndpointRoute}/{id}/reschedule";
@@ -64,8 +62,7 @@ public class RescheduleAppointmentTests
     public async Task Rescheduling_an_appointment_captures_the_new_date_correctly()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Build<RescheduleAppointment>()
             .With(p => p.NewDate, () => DateTimeOffset.UtcNow.AddDays(3)).Create();
         var uri = $"{EndpointRoute}/{id}/reschedule";

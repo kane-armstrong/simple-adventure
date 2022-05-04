@@ -29,8 +29,7 @@ public class RejectAppointmentTests
     public async Task Successful_requests_return_204_no_content()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<RejectAppointment>();
         var uri = $"{EndpointRoute}/{id}/reject";
 
@@ -45,8 +44,7 @@ public class RejectAppointmentTests
     public async Task Rejected_appointments_are_persisted_correctly()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<RejectAppointment>();
         var uri = $"{EndpointRoute}/{id}/reject";
 
@@ -62,8 +60,7 @@ public class RejectAppointmentTests
     public async Task Rejecting_an_appointment_captures_the_rejection_reason_correctly()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<RejectAppointment>();
         var uri = $"{EndpointRoute}/{id}/reject";
 

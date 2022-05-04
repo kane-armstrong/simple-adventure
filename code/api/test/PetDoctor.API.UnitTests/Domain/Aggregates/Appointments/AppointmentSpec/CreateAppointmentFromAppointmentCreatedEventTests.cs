@@ -89,7 +89,7 @@ public class CreateFromAppointmentCreatedEventTests
 
         var apt = new Appointment(pet, owner, "reasons", DateTimeOffset.Now.AddDays(3));
 
-        var @event = apt.PendingEvents.First() as AppointmentCreated;
+        var @event = apt.PendingEvents[0] as AppointmentCreated;
 
         var sut = new Appointment(@event!);
 

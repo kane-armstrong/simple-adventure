@@ -29,8 +29,7 @@ public class CompleteAppointmentTests
     public async Task Successful_requests_return_204_no_content()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<CompleteAppointment>();
         var uri = $"{EndpointRoute}/{id}/complete";
 
@@ -45,8 +44,7 @@ public class CompleteAppointmentTests
     public async Task A_completed_appointment_is_persisted_correctly()
     {
         var client = _testFixture.Client;
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
         var request = _fixture.Create<CompleteAppointment>();
         var uri = $"{EndpointRoute}/{id}/complete";
 
