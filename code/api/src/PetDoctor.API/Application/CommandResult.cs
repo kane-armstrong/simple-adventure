@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PetDoctor.API.Application;
+﻿namespace PetDoctor.API.Application;
 
 public struct CommandResult
 {

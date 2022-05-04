@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PetDoctor.API.Application.Models;
+﻿namespace PetDoctor.API.Application.Models;
 
 public record Page<T>
 {

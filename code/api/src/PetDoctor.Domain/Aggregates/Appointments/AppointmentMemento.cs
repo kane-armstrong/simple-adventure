@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PetDoctor.Domain.Aggregates.Appointments;
+﻿namespace PetDoctor.Domain.Aggregates.Appointments;
 
 public record AppointmentMemento
 {

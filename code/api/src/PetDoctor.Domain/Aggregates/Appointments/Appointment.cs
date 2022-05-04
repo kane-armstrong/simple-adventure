@@ -1,6 +1,4 @@
 ﻿using PetDoctor.Domain.Aggregates.Appointments.Events;
-using System;
-using System.Collections.Generic;
 
 namespace PetDoctor.Domain.Aggregates.Appointments;
 

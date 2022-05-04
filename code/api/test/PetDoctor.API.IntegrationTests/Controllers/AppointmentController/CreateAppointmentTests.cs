@@ -3,11 +3,7 @@ using FluentAssertions;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
-using System;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController;

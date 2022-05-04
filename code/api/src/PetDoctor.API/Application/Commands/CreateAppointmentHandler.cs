@@ -1,6 +1,4 @@
 ﻿using PetDoctor.Domain.Aggregates.Appointments;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PetDoctor.API.Application.Commands;
 

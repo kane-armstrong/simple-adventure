@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PetDoctor.Infrastructure;
 using Respawn;
 using SqlStreamStore;
-using System.Threading.Tasks;
 
 namespace PetDoctor.API.IntegrationTests.Setup;
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using PetDoctor.Infrastructure;
+﻿using PetDoctor.Infrastructure;
 
 namespace PetDoctor.API.IntegrationTests.Helpers;
 

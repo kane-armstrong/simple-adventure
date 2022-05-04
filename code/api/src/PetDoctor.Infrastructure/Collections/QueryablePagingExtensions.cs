@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace PetDoctor.Infrastructure.Collections;
+﻿namespace PetDoctor.Infrastructure.Collections;
 
 public static class QueryablePagingExtensions
 {

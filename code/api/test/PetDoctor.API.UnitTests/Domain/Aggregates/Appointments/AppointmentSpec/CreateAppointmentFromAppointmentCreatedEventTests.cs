@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;

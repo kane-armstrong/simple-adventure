@@ -1,13 +1,10 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
 using PetDoctor.Domain.Aggregates.Appointments;
+using System.Net;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController;

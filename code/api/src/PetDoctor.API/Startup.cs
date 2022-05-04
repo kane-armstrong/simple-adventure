@@ -1,11 +1,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PetDoctor.API.Application.Commands;
@@ -18,7 +13,6 @@ using PetDoctor.Infrastructure;
 using PetDoctor.Infrastructure.Cqrs;
 using PetDoctor.Infrastructure.Repositories;
 using SqlStreamStore;
-using System;
 using System.Reflection;
 
 namespace PetDoctor.API;

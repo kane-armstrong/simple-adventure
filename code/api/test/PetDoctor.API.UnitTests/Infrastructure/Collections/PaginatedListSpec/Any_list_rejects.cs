@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using PetDoctor.Infrastructure.Collections;
 using Xunit;
 

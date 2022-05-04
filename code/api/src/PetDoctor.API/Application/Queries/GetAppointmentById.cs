@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PetDoctor.API.Application.Queries;
+﻿namespace PetDoctor.API.Application.Queries;
 
 public record GetAppointmentById
 {

@@ -1,9 +1,8 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using PetDoctor.API.Application.Models;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
+using System.Net;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController;

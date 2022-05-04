@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PetDoctor.API.Application.Commands;
+﻿namespace PetDoctor.API.Application.Commands;
 
 public record CompleteAppointment
 {

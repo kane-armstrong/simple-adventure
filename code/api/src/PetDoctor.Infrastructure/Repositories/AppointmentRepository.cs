@@ -4,9 +4,6 @@ using PetDoctor.Domain.Aggregates.Appointments.Events;
 using PetDoctor.Infrastructure.Cqrs;
 using SqlStreamStore;
 using SqlStreamStore.Streams;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PetDoctor.Infrastructure.Repositories;
 

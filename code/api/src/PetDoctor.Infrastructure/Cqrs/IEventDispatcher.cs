@@ -1,8 +1,4 @@
-﻿using PetDoctor.Domain;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace PetDoctor.Infrastructure.Cqrs;
+﻿namespace PetDoctor.Infrastructure.Cqrs;
 
 public interface IEventDispatcher
 {

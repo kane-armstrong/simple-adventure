@@ -1,5 +1,4 @@
 ﻿using PetDoctor.Domain.Aggregates.Appointments;
-using System;
 
 namespace PetDoctor.API.Application.Models;
 

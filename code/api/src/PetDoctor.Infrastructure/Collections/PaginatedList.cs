@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PetDoctor.Infrastructure.Collections;
+﻿namespace PetDoctor.Infrastructure.Collections;
 
 public class PaginatedList<T>
 {

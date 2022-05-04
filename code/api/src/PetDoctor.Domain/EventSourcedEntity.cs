@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PetDoctor.Domain;
+﻿namespace PetDoctor.Domain;
 
 public abstract class EventSourcedEntity : IEventSourcedEntity
 {

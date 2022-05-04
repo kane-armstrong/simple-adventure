@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Immutable;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
 using PetDoctor.API.Application.Extensions;
 using PetDoctor.Infrastructure.Collections;
+using System.Collections.Immutable;
 using Xunit;
 
 namespace PetDoctor.API.UnitTests.API.Application.Extensions;

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Reflection;
-using AutoFixture.Kernel;
+﻿using AutoFixture.Kernel;
 using PetDoctor.API.Application.Commands;
+using System.Reflection;
 
 namespace PetDoctor.API.IntegrationTests.Helpers;
 

@@ -1,8 +1,5 @@
 ﻿using SqlStreamStore;
 using SqlStreamStore.Streams;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PetDoctor.Infrastructure;
 

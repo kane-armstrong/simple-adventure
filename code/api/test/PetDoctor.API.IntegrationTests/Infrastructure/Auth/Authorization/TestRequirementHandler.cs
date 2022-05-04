@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
 
 namespace PetDoctor.API.IntegrationTests.Infrastructure.Auth.Authorization;
 
