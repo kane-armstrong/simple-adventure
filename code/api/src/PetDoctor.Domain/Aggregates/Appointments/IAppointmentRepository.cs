@@ -2,6 +2,6 @@
 
 public interface IAppointmentRepository
 {
-    Task<Appointment> Find(Guid id, CancellationToken cancellationToken);
+    Task<Appointment?> Find(Guid id, CancellationToken cancellationToken);
     Task Save(Appointment appointment, CancellationToken cancellationToken);
 }

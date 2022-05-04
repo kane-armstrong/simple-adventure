@@ -26,7 +26,7 @@ public class CreateAppointmentBuilder : ISpecimenBuilder
         return new NoSpecimen();
     }
 
-    private static object Build(Type type, string name)
+    private static object? Build(Type type, string? name)
     {
         if (type == typeof(string) && name == nameof(CreateAppointment.OwnerPhone))
         {

@@ -54,7 +54,7 @@ public class CheckinToAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         var sut = await _testFixture.FindAppointment(id);
-        sut.State.Should().Be(AppointmentState.CheckedIn);
+        sut?.State.Should().Be(AppointmentState.CheckedIn);
     }
 
     [Fact]

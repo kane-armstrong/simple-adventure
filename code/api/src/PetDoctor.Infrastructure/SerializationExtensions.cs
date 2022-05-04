@@ -21,12 +21,19 @@ public static class SerializationExtensions
     {
         try
         {
-            return JsonConvert.DeserializeObject<T>(@this, new JsonSerializerSettings
+            var deserialized = JsonConvert.DeserializeObject<T>(@this, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.None,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             });
+
+            if (deserialized == null)
+            {
+                throw new JsonReaderException();
+            }
+
+            return deserialized;
         }
         catch (JsonReaderException)
         {

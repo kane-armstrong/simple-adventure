@@ -54,7 +54,7 @@ public class CompleteAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         var sut = await _testFixture.FindAppointment(id);
-        sut.State.Should().Be(AppointmentState.Completed);
+        sut?.State.Should().Be(AppointmentState.Completed);
     }
 
     [Fact]

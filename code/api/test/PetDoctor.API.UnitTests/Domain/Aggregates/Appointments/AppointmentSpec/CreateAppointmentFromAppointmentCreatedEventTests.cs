@@ -91,7 +91,7 @@ public class CreateFromAppointmentCreatedEventTests
 
         var @event = apt.PendingEvents.First() as AppointmentCreated;
 
-        var sut = new Appointment(@event);
+        var sut = new Appointment(@event!);
 
         sut.State.Should().Be(AppointmentState.Requested);
     }

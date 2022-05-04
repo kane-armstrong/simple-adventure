@@ -37,7 +37,7 @@ public class AppointmentRepository : IAppointmentRepository
         { typeof(AppointmentRescheduled), AppointmentRescheduled },
     };
 
-    public async Task<Appointment> Find(Guid id, CancellationToken cancellationToken)
+    public async Task<Appointment?> Find(Guid id, CancellationToken cancellationToken)
     {
         var messages = await _eventStream.LoadEvents(id);
         if (messages.Count == 0)

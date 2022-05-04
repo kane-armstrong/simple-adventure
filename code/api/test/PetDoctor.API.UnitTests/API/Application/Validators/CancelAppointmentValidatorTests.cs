@@ -13,7 +13,7 @@ public class CancelAppointmentValidatorTests
     {
         var request = new CancelAppointment
         {
-            Reason = null
+            Reason = null!
         };
 
         var sut = new CancelAppointmentValidator();

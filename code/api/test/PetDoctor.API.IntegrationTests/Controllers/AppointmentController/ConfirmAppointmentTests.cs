@@ -54,7 +54,7 @@ public class ConfirmAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         var sut = await _testFixture.FindAppointment(id);
-        sut.State.Should().Be(AppointmentState.Confirmed);
+        sut?.State.Should().Be(AppointmentState.Confirmed);
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class ConfirmAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         var sut = await _testFixture.FindAppointment(id);
-        sut.AttendingVeterinarianId.Should().Be(request.AttendingVeterinarianId);
+        sut?.AttendingVeterinarianId.Should().Be(request.AttendingVeterinarianId);
     }
 
     [Fact]

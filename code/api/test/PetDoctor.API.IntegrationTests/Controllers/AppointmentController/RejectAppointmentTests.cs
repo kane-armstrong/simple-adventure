@@ -54,7 +54,7 @@ public class RejectAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         var sut = await _testFixture.FindAppointment(id);
-        sut.State.Should().Be(AppointmentState.Rejected);
+        sut?.State.Should().Be(AppointmentState.Rejected);
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class RejectAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         var sut = await _testFixture.FindAppointment(id);
-        sut.RejectionReason.Should().Be(request.Reason);
+        sut?.RejectionReason.Should().Be(request.Reason);
     }
 
     [Fact]

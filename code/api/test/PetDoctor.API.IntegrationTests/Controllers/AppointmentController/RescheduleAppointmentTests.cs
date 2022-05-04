@@ -56,7 +56,7 @@ public class RescheduleAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         var sut = await _testFixture.FindAppointment(id);
-        sut.State.Should().Be(AppointmentState.Requested);
+        sut?.State.Should().Be(AppointmentState.Requested);
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class RescheduleAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         var sut = await _testFixture.FindAppointment(id);
-        sut.ScheduledOn.Should().Be(request.NewDate);
+        sut?.ScheduledOn.Should().Be(request.NewDate);
     }
 
     [Fact]

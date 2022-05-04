@@ -9,7 +9,7 @@ public class Any_list_rejects
     [Fact]
     public void a_null_source()
     {
-        var exception = Record.Exception(() => new PaginatedList<string>(null, 1, 1, 1));
+        var exception = Record.Exception(() => new PaginatedList<string>(null!, 1, 1, 1));
         exception.Should().NotBeNull();
     }
 

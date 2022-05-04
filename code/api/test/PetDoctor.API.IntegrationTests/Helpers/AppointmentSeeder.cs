@@ -11,7 +11,7 @@ public class AppointmentSeeder
         const string route = "v1/appointments";
         var result = await client.PostAsJsonAsync(route, appointment);
         await result.ThrowWithBodyIfUnsuccessfulStatusCode();
-        var foundIdInLocationHeader = Guid.TryParse(result.Headers.Location.AbsoluteUri.Split('/').Last(), out var id);
+        var foundIdInLocationHeader = Guid.TryParse(result.Headers.Location?.AbsoluteUri.Split('/').Last(), out var id);
         foundIdInLocationHeader.Should().BeTrue();
         return id;
     }
