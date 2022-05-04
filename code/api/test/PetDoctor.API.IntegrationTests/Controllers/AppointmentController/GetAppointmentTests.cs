@@ -5,6 +5,9 @@ using PetDoctor.API.Application.Models;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
 using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController;
@@ -236,5 +239,26 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var result = await client.GetAsync(uri);
 
         result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    [ResetDatabase]
+    public async Task The_correct_response_body_is_returned_when_the_appointment_does_not_exist()
+    {
+        var client = _testFixture.Client;
+        var uri = $"{EndpointRoute}/{Guid.NewGuid()}";
+
+        var result = await client.GetAsync(uri);
+
+        var body = await result.Content.ReadAsStringAsync();
+        var payload = JsonConvert.DeserializeObject<ProblemDetails>(body);
+        payload.Should().BeEquivalentTo(new
+        {
+            Detail = "The requested resource was not found",
+            Status = StatusCodes.Status404NotFound,
+            Title = "Not Found"
+        });
+        Uri.IsWellFormedUriString(payload!.Instance, UriKind.Absolute).Should().BeTrue();
+        Uri.IsWellFormedUriString(payload.Type, UriKind.Absolute).Should().BeTrue();
     }
 }

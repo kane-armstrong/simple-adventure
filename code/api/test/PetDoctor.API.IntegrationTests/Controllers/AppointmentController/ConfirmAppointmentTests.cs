@@ -1,5 +1,8 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
@@ -83,5 +86,28 @@ public class ConfirmAppointmentTests
         var response = await client.PutAsJsonAsync(uri, request);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    [ResetDatabase]
+    public async Task Confirming_an_appointment_fails_with_the_correct_response_body_when_the_appointment_does_not_exist()
+    {
+        var client = _testFixture.Client;
+        var id = Guid.NewGuid();
+        var request = _fixture.Create<ConfirmAppointment>();
+        var uri = $"{EndpointRoute}/{id}/confirm";
+
+        var response = await client.PutAsJsonAsync(uri, request);
+
+        var body = await response.Content.ReadAsStringAsync();
+        var payload = JsonConvert.DeserializeObject<ProblemDetails>(body);
+        payload.Should().BeEquivalentTo(new
+        {
+            Detail = "The requested resource was not found",
+            Status = StatusCodes.Status404NotFound,
+            Title = "Not Found"
+        });
+        Uri.IsWellFormedUriString(payload!.Instance, UriKind.Absolute).Should().BeTrue();
+        Uri.IsWellFormedUriString(payload.Type, UriKind.Absolute).Should().BeTrue();
     }
 }

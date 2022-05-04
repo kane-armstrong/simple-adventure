@@ -42,8 +42,11 @@ public class AppointmentsController : ControllerBase
         [FromServices] CreateAppointmentHandler handler)
     {
         var result = await handler.Handle(request, CancellationToken.None);
+        if (!result.Succeeded)
+            return result.Error!.CreateContentResponse();
+
         const string route = nameof(GetAppointmentById);
-        return CreatedAtRoute(route, new { id = result.ResourceId, version = "1" }, null);
+        return CreatedAtRoute(route, new { id = result.Payload.CreatedAppointmentId, version = "1" }, null);
     }
 
     [HttpPut("{id}/confirm")]
@@ -55,9 +58,9 @@ public class AppointmentsController : ControllerBase
     {
         request.Id = id;
         var result = await handler.Handle(request, CancellationToken.None);
-        if (result is { ResourceFound: false })
-            return NotFound();
-        return NoContent();
+        if (result.Succeeded)
+            return NoContent();
+        return result.Error!.CreateContentResponse();
     }
 
     [HttpPut("{id}/reject")]
@@ -69,9 +72,9 @@ public class AppointmentsController : ControllerBase
     {
         request.Id = id;
         var result = await handler.Handle(request, CancellationToken.None);
-        if (result is { ResourceFound: false })
-            return NotFound();
-        return NoContent();
+        if (result.Succeeded)
+            return NoContent();
+        return result.Error!.CreateContentResponse();
     }
 
     [HttpPut("{id}/reschedule")]
@@ -83,9 +86,9 @@ public class AppointmentsController : ControllerBase
     {
         request.Id = id;
         var result = await handler.Handle(request, CancellationToken.None);
-        if (result is { ResourceFound: false })
-            return NotFound();
-        return NoContent();
+        if (result.Succeeded)
+            return NoContent();
+        return result.Error!.CreateContentResponse();
     }
 
     [HttpPut("{id}/cancel")]
@@ -97,9 +100,9 @@ public class AppointmentsController : ControllerBase
     {
         request.Id = id;
         var result = await handler.Handle(request, CancellationToken.None);
-        if (result is { ResourceFound: false })
-            return NotFound();
-        return NoContent();
+        if (result.Succeeded)
+            return NoContent();
+        return result.Error!.CreateContentResponse();
     }
 
     [HttpPut("{id}/checkin")]
@@ -111,9 +114,9 @@ public class AppointmentsController : ControllerBase
     {
         request.Id = id;
         var result = await handler.Handle(request, CancellationToken.None);
-        if (result is { ResourceFound: false })
-            return NotFound();
-        return NoContent();
+        if (result.Succeeded)
+            return NoContent();
+        return result.Error!.CreateContentResponse();
     }
 
     [HttpPut("{id}/complete")]
@@ -125,8 +128,8 @@ public class AppointmentsController : ControllerBase
     {
         request.Id = id;
         var result = await handler.Handle(request, CancellationToken.None);
-        if (result is { ResourceFound: false })
-            return NotFound();
-        return NoContent();
+        if (result.Succeeded)
+            return NoContent();
+        return result.Error!.CreateContentResponse();
     }
 }
