@@ -17,6 +17,6 @@ public class TestFixture
     public async Task<Appointment> FindAppointment(Guid id)
     {
         var appointments = _webApplicationFactory.Services.GetRequiredService<IAppointmentRepository>();
-        return await appointments.Find(id);
+        return await appointments.Find(id, CancellationToken.None);
     }
 }

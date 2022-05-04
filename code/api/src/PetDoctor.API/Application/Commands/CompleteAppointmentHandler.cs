@@ -13,7 +13,7 @@ public class CompleteAppointmentHandler
 
     public async Task<CommandResult> Handle(CompleteAppointment request, CancellationToken cancellationToken)
     {
-        var appointment = await _appointments.Find(request.Id);
+        var appointment = await _appointments.Find(request.Id, cancellationToken);
         if (appointment is null)
             return new()
             {
@@ -23,7 +23,7 @@ public class CompleteAppointmentHandler
 
         appointment.Complete();
 
-        await _appointments.Save(appointment);
+        await _appointments.Save(appointment, cancellationToken);
 
         return new()
         {

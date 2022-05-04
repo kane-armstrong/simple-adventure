@@ -29,7 +29,7 @@ public class AppointmentsController : ControllerBase
         [FromRoute] Guid id,
         [FromServices] GetAppointmentByIdHandler handler)
     {
-        var result = await handler.Handle(new GetAppointmentById { Id = id }, CancellationToken.None);
+        var result = await handler.Handle(new GetAppointmentById { Id = id });
         if (result is null)
             return NotFound();
         return Ok(result);

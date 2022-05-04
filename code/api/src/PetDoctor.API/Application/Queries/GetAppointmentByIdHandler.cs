@@ -13,7 +13,7 @@ public class GetAppointmentByIdHandler
         _db = db;
     }
 
-    public async Task<AppointmentView> Handle(GetAppointmentById request, CancellationToken cancellationToken)
+    public async Task<AppointmentView?> Handle(GetAppointmentById request)
     {
         var snapshot = await _db.AppointmentSnapshots.FindAsync(request.Id);
         return snapshot?.ToAppointmentView();

@@ -13,7 +13,7 @@ public class CheckinToAppointmentHandler
 
     public async Task<CommandResult> Handle(CheckinToAppointment request, CancellationToken cancellationToken)
     {
-        var appointment = await _appointments.Find(request.Id);
+        var appointment = await _appointments.Find(request.Id, cancellationToken);
         if (appointment is null)
             return new()
             {
@@ -23,7 +23,7 @@ public class CheckinToAppointmentHandler
 
         appointment.CheckIn();
 
-        await _appointments.Save(appointment);
+        await _appointments.Save(appointment, cancellationToken);
 
         return new()
         {
