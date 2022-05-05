@@ -46,7 +46,7 @@ public class AppointmentsController : ControllerBase
             return result.Error!.CreateContentResponse();
 
         const string route = nameof(GetAppointmentById);
-        return CreatedAtRoute(route, new { id = result.Payload.CreatedAppointmentId, version = "1" }, null);
+        return CreatedAtRoute(route, new { id = result.Payload!.CreatedAppointmentId, version = "1" }, null);
     }
 
     [HttpPut("{id}/confirm")]
