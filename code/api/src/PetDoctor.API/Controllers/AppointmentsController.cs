@@ -25,14 +25,14 @@ public class AppointmentsController : ControllerBase
 
     [HttpGet("{id}", Name = nameof(GetAppointmentById))]
     [ProducesResponseType(typeof(Page<AppointmentView>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<AppointmentView>> GetAppointmentById(
+    public async Task<IActionResult> GetAppointmentById(
         [FromRoute] Guid id,
         [FromServices] GetAppointmentByIdHandler handler)
     {
         var result = await handler.Handle(new GetAppointmentById { Id = id });
-        if (result is null)
-            return NotFound();
-        return Ok(result);
+        if (result.Succeeded)
+            return Ok(result);
+        return result.Error!.CreateContentResponse();
     }
 
     [HttpPost("")]
