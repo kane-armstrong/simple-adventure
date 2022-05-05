@@ -188,7 +188,7 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
 
-        view.AttendingVeterinarianId.Should().Be(appointment.DesiredVerterinarianId);
+        view.AttendingVeterinarianId.Should().Be(appointment.DesiredVeterinarianId);
     }
 
     [Fact]
