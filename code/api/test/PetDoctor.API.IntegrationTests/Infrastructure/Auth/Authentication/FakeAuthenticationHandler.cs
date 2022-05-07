@@ -3,14 +3,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 
 namespace PetDoctor.API.IntegrationTests.Infrastructure.Auth.Authentication;
 
-public class TestAuthenticationHandler : AuthenticationHandler<TestAuthenticationOptions>
+public class FakeAuthenticationHandler : AuthenticationHandler<FakeAuthenticationOptions>
 {
-    public TestAuthenticationHandler(
-        IOptionsMonitor<TestAuthenticationOptions> options,
+    public FakeAuthenticationHandler(
+        IOptionsMonitor<FakeAuthenticationOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
         ISystemClock clock
@@ -23,7 +22,7 @@ public class TestAuthenticationHandler : AuthenticationHandler<TestAuthenticatio
         var authenticationTicket = new AuthenticationTicket(
             new ClaimsPrincipal(Options.Identity),
             new AuthenticationProperties(),
-            TestAuthenticationConstants.Scheme);
+            FakeAuthenticationConstants.Scheme);
 
         return Task.FromResult(AuthenticateResult.Success(authenticationTicket));
     }

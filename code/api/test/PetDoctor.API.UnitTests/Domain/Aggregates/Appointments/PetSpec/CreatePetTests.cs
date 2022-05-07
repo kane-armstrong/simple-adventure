@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using Xunit;
 

@@ -1,6 +1,4 @@
 ﻿using PetDoctor.Domain.Aggregates.Appointments.Events;
-using System;
-using System.Collections.Generic;
 
 namespace PetDoctor.Domain.Aggregates.Appointments;
 
@@ -10,20 +8,22 @@ public class Appointment : EventSourcedEntity
     public Owner Owner { get; }
     public Guid? AttendingVeterinarianId { get; private set; }
     public string ReasonForVisit { get; }
-    public string RejectionReason { get; set; }
-    public string CancellationReason { get; set; }
+    public string? RejectionReason { get; set; }
+    public string? CancellationReason { get; set; }
     public DateTimeOffset ScheduledOn { get; private set; }
     public AppointmentState State { get; private set; }
 
     public Appointment(AppointmentCreated @event)
     {
-        Id = @event.AppointmentId;
-        Pet = @event.Data.Pet;
-        Owner = @event.Data.Owner;
-        AttendingVeterinarianId = @event.Data.AttendingVeterinarianId;
-        ReasonForVisit = @event.Data.ReasonForVisit;
-        ScheduledOn = @event.Data.ScheduledOn;
-        State = @event.Data.State;
+        var (appointmentId, appointmentMemento) = @event;
+
+        Id = appointmentId;
+        Pet = appointmentMemento.Pet;
+        Owner = appointmentMemento.Owner;
+        AttendingVeterinarianId = appointmentMemento.AttendingVeterinarianId;
+        ReasonForVisit = appointmentMemento.ReasonForVisit;
+        ScheduledOn = appointmentMemento.ScheduledOn;
+        State = appointmentMemento.State;
     }
 
     public Appointment(

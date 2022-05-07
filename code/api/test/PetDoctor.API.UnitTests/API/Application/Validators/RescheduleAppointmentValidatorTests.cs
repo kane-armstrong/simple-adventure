@@ -1,7 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
-using System;
 using Xunit;
 
 namespace PetDoctor.API.UnitTests.API.Application.Validators;

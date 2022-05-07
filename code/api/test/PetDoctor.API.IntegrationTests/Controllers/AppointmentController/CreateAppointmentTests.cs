@@ -3,11 +3,7 @@ using FluentAssertions;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
-using System;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController;
@@ -51,7 +47,7 @@ public class CreateAppointmentTests
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
         const string guidPattern = "[({]?[a-fA-F0-9]{8}[-]?([a-fA-F0-9]{4}[-]?){3}[a-fA-F0-9]{12}[})]?";
-        response.Headers.Location.AbsoluteUri.Should().MatchRegex($"{client.BaseAddress}{EndpointRoute}/{guidPattern}");
+        response.Headers.Location?.AbsoluteUri.Should().MatchRegex($"{client.BaseAddress}{EndpointRoute}/{guidPattern}");
     }
 
     [Fact]
@@ -65,7 +61,7 @@ public class CreateAppointmentTests
         var response = await client.PostAsJsonAsync(EndpointRoute, request);
         await response.ThrowWithBodyIfUnsuccessfulStatusCode();
 
-        var foundIdInLocationHeader = Guid.TryParse(response.Headers.Location.AbsoluteUri.Split('/').Last(), out var id);
+        var foundIdInLocationHeader = Guid.TryParse(response.Headers.Location?.AbsoluteUri.Split('/').Last(), out var id);
         foundIdInLocationHeader.Should().BeTrue();
 
         var created = await _testFixture.FindAppointment(id);

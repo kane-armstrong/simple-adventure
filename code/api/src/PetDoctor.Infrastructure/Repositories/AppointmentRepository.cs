@@ -4,9 +4,6 @@ using PetDoctor.Domain.Aggregates.Appointments.Events;
 using PetDoctor.Infrastructure.Cqrs;
 using SqlStreamStore;
 using SqlStreamStore.Streams;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PetDoctor.Infrastructure.Repositories;
 
@@ -29,7 +26,7 @@ public class AppointmentRepository : IAppointmentRepository
         _eventDispatcher = eventDispatcher;
     }
 
-    private static readonly Dictionary<Type, string> EventTypeMap = new Dictionary<Type, string>
+    private static readonly Dictionary<Type, string> EventTypeMap = new()
     {
         { typeof(AppointmentCanceled), AppointmentCanceled },
         { typeof(AppointmentCompleted), AppointmentCompleted },
@@ -40,25 +37,25 @@ public class AppointmentRepository : IAppointmentRepository
         { typeof(AppointmentRescheduled), AppointmentRescheduled },
     };
 
-    public async Task<Appointment> Find(Guid id)
+    public async Task<Appointment?> Find(Guid id, CancellationToken cancellationToken)
     {
         var messages = await _eventStream.LoadEvents(id);
         if (messages.Count == 0)
             return null;
 
-        var createdEventPayload = await messages.Dequeue().GetJsonData();
+        var createdEventPayload = await messages.Dequeue().GetJsonData(cancellationToken);
         var createdEvent = createdEventPayload.FromJson<AppointmentCreated>();
 
         var appointment = new Appointment(createdEvent);
 
-        var changes = await LoadReplayableEvents(messages);
+        var changes = await LoadReplayableEvents(messages, cancellationToken);
 
         appointment.ReplayEvents(changes);
 
         return appointment;
     }
 
-    public async Task Save(Appointment appointment)
+    public async Task Save(Appointment appointment, CancellationToken cancellationToken)
     {
         foreach (var @event in appointment.PendingEvents)
         {
@@ -69,18 +66,19 @@ public class AppointmentRepository : IAppointmentRepository
             await _eventStream.AppendToStream(
                 appointment.Id.ToString(),
                 ExpectedVersion.Any,
-                new NewStreamMessage(@event.Id, EventTypeMap[@event.GetType()], @event.ToJson()));
+                new NewStreamMessage(@event.Id, EventTypeMap[@event.GetType()], @event.ToJson()),
+                cancellationToken);
         }
 
-        await DispatchEvents(appointment);
+        await DispatchEvents(appointment, cancellationToken);
     }
 
-    private static async Task<List<DomainEvent>> LoadReplayableEvents(IEnumerable<StreamMessage> messages)
+    private static async Task<List<DomainEvent>> LoadReplayableEvents(IEnumerable<StreamMessage> messages, CancellationToken cancellationToken)
     {
         var changes = new List<DomainEvent>();
         foreach (var @event in messages)
         {
-            var jsonData = await @event.GetJsonData();
+            var jsonData = await @event.GetJsonData(cancellationToken);
             switch (@event.Type)
             {
                 case AppointmentCanceled:
@@ -112,11 +110,11 @@ public class AppointmentRepository : IAppointmentRepository
         return changes;
     }
 
-    private async Task DispatchEvents(IEventSourcedEntity entity)
+    private async Task DispatchEvents(IEventSourcedEntity entity, CancellationToken cancellationToken)
     {
         foreach (var @event in entity.PendingEvents)
         {
-            await _eventDispatcher.Dispatch(@event);
+            await _eventDispatcher.Dispatch(@event, cancellationToken);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PetDoctor.Domain.Aggregates.Appointments.Events;
+﻿namespace PetDoctor.Domain.Aggregates.Appointments.Events;
 
 public record AppointmentMembersCheckedIn(Guid AppointmentId) : DomainEvent
 {

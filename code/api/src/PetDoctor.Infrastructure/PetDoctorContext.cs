@@ -6,7 +6,7 @@ namespace PetDoctor.Infrastructure;
 
 public class PetDoctorContext : DbContext
 {
-    public DbSet<AppointmentSnapshot> AppointmentSnapshots { get; set; }
+    public DbSet<AppointmentSnapshot> AppointmentSnapshots { get; set; } = null!;
 
     public PetDoctorContext(DbContextOptions<PetDoctorContext> options) : base(options)
     {

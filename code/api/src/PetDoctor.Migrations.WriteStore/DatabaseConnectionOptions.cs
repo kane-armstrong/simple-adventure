@@ -2,8 +2,8 @@
 {
     public class DatabaseConnectionOptions
     {
-        public string WriteStore { get; set; }
-        public string Master { get; set; }
-        public string ApplicationDatabaseName { get; set; }
+        public string WriteStore { get; set; } = string.Empty;
+        public string Master { get; set; } = string.Empty;
+        public string ApplicationDatabaseName { get; set; } = string.Empty;
     }
 }

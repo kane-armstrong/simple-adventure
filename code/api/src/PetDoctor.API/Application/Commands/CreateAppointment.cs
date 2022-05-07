@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PetDoctor.API.Application.Commands;
+﻿namespace PetDoctor.API.Application.Commands;
 
 public record CreateAppointment
 {
@@ -11,7 +9,7 @@ public record CreateAppointment
     public string OwnerLastName { get; init; } = string.Empty;
     public string OwnerPhone { get; init; } = string.Empty;
     public string OwnerEmail { get; init; } = string.Empty;
-    public Guid? DesiredVerterinarianId { get; init; }
+    public Guid? DesiredVeterinarianId { get; init; }
     public string ReasonForVisit { get; init; } = string.Empty;
     public DateTimeOffset DesiredDate { get; init; }
 }

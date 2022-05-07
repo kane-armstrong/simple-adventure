@@ -1,12 +1,13 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Models;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
+using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController;
@@ -29,12 +30,11 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
     {
         var client = _testFixture.Client;
 
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client);
+        var id = await AppointmentSeeder.CreateAppointment(client);
 
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         result.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -47,11 +47,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -67,11 +66,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -87,11 +85,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -107,11 +104,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -127,11 +123,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -147,11 +142,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -167,11 +161,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -187,16 +180,15 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
 
-        view.AttendingVeterinarianId.Should().Be(appointment.DesiredVerterinarianId);
+        view.AttendingVeterinarianId.Should().Be(appointment.DesiredVeterinarianId);
     }
 
     [Fact]
@@ -207,11 +199,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -227,11 +218,10 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var fixture = new Fixture();
         fixture.Customize(new CreateAppointmentCustomization());
         var appointment = fixture.Create<CreateAppointment>();
-        var seeder = new AppointmentSeeder();
-        var id = await seeder.CreateAppointment(client, appointment);
+        var id = await AppointmentSeeder.CreateAppointment(client, appointment);
         var uri = $"{EndpointRoute}/{id}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         var view = await result.GetPayload<AppointmentView>();
         view.Should().NotBeNull();
@@ -246,8 +236,29 @@ public class GetAppointmentTests : IClassFixture<TestFixture>
         var client = _testFixture.Client;
         var uri = $"{EndpointRoute}/{Guid.NewGuid()}";
 
-        var result = await client.GetAsync(uri);
+        using var result = await client.GetAsync(uri);
 
         result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    [ResetDatabase]
+    public async Task The_correct_response_body_is_returned_when_the_appointment_does_not_exist()
+    {
+        var client = _testFixture.Client;
+        var uri = $"{EndpointRoute}/{Guid.NewGuid()}";
+
+        using var result = await client.GetAsync(uri);
+
+        var body = await result.Content.ReadAsStringAsync();
+        var payload = JsonConvert.DeserializeObject<ProblemDetails>(body);
+        payload.Should().BeEquivalentTo(new
+        {
+            Detail = "The requested resource was not found",
+            Status = StatusCodes.Status404NotFound,
+            Title = "Not Found"
+        });
+        Uri.IsWellFormedUriString(payload!.Instance, UriKind.Absolute).Should().BeTrue();
+        Uri.IsWellFormedUriString(payload.Type, UriKind.Absolute).Should().BeTrue();
     }
 }

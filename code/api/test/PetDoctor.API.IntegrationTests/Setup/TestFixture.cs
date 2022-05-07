@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PetDoctor.Domain.Aggregates.Appointments;
 
 namespace PetDoctor.API.IntegrationTests.Setup;
@@ -17,9 +14,9 @@ public class TestFixture
         Client = _webApplicationFactory.CreateClient();
     }
 
-    public async Task<Appointment> FindAppointment(Guid id)
+    public async Task<Appointment?> FindAppointment(Guid id)
     {
         var appointments = _webApplicationFactory.Services.GetRequiredService<IAppointmentRepository>();
-        return await appointments.Find(id);
+        return await appointments.Find(id, CancellationToken.None);
     }
 }

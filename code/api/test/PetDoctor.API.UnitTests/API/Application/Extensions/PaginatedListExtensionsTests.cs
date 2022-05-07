@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Immutable;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
 using PetDoctor.API.Application.Extensions;
 using PetDoctor.Infrastructure.Collections;
+using System.Collections.Immutable;
 using Xunit;
 
 namespace PetDoctor.API.UnitTests.API.Application.Extensions;
@@ -97,8 +96,8 @@ public class PaginatedListExtensionsTests
     [Fact]
     public void Mapping_a_list_to_a_page_throws_when_the_input_list_is_null()
     {
-        PaginatedList<string> sut = null;
+        PaginatedList<string>? sut = null;
 
-        Assert.Throws<ArgumentNullException>(() => sut.ToPage());
+        Assert.Throws<ArgumentNullException>(() => sut!.ToPage());
     }
 }

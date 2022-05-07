@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
 using PetDoctor.Domain.Aggregates.Appointments;
 using PetDoctor.Domain.Aggregates.Appointments.Events;
@@ -91,9 +89,9 @@ public class CreateFromAppointmentCreatedEventTests
 
         var apt = new Appointment(pet, owner, "reasons", DateTimeOffset.Now.AddDays(3));
 
-        var @event = apt.PendingEvents.First() as AppointmentCreated;
+        var @event = apt.PendingEvents[0] as AppointmentCreated;
 
-        var sut = new Appointment(@event);
+        var sut = new Appointment(@event!);
 
         sut.State.Should().Be(AppointmentState.Requested);
     }

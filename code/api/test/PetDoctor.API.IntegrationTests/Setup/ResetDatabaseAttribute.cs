@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Xunit.Sdk;
 
 namespace PetDoctor.API.IntegrationTests.Setup;

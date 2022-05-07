@@ -1,9 +1,8 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using PetDoctor.API.Application.Models;
 using PetDoctor.API.IntegrationTests.Helpers;
 using PetDoctor.API.IntegrationTests.Setup;
+using System.Net;
 using Xunit;
 
 namespace PetDoctor.API.IntegrationTests.Controllers.AppointmentController;
@@ -59,10 +58,9 @@ public class ListAppointmentsTests : IClassFixture<TestFixture>
 
         var uri = $"{EndpointRoute}?index=1&size={pageCount}";
 
-        var seeder = new AppointmentSeeder();
         for (var i = 0; i < count; i++)
         {
-            await seeder.CreateAppointment(client);
+            await AppointmentSeeder.CreateAppointment(client);
         }
 
         var result = await client.GetAsync(uri);
@@ -86,10 +84,9 @@ public class ListAppointmentsTests : IClassFixture<TestFixture>
 
         var uri = $"{EndpointRoute}?index=1&size={pageCount}";
 
-        var seeder = new AppointmentSeeder();
         for (var i = 0; i < count; i++)
         {
-            await seeder.CreateAppointment(client);
+            await AppointmentSeeder.CreateAppointment(client);
         }
 
         var result = await client.GetAsync(uri);

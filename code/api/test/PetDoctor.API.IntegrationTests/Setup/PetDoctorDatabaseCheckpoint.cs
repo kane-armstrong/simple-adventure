@@ -4,13 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using PetDoctor.Infrastructure;
 using Respawn;
 using SqlStreamStore;
-using System.Threading.Tasks;
 
 namespace PetDoctor.API.IntegrationTests.Setup;
 
-class PetDoctorDatabaseCheckpoint
+internal class PetDoctorDatabaseCheckpoint
 {
-    private static readonly Checkpoint Checkpoint = new Checkpoint
+    private static readonly Checkpoint Checkpoint = new()
     {
         TablesToIgnore = new[]
         {

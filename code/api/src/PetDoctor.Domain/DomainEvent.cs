@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PetDoctor.Domain;
+﻿namespace PetDoctor.Domain;
 
 public abstract record DomainEvent
 {

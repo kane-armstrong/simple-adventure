@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
 
 namespace PetDoctor.API.IntegrationTests.Infrastructure.Auth.Authorization;
 
-public class TestRequirementHandler : AuthorizationHandler<TestRequirement>
+public class FakeRequirementHandler : AuthorizationHandler<FakeRequirement>
 {
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
-        TestRequirement requirement)
+        FakeRequirement requirement)
     {
         context.Succeed(requirement);
         return Task.CompletedTask;

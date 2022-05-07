@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using PetDoctor.API.Application.Commands;
-using System;
 using Humanizer;
+using PetDoctor.API.Application.Commands;
 
 namespace PetDoctor.API.Application.Validators;
 

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace PetDoctor.Domain.Aggregates.Appointments;
+﻿namespace PetDoctor.Domain.Aggregates.Appointments;
 
 public interface IAppointmentRepository
 {
-    Task<Appointment> Find(Guid id);
-    Task Save(Appointment appointment);
+    Task<Appointment?> Find(Guid id, CancellationToken cancellationToken);
+    Task Save(Appointment appointment, CancellationToken cancellationToken);
 }

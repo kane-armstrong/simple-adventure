@@ -1,11 +1,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PetDoctor.API.Application.Commands;
@@ -18,8 +13,11 @@ using PetDoctor.Infrastructure;
 using PetDoctor.Infrastructure.Cqrs;
 using PetDoctor.Infrastructure.Repositories;
 using SqlStreamStore;
-using System;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using PetDoctor.API.Application.Links;
 
 namespace PetDoctor.API;
 
@@ -85,6 +83,16 @@ public class Startup
         services.AddScoped<IEventHandler<AppointmentCreated>, AppointmentCreatedHandler>();
         services.AddScoped<IEventHandler<AppointmentRejected>, AppointmentRejectedHandler>();
         services.AddScoped<IEventHandler<AppointmentRescheduled>, AppointmentRescheduledHandler>();
+
+        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+        services.AddScoped(x =>
+        {
+            var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext!;
+            var factory = x.GetRequiredService<IUrlHelperFactory>();
+            return factory.GetUrlHelper(actionContext);
+        });
+
+        services.AddTransient<IAppointmentLinksGenerator, AppointmentLinksGenerator>();
 
         services.AddSingleton<IEventDispatcher, EventDispatcher>();
 

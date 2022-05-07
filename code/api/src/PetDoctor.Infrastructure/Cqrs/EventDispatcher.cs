@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PetDoctor.Infrastructure.Cqrs;
 
@@ -14,7 +11,7 @@ public class EventDispatcher : IEventDispatcher
         _serviceProvider = serviceProvider;
     }
 
-    public async Task Dispatch<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
+    public async Task Dispatch<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : class
     {
         // TODO  gross, do this properly
         using var scope = _serviceProvider.CreateScope();

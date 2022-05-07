@@ -12,7 +12,7 @@ public class RejectAppointmentValidatorTests
     {
         var request = new RejectAppointment
         {
-            Reason = null
+            Reason = null!
         };
 
         var sut = new RejectAppointmentValidator();

@@ -1,7 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using PetDoctor.API.Application.Commands;
 using PetDoctor.API.Application.Validators;
-using System;
 using Xunit;
 
 namespace PetDoctor.API.UnitTests.API.Application.Validators;
@@ -13,7 +12,7 @@ public class CreateAppointmentValidatorTests
     {
         var request = new CreateAppointment
         {
-            ReasonForVisit = null
+            ReasonForVisit = null!
         };
 
         var sut = new CreateAppointmentValidator();
@@ -65,7 +64,7 @@ public class CreateAppointmentValidatorTests
     {
         var request = new CreateAppointment
         {
-            OwnerFirstName = null
+            OwnerFirstName = null!
         };
 
         var sut = new CreateAppointmentValidator();
@@ -104,7 +103,7 @@ public class CreateAppointmentValidatorTests
     {
         var request = new CreateAppointment
         {
-            OwnerLastName = null
+            OwnerLastName = null!
         };
 
         var sut = new CreateAppointmentValidator();
@@ -143,7 +142,7 @@ public class CreateAppointmentValidatorTests
     {
         var request = new CreateAppointment
         {
-            OwnerEmail = null
+            OwnerEmail = null!
         };
 
         var sut = new CreateAppointmentValidator();
@@ -182,7 +181,7 @@ public class CreateAppointmentValidatorTests
     {
         var request = new CreateAppointment
         {
-            OwnerPhone = null
+            OwnerPhone = null!
         };
 
         var sut = new CreateAppointmentValidator();
@@ -221,7 +220,7 @@ public class CreateAppointmentValidatorTests
     {
         var request = new CreateAppointment
         {
-            PetName = null
+            PetName = null!
         };
 
         var sut = new CreateAppointmentValidator();
@@ -260,7 +259,7 @@ public class CreateAppointmentValidatorTests
     {
         var request = new CreateAppointment
         {
-            PetBreed = null
+            PetBreed = null!
         };
 
         var sut = new CreateAppointmentValidator();
