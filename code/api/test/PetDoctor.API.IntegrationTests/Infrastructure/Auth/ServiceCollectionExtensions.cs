@@ -13,10 +13,10 @@ public static class ServiceCollectionExtensions
         {
             foreach (var policy in policies)
             {
-                options.AddPolicy(policy, p => p.Requirements.Add(new TestRequirement()));
+                options.AddPolicy(policy, p => p.Requirements.Add(new FakeRequirement()));
             }
         });
-        services.AddSingleton<IAuthorizationHandler, TestRequirementHandler>();
+        services.AddSingleton<IAuthorizationHandler, FakeRequirementHandler>();
         return services;
     }
 
@@ -24,10 +24,10 @@ public static class ServiceCollectionExtensions
     {
         services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = TestAuthenticationConstants.Scheme;
-                options.DefaultChallengeScheme = TestAuthenticationConstants.Scheme;
+                options.DefaultAuthenticateScheme = FakeAuthenticationConstants.Scheme;
+                options.DefaultChallengeScheme = FakeAuthenticationConstants.Scheme;
             })
-            .AddTestAuthentication();
+            .AddFakeAuthentication();
         return services;
     }
 }
