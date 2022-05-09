@@ -31,7 +31,7 @@ public class AppointmentsController : ControllerBase
     {
         var result = await handler.Handle(new GetAppointmentById { Id = id });
         if (result.Succeeded)
-            return Ok(result);
+            return Ok(result.Payload);
         return result.Error!.CreateContentResponse();
     }
 
